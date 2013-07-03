@@ -281,4 +281,5 @@ public class FTmxMap : FContainer {
 		get { return _clipNode; }
 		set { _clipNode = value; }
 	}
+
 }

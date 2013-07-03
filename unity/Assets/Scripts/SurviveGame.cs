@@ -4,7 +4,7 @@ using System.Collections;
 public class SurviveGame : MonoBehaviour {
     
     //FTmxMap background;
-    FLabel textLabel;
+    
 
     FSceneManager sceneManager;
 	// Use this for initialization
@@ -31,12 +31,7 @@ public class SurviveGame : MonoBehaviour {
         //Debug.Log("Player position = " + player.GetPosition());
         //Debug.Log("Half Width = " + Futile.screen.halfWidth + " | Half Height = " + Futile.screen.halfHeight);
 
-        textLabel = new FLabel("ComicSans", "Hello world! This is my game!");
-        //Futile.stage.AddChild(textLabel);
-
-        Futile.stage.AddChild(textLabel);
-        textLabel.anchorY = 1;
-        textLabel.y = Futile.screen.halfHeight;
+        
 	}
 	
 	// Update is called once per frame

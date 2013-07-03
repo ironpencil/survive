@@ -38,15 +38,8 @@ public class FWorldScene : FScene
 
         if (Input.GetKeyDown("space"))
         {
-            if (this.Name != "menu")
-            {
-                FWorldScene newScene = new FWorldScene("menu");
-                FSceneManager.Instance.PushScene(newScene);
-            }
-            else
-            {
-                FSceneManager.Instance.PopScene();
-            }
+            FMenuScene menu = new FMenuScene("menu");
+            FSceneManager.Instance.PushScene(menu);
         }
 
         bool playerMoved = false;
@@ -103,31 +96,30 @@ public class FWorldScene : FScene
 
 
         // Add tilemap 
-        //FTmxMap tmx1 = new FTmxMap();
-        //tmx1.clipNode = player;
-        //tmx1.LoadTMX("CSVs/forestMapLarge"); // load tmx text file (within Resources/CSVs folder)
-        //tileMap = null;
+        FTmxMap tmx1 = new FTmxMap();
+        tmx1.clipNode = player;
+        tmx1.LoadTMX("CSVs/forestMapLarge"); // load tmx text file (within Resources/CSVs folder)
+        tileMap = null;
 
-        //bool tileMapFound = tmx1._tileMaps.TryGetValue(tmx1._layerNames[0], out tileMap);
+        bool tileMapFound = tmx1._tileMaps.TryGetValue(tmx1._layerNames[0], out tileMap);
 
-        //Debug.Log("tileMapFound=" + tileMapFound);
+        Debug.Log("tileMapFound=" + tileMapFound);
 
-        //tmx1.x = 0;
-        //tmx1.y = 0;
+        tmx1.x = 0;
+        tmx1.y = 0;
 
-        //Debug.Log("TileMap Size (x, y):" + tileMap.width + "," + tileMap.height);
-        //Debug.Log("TileMap Tiles (x, y):" + tileMap.widthInTiles + "," + tileMap.heightInTiles);
+        Debug.Log("TileMap Size (x, y):" + tileMap.width + "," + tileMap.height);
+        Debug.Log("TileMap Tiles (x, y):" + tileMap.widthInTiles + "," + tileMap.heightInTiles);
 
-        //Futile.stage.AddChild(tmx1);
+        this.AddChild(tmx1);
 
-        //tmx1.AddChild(player);
+        tmx1.AddChild(player);
 
-        this.AddChild(player);
+        //this.AddChild(player);
 
         Futile.stage.Follow(player, true, true);
 
-        //maxBounds = GetSizeInTiles(new Vector2(tileMap.width, tileMap.height));
-        maxBounds = new Vector2(10, 10);
+        maxBounds = GetSizeInTiles(new Vector2(tileMap.width, tileMap.height));
         maxBounds.x--;
         maxBounds.y--;
 
@@ -157,8 +149,8 @@ public class FWorldScene : FScene
         Vector2 desiredTilePosition = Vector2.zero;
 
         desiredTilePosition.x += (tile.x * TILE_WIDTH);
-        //desiredTilePosition.y += (tile.y * TILE_HEIGHT) - tileMap.height;
-        desiredTilePosition.y += (tile.y * TILE_HEIGHT);
+        desiredTilePosition.y += (tile.y * TILE_HEIGHT) - tileMap.height;
+        //desiredTilePosition.y += (tile.y * TILE_HEIGHT);
 
         //desiredTilePosition.x += Futile.screen.halfWidth + (background.width / 2);
         //desiredTilePosition.y -= Futile.screen.halfHeight + (background.height / 2);
