@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="15" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="gameTiles" tilewidth="32" tileheight="32">
+  <image source="gameTiles.png" width="64" height="64"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYCQTM6FhmDgzGo3OxmYOJW7A5yZ0txHSS6zbiLEDV7jA2Ohhgs6H6WXBgwnFDS6zWXDI4YsnZL2E7AcA+fAA5Q==
+  </data>
+ </layer>
+</map>
