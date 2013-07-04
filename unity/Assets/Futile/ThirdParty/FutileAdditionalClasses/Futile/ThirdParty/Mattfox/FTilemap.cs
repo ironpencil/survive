@@ -448,6 +448,16 @@ public class FTilemap : FContainer {
 	{
 		get { return _tilesHigh; }
 	}
+
+    virtual public float tileWidth
+    {
+        get { return _tileWidth; }
+    }
+
+    virtual public float tileHeight
+    {
+        get { return _tileHeight; }
+    }
 	
 	public FShader shader
 	{

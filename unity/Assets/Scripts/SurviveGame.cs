@@ -3,8 +3,7 @@ using System.Collections;
 
 public class SurviveGame : MonoBehaviour {
     
-    //FTmxMap background;
-    
+    //FTmxMap background;    
 
     FSceneManager sceneManager;
 	// Use this for initialization
@@ -27,6 +26,9 @@ public class SurviveGame : MonoBehaviour {
 
         sceneManager.PushScene(gameScene);
 
+        string test = "blah";
+
+        test.dictionaryFromJson();
 
         //Debug.Log("Player position = " + player.GetPosition());
         //Debug.Log("Half Width = " + Futile.screen.halfWidth + " | Half Height = " + Futile.screen.halfHeight);

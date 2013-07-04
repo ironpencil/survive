@@ -7,7 +7,7 @@ public class FTmxMap : FContainer {
 	
 	public List<XMLNode> _tilesets;
 	public List<string> _layerNames;
-    public Dictionary<string, FTilemap> _tileMaps;
+    public List<TmxLayer> _tmxLayers;
 	
 	private FNode _clipNode; // for tilemaps
 	
@@ -17,7 +17,7 @@ public class FTmxMap : FContainer {
 	{
 		_tilesets = new List<XMLNode>();
 		_layerNames = new List<string>();
-        _tileMaps = new Dictionary<string, FTilemap>();
+        _tmxLayers = new List<TmxLayer>();
 	}
 	
 	public void LoadTMX(string fileName) 
@@ -138,7 +138,7 @@ public class FTmxMap : FContainer {
 	virtual protected FNode createObjectLayer(XMLNode node)
 	{
 		// add objects to FContainers
-		FContainer objectGroup = new FContainer();
+        FContainer objectGroup = new FContainer();
 		
 		foreach (XMLNode fObject in node.children) {
 			if (fObject.tagName == "object") {
@@ -156,6 +156,8 @@ public class FTmxMap : FContainer {
 		
 		// remember name 
 		_layerNames.Add (node.attributes["name"]);
+
+        _tmxLayers.Add(new TmxLayer(objectGroup, node.attributes["name"], TmxLayerType.OBJECT_LAYER));
 		
 		// add to self
 		return objectGroup;
@@ -163,6 +165,7 @@ public class FTmxMap : FContainer {
 	
 	virtual protected FNode createTilemap(XMLNode node) 
 	{
+        string layerName = "";
 		XMLNode csvData = new XMLNode();
 		XMLNode properties = new XMLNode();
 		foreach (XMLNode child in node.children) {
@@ -178,9 +181,11 @@ public class FTmxMap : FContainer {
 			Debug.Log ("FTiledScene: Could not render layer data, encoding set to: " + csvData.attributes["encoding"]);
 			return null;
 		}
+
+        layerName = node.attributes["name"];
 		
 		// remember name 
-		_layerNames.Add (node.attributes["name"]);
+		_layerNames.Add (layerName);
 		
 		// skipZero, if this is true all filled tiles will be drawn without clipping
 		bool skipZero = false;
@@ -209,7 +214,7 @@ public class FTmxMap : FContainer {
 		}
 		tilemap.LoadText(csvText, skipZero);
 
-        _tileMaps.Add(node.attributes["name"], tilemap);
+        _tmxLayers.Add(new TmxLayer(tilemap, layerName, TmxLayerType.TILE_LAYER));
 
 		return tilemap;
 	}
@@ -282,4 +287,23 @@ public class FTmxMap : FContainer {
 		set { _clipNode = value; }
 	}
 
+}
+
+public class TmxLayer
+{
+    public TmxLayerType LayerType { get; set; }
+    public string Name { get; set; }
+    public FContainer Layer { get; set; }
+
+    public TmxLayer(FContainer layer, string name, TmxLayerType layerType) : base() {
+        Layer = layer;
+        Name = name;
+        LayerType = LayerType;        
+    }
+}
+
+public enum TmxLayerType
+{
+    TILE_LAYER,
+    OBJECT_LAYER
 }
