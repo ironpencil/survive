@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class TileMapHelper
 {
-    public FTilemap TileMap { get; set; }
+    public TileMapData TileMap { get; set; }
 
-    public TileMapHelper(FTilemap tileMap)
+    public TileMapHelper(TileMapData tileMap)
     {
         this.TileMap = tileMap;
     }
@@ -19,8 +19,8 @@ public class TileMapHelper
     {
         Vector2 desiredTilePosition = Vector2.zero;
 
-        desiredTilePosition.x += (tile.x * TileMap.tileWidth);
-        desiredTilePosition.y += (tile.y * TileMap.tileHeight) - TileMap.height;
+        desiredTilePosition.x += (tile.x * TileMap.TileWidth);
+        desiredTilePosition.y += (tile.y * TileMap.TileHeight); // -TileMap.Height;
         //desiredTilePosition.y += (tile.y * TILE_HEIGHT);
 
         //desiredTilePosition.x += Futile.screen.halfWidth + (background.width / 2);
@@ -33,8 +33,8 @@ public class TileMapHelper
 
     public Vector2 GetSizeInTiles(Vector2 sizeInPixels)
     {
-        int x = TileMap.widthInTiles;
-        int y = TileMap.heightInTiles;
+        int x = TileMap.WidthInTiles;
+        int y = TileMap.HeightInTiles;
 
         return new Vector2(x, y);
     }
@@ -44,8 +44,8 @@ public class TileMapHelper
         Vector2 centerTile = new Vector2();
 
 
-        centerTile.x = (int)(TileMap.widthInTiles / 2);
-        centerTile.y = (int)(TileMap.heightInTiles / 2);
+        centerTile.x = (int)(TileMap.WidthInTiles / 2);
+        centerTile.y = (int)(TileMap.HeightInTiles / 2);
 
         return centerTile;
     }

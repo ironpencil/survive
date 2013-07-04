@@ -12,7 +12,7 @@ public class SurviveGame : MonoBehaviour {
         FutileParams fparams = new FutileParams(true, true, false, false);
         fparams.AddResolutionLevel(960.0f, 1.0f, 1.0f, "");
         fparams.origin = new Vector2(0.5f, 0.5f);
-        fparams.backgroundColor = new Color(255.0f, 0.0f, 0.0f);
+        fparams.backgroundColor = Color.magenta;
         Futile.instance.Init(fparams);
 
         // load image atlas (within Resources/Atlases folder)
@@ -25,10 +25,6 @@ public class SurviveGame : MonoBehaviour {
         FWorldScene gameScene = new FWorldScene("world");
 
         sceneManager.PushScene(gameScene);
-
-        string test = "blah";
-
-        test.dictionaryFromJson();
 
         //Debug.Log("Player position = " + player.GetPosition());
         //Debug.Log("Half Width = " + Futile.screen.halfWidth + " | Half Height = " + Futile.screen.halfHeight);

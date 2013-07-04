@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class TileLayer : MapLayer
+public class TileLayer : MapLayer
 {
-    public List<TileData> tiles = new List<TileData>();
+    public List<LayerTile> tiles = new List<LayerTile>();
 
 }

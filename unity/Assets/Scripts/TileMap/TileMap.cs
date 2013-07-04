@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class TileMapData
+public class TileMapData : FContainer
 {
+
+    private MapTile[,] tiles;
+
     public string Name { get; set; }
 
     private Dictionary<int, TileSet> tileSets;
@@ -18,6 +21,10 @@ class TileMapData
     public int TileWidth { get; set; }
     public int TileHeight { get; set; }
 
+    public int WidthInTiles { get; set; }
+    public int HeightInTiles { get; set; }
+
+    
 
 
     private string mapFile;
@@ -35,20 +42,26 @@ class TileMapData
         tileSetFirstGIDs = new List<int>();
         tileSetFoundGIDs = new Dictionary<int, TileSet>();
 
-        TextAsset map = (TextAsset)Resources.Load(mapFile, typeof(TextAsset));
+        TextAsset mapAsset = (TextAsset)Resources.Load(mapFile, typeof(TextAsset));
 
-        if (!map)
+        if (!mapAsset)
         {
             Debug.Log("Map file '" + mapFile + "' not found!");
             Debug.Break();
         }
 
-        mapData = map.text.dictionaryFromJson();
+        mapData = mapAsset.text.dictionaryFromJson();
 
-        Width = int.Parse(mapData["width"].ToString());
-        Height = int.Parse(mapData["height"].ToString());
+        Resources.UnloadAsset(mapAsset);
+
+        WidthInTiles = int.Parse(mapData["width"].ToString());
+        HeightInTiles = int.Parse(mapData["height"].ToString());        
         TileWidth = int.Parse(mapData["tilewidth"].ToString());
         TileHeight = int.Parse(mapData["tileheight"].ToString());
+        Width = WidthInTiles * TileWidth;
+        Height = HeightInTiles * TileHeight;
+
+        InitializeMapTiles();       
 
         List<object> tileSetsData = (List<object>)mapData["tilesets"];
 
@@ -59,6 +72,8 @@ class TileMapData
             tileSet.FirstGID = int.Parse(tileSetData["firstgid"].ToString());
             tileSet.Image = tileSetData["image"].ToString();
             tileSet.Name = tileSetData["name"].ToString();
+            tileSet.TileWidth = int.Parse(tileSetData["tilewidth"].ToString());
+            tileSet.TileHeight = int.Parse(tileSetData["tileheight"].ToString());
             tileSet.TileProperties = (Dictionary<string, object>)tileSetData["tileproperties"];
 
             tileSets.Add(tileSet.FirstGID, tileSet);
@@ -72,7 +87,22 @@ class TileMapData
         foreach (Dictionary<string, object> layerData in mapLayers)
         {
 
-            MapLayer mapLayer = new MapLayer();
+            MapLayer mapLayer = null;
+
+            string layerType = layerData["type"].ToString();
+
+            if (layerType.Equals("tilelayer")) {
+                mapLayer = new TileLayer();
+            }
+            else if (layerType.Equals("objectgroup"))
+            {
+                mapLayer = new ObjectLayer();
+            }
+            else
+            {
+                Debug.Log("Unknown layer type!");
+                mapLayer = new MapLayer();
+            }
 
             mapLayer.Name = layerData["name"].ToString();
             mapLayer.Visible = bool.Parse(layerData["visible"].ToString());
@@ -81,8 +111,7 @@ class TileMapData
             mapLayer.Opacity = int.Parse(layerData["opacity"].ToString());
             mapLayer.LayerType = layerData["type"].ToString();
 
-            if (mapLayer.LayerType.Equals("tilelayer"))
-            {
+            if (mapLayer is TileLayer) {
                 //load the tile layer
                 List<object> tileGIDs = (List<object>) layerData["data"];
 
@@ -91,40 +120,56 @@ class TileMapData
 
                 for (int i = 0; i < tileGIDs.Count; i++)
                 {
-                    TileLayer tileLayer = (TileLayer)mapLayer;
+                    int tileGID = int.Parse(tileGIDs[i].ToString());
 
-                    TileData tile = new TileData();
-
-                    tile.Layer = tileLayer;                                        
-                    tile.GID = int.Parse(tileGIDs[i].ToString());
-                    tile.TileSet = FindTileSetContainingGID(tile.GID);
-
-                    tile.TileX = x;
-                    tile.TileY = y;
-
-                    x++;
-
-                    if (x % mapLayer.Width == 0)
+                    //GID of 0 means there is no tile?
+                    if (tileGID > 0)
                     {
-                        x = 0;
-                        y++;
-                    }
+                        TileLayer tileLayer = mapLayer as TileLayer;
 
-                    tileLayer.tiles.Add(tile);
+                        LayerTileData tileData = new LayerTileData();
+
+                        tileData.Layer = tileLayer;
+                        tileData.GID = int.Parse(tileGIDs[i].ToString());
+                        tileData.TileSet = FindTileSetContainingGID(tileData.GID);
+
+                        tileData.TileX = x;
+                        tileData.TileY = tileLayer.Height - y - 1; //TileY should count up from the bottom
+
+                        x++;
+
+                        if (x % mapLayer.Width == 0)
+                        {
+                            x = 0;
+                            y++;
+                        }
+
+                        LayerTile tile = new LayerTile(tileData);
+
+                        tile.x = tileData.TileX * tileData.TileSet.TileWidth; // -tileData.TileSet.TileWidth;
+                        tile.y = tileData.TileY * tileData.TileSet.TileHeight; // -tileData.TileSet.TileHeight + tileLayer.Height;
+
+                        //the tile physicall resides in the TileLayer container
+                        tileLayer.tiles.Add(tile);
+                        tileLayer.AddChild(tile);
+
+                        //add a reference to this tile to our MapTiles array
+                        tiles[tileData.TileX, tileData.TileY].LayerTiles.Add(tile);
+                    }
                 }
 
                 //should now have a tile layer that contains all the layer info
                 //plus a list of tiles, each referencing the TileSet that its tile comes from
                 
             }
-            else if (mapLayer.LayerType.Equals("objectgroup"))
+            else if (mapLayer is ObjectLayer)
             {
                 //load the object group
                 List<object> objectDefs = (List<object>)layerData["objects"];
 
                 foreach (Dictionary<string, object> objectDef in objectDefs)
                 {
-                    ObjectLayer objectLayer = (ObjectLayer)mapLayer;
+                    ObjectLayer objectLayer = mapLayer as ObjectLayer;
 
                     TiledObject tiledObject = new TiledObject();
 
@@ -142,11 +187,60 @@ class TileMapData
 
                     //should now have an object layer that contains all the object info
 
-                }
+                    //TODO: Add references to the objects to the MapTile array for any tiles that they exist in?
+
+                    //TODO: Create Colliders for the objects?
+
+                }                
                 
-            }          
+            }    
+      
+            //done loading the layer, add it to this map
+            this.AddChild(mapLayer);
         } 
 
+    }
+
+    private void InitializeMapTiles()
+    {
+        tiles = new MapTile[WidthInTiles, HeightInTiles];
+
+        //Debug.Log("Size of MapTiles is [" + WidthInTiles + "," + HeightInTiles + "]");
+
+        int x = 0;
+        int y = 0;
+
+        for (int i = 0; i < Width; i++)
+        {
+            MapTile mapTile = new MapTile();
+
+            mapTile.TileX = x;
+            mapTile.TileY = HeightInTiles - y - 1; //TileY should count up from the bottom
+
+            mapTile.Width = TileWidth;
+            mapTile.Height = TileHeight;
+
+            x++;
+
+            //Debug.Log("New x = " + x);
+
+            if (x % WidthInTiles == 0)
+            {
+                x = 0;
+                y++;
+            }
+
+            //Debug.Log("Post modulo x = " + x);
+
+            mapTile.x = mapTile.TileX * TileWidth; // -tileData.TileSet.TileWidth;
+            mapTile.y = mapTile.TileY * TileHeight; // -tileData.TileSet.TileHeight + tileLayer.Height;
+
+            //add to our map tile array, add to container
+            //Debug.Log("Initializing map tile[" + mapTile.TileX + "," + mapTile.TileY + "]");
+            tiles[mapTile.TileX, mapTile.TileY] = mapTile;
+            this.AddChild(mapTile);
+
+        }
     }
 
     private TileSet FindTileSetContainingGID(int gid)
@@ -180,5 +274,15 @@ class TileMapData
         tileSetFoundGIDs.Add(gid, foundTileSet);
 
         return foundTileSet;
+    }
+
+    public MapTile GetTile(int tileX, int tileY)
+    {
+        return tiles[tileX, tileY];
+    }
+
+    public Vector2 GetTilePosition(int tileX, int tileY)
+    {
+        return GetTile(tileX, tileY).GetPosition();
     }
 }

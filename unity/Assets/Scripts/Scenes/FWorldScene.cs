@@ -18,7 +18,8 @@ public class FWorldScene : FScene
 
     Player player;
     FTmxMap tmxMap;
-    FTilemap tileMap;
+    //FTilemap tileMap;
+    TileMapData tileMap;
     FLabel textLabel;
     TileMapHelper mapHelper;
 
@@ -52,41 +53,45 @@ public class FWorldScene : FScene
         {
             bool playerMoved = false;
 
+            int tileYDelta = 0;
+            int tileXDelta = 0;
+
             if (Input.GetKey("up"))
             {
-                if (player.TileY < tileMap.heightInTiles - 1)
+                if (player.TileY < tileMap.HeightInTiles - 1)
                 {
-                    player.TileY += 1;
+                    tileYDelta += 1;
                     playerMoved = true;
                 }
             } else if (Input.GetKey("down"))
             {
                 if (player.TileY > 0)
                 {
-                    player.TileY -= 1;
+                    tileYDelta -= 1;
                     playerMoved = true;
                 }
             } else if (Input.GetKey("left"))
             {
                 if (player.TileX > 0)
                 {
-                    player.TileX -= 1;
+                    tileXDelta -= 1;
                     playerMoved = true;
                 }
             } else if (Input.GetKey("right"))
             {
-                if (player.TileX < tileMap.widthInTiles - 1)
+                if (player.TileX < tileMap.WidthInTiles - 1)
                 {
-                    player.TileX += 1;
+                    tileXDelta += 1;
                     playerMoved = true;
                 }
             }
 
             if (playerMoved)
             {
-                player.MoveToFront();
+                //player.MoveToFront();
                 //player.SetPosition(GetTilePosition(playerTile));
-                player.SetPosition(mapHelper.GetTilePosition(player.TileCoordinates));
+                ChangePlayerTile(tileXDelta, tileYDelta);
+                //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
                 Debug.Log("Player position = " + player.GetPosition());
                 Debug.Log("Player tile = " + player.TileCoordinates);
 
@@ -99,10 +104,11 @@ public class FWorldScene : FScene
 
     public override void OnEnter()
 	{
+        
         Debug.Log("WorldScene OnEnter()");
         player = new Player("player");
 
-
+        /* This is the old TMXMap code
         // Add tilemap 
         tmxMap = new FTmxMap();
         tmxMap.clipNode = player;
@@ -132,6 +138,15 @@ public class FWorldScene : FScene
         this.AddChild(tmxMap);
 
         tmxMap.AddChild(player);
+        */
+
+        tileMap = new TileMapData("Forest", "JSON/forestMapLarge");
+        tileMap.LoadTiles();
+
+        mapHelper = new TileMapHelper(tileMap);
+
+        this.AddChild(tileMap);
+        tileMap.AddChild(player);
 
         //this.AddChild(player);
 
@@ -141,14 +156,18 @@ public class FWorldScene : FScene
         //maxBounds.x--;
         //maxBounds.y--;
 
-        player.anchorX = 0;
-        player.anchorY = 0;
+        //player.anchorX = 0;
+        //player.anchorY = 0;
 
         Debug.Log("Stage position = " + Futile.stage.GetPosition());
         Debug.Log("Player position = " + player.GetPosition());
 
-        player.TileCoordinates = mapHelper.GetCenterTile();
-        player.SetPosition(mapHelper.GetTilePosition(player.TileCoordinates));        
+
+        Vector2 centerTile = mapHelper.GetCenterTile();
+        MovePlayerToTile(centerTile.x, centerTile.y);
+
+        //player.TileCoordinates = mapHelper.GetCenterTile();
+        //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));        
 	}
 
     public override void OnExit()
@@ -156,7 +175,22 @@ public class FWorldScene : FScene
 
 	}
 
+    public void ChangePlayerTile(int tileXDelta, int tileYDelta)
+    {
+        MovePlayerToTile(player.TileX + tileXDelta, player.TileY + tileYDelta);
+    }
 
+    public void MovePlayerToTile(int tileX, int tileY)
+    {
+        player.TileX = tileX;
+        player.TileY = tileY;
+        player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));  
+    }
+
+    public void MovePlayerToTile(float tileX, float tileY)
+    {
+        MovePlayerToTile((int)tileX, (int)tileY);
+    }
 
 }
 
