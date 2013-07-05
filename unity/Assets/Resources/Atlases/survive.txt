@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_desert_1.png":
+"tiles_desert_0.png":
 {
 	"frame": {"x":550,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_desert_2.png":
+"tiles_desert_1.png":
 {
 	"frame": {"x":584,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -32,7 +32,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_desert_3.png":
+"tiles_desert_2.png":
 {
 	"frame": {"x":618,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -40,7 +40,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_desert_4.png":
+"tiles_desert_3.png":
 {
 	"frame": {"x":652,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -48,7 +48,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_forest_1.png":
+"tiles_forest_0.png":
 {
 	"frame": {"x":686,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -56,7 +56,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_forest_2.png":
+"tiles_forest_1.png":
 {
 	"frame": {"x":720,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -64,7 +64,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_forest_3.png":
+"tiles_forest_2.png":
 {
 	"frame": {"x":754,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -72,7 +72,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
-"tiles_forest_4.png":
+"tiles_forest_3.png":
 {
 	"frame": {"x":788,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -87,6 +87,6 @@
 	"format": "RGBA8888",
 	"size": {"w":1024,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:4b9228eb37b09449616d8a38eb3e1914$"
+	"smartupdate": "$TexturePacker:SmartUpdate:e578050aa0c0846ffa5cbe2cb9b98383$"
 }
 }

@@ -148,14 +148,14 @@
         <array>
             <filename>player.png</filename>
             <filename>comic-sans.png</filename>
+            <filename>tiles_desert_2.png</filename>
+            <filename>tiles_desert_3.png</filename>
+            <filename>tiles_forest_0.png</filename>
             <filename>tiles_forest_1.png</filename>
             <filename>tiles_forest_2.png</filename>
             <filename>tiles_forest_3.png</filename>
-            <filename>tiles_forest_4.png</filename>
-            <filename>tiles_desert_4.png</filename>
+            <filename>tiles_desert_0.png</filename>
             <filename>tiles_desert_1.png</filename>
-            <filename>tiles_desert_2.png</filename>
-            <filename>tiles_desert_3.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -5,6 +5,10 @@
          "height":32,
          "name":"GroundTiles",
          "opacity":1,
+         "properties":
+            {
+             "layer_type":"terrain"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":32,
@@ -70,6 +74,10 @@
                  "y":384
                 }],
          "opacity":1,
+         "properties":
+            {
+             "layer_type":"event"
+            },
          "type":"objectgroup",
          "visible":true,
          "width":32,

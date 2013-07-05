@@ -27,10 +27,21 @@ public class LayerTileData
 
         int assetID = GID - TileSet.FirstGID;
 
-        assetID++; //asset IDs start at 1
+        //assetID++; //asset IDs start at 1
 
         assetName = TileSet.GetAssetBase() + "_" + assetID; // + ".png";
 
         return assetName;
+    }
+
+    public string GetPropertyValue(string propertyName)
+    {
+        string propertyValue = "";
+
+        string propertyKey = TileSet.GeneratePropertyKey(GID, propertyName);
+
+        propertyValue = TileSet.GetPropertyValue(propertyKey);
+
+        return propertyValue;
     }
 }

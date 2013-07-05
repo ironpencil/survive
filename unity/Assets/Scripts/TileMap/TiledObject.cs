@@ -25,4 +25,38 @@ class TiledObject
     public int ObjHeight { get; set; }
 
     public Dictionary<string, object> ObjProperties { get; set; }
+
+    public string GetPropertyValue(string propertyName)
+    {
+        string propertyValue = "";
+
+        if (ObjProperties != null)
+        {
+
+            if (ObjProperties.ContainsKey(propertyName))
+            {
+
+                object objValue;
+                if (ObjProperties.TryGetValue(propertyName, out objValue))
+                {
+                    propertyValue = objValue.ToString();
+                }
+
+            }
+        }
+
+        return propertyValue;
+    }
+
+    public List<string> GetPropertyNames()
+    {
+        List<string> propertyNames = new List<string>();
+
+        foreach (string key in ObjProperties.Keys)
+        {
+            propertyNames.Add(key);
+        }
+
+        return propertyNames;
+    }
 }

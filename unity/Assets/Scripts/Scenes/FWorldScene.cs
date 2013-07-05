@@ -22,6 +22,7 @@ public class FWorldScene : FScene
     TileMapData tileMap;
     FLabel textLabel;
     TileMapHelper mapHelper;
+    TileLayer terrainLayer;
 
     private float moveDelayTime = 0.1f;
     private float nextMoveTime = 0.0f;
@@ -88,15 +89,33 @@ public class FWorldScene : FScene
 
             if (playerMoved)
             {
-                //player.MoveToFront();
-                //player.SetPosition(GetTilePosition(playerTile));
-                ChangePlayerTile(tileXDelta, tileYDelta);
-                //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
-                Debug.Log("Player position = " + player.GetPosition());
-                Debug.Log("Player tile = " + player.TileCoordinates);
 
-                nextMoveTime = Time.time + moveDelayTime;
-                //Debug.Log("Background position = " + background.GetPosition());
+                int targetTileX = player.TileX + tileXDelta;
+                int targetTileY = player.TileY + tileYDelta;
+
+                MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
+
+                LayerTileData targetTileData = targetTile.GetTileFromLayer(terrainLayer).TileData;
+
+                string canWalkValue = targetTileData.GetPropertyValue("canWalkOver");
+
+                Debug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
+
+                bool canWalk = (canWalkValue.Length > 0 ? bool.Parse(canWalkValue) : false);
+                if (canWalk)
+                {
+
+                    //player.MoveToFront();
+                    //player.SetPosition(GetTilePosition(playerTile));
+                    MovePlayerToTile(targetTile);
+                    //ChangePlayerTile(tileXDelta, tileYDelta);
+                    //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
+                    Debug.Log("Player position = " + player.GetPosition());
+                    Debug.Log("Player tile = " + player.TileCoordinates);
+
+                    nextMoveTime = Time.time + moveDelayTime;
+                    //Debug.Log("Background position = " + background.GetPosition());
+                }
             }
         }
 		
@@ -148,6 +167,25 @@ public class FWorldScene : FScene
         this.AddChild(tileMap);
         tileMap.AddChild(player);
 
+        terrainLayer = null;
+        foreach (MapLayer mapLayer in tileMap.Layers)
+        {
+            //find the terrain layer
+            if (mapLayer.LayerType.Equals("tilelayer"))
+            {
+                TileLayer tileLayer = (TileLayer)mapLayer;
+
+                if (tileLayer.GetPropertyValue("layer_type").Equals("terrain"))
+                {
+                    terrainLayer = tileLayer;
+                }
+            }
+        }
+
+        if (terrainLayer == null)
+        {
+            Debug.Log("No Terrain Layer found!");
+        }
         //this.AddChild(player);
 
         Futile.stage.Follow(player, true, true);
@@ -190,6 +228,13 @@ public class FWorldScene : FScene
     public void MovePlayerToTile(float tileX, float tileY)
     {
         MovePlayerToTile((int)tileX, (int)tileY);
+    }
+
+    public void MovePlayerToTile(MapTile tile)
+    {
+        player.TileX = tile.TileX;
+        player.TileY = tile.TileY;
+        player.SetPosition(tile.GetPosition());
     }
 
 }

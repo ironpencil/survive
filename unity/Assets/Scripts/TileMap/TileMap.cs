@@ -9,9 +9,14 @@ public class TileMapData : FContainer
 
     private MapTile[,] tiles;
 
+    private List<MapLayer> layers;
+    public List<MapLayer> Layers { get { return layers; } set { layers = value; } }
+
     public string Name { get; set; }
 
     private Dictionary<int, TileSet> tileSets;
+
+    //these two collections are only used to cache tile data during setup
     private List<int> tileSetFirstGIDs;
     private Dictionary<int, TileSet> tileSetFoundGIDs;
 
@@ -39,6 +44,8 @@ public class TileMapData : FContainer
     public void LoadTiles()
     {
         tileSets = new Dictionary<int, TileSet>();
+        layers = new List<MapLayer>();
+
         tileSetFirstGIDs = new List<int>();
         tileSetFoundGIDs = new Dictionary<int, TileSet>();
 
@@ -74,7 +81,10 @@ public class TileMapData : FContainer
             tileSet.Name = tileSetData["name"].ToString();
             tileSet.TileWidth = int.Parse(tileSetData["tilewidth"].ToString());
             tileSet.TileHeight = int.Parse(tileSetData["tileheight"].ToString());
-            tileSet.TileProperties = (Dictionary<string, object>)tileSetData["tileproperties"];
+
+            tileSet.SetupTileProperties((Dictionary<string, object>)tileSetData["tileproperties"]);
+
+            Debug.Log(tileSet.GetTilePropertyDescription());
 
             tileSets.Add(tileSet.FirstGID, tileSet);
             tileSetFirstGIDs.Add(tileSet.FirstGID);
@@ -110,6 +120,7 @@ public class TileMapData : FContainer
             mapLayer.Height = int.Parse(layerData["height"].ToString());
             mapLayer.Opacity = int.Parse(layerData["opacity"].ToString());
             mapLayer.LayerType = layerData["type"].ToString();
+            mapLayer.LayerProperties = (Dictionary<string, object>)layerData["properties"];
 
             if (mapLayer is TileLayer) {
                 //load the tile layer
@@ -154,7 +165,7 @@ public class TileMapData : FContainer
                         tileLayer.AddChild(tile);
 
                         //add a reference to this tile to our MapTiles array
-                        tiles[tileData.TileX, tileData.TileY].LayerTiles.Add(tile);
+                        tiles[tileData.TileX, tileData.TileY].LayerTiles.Add(tileLayer, tile);
                     }
                 }
 
@@ -196,8 +207,13 @@ public class TileMapData : FContainer
             }    
       
             //done loading the layer, add it to this map
+            layers.Add(mapLayer);
             this.AddChild(mapLayer);
-        } 
+        }
+
+        //these are only used during set-up, don't need them anymore
+        tileSetFirstGIDs = null;
+        tileSetFoundGIDs = null;
 
     }
 
