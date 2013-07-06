@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class ObjectLayer : MapLayer
+public class ObjectLayer : MapLayer
 {
 
     public List<TiledObject> objects = new List<TiledObject>();

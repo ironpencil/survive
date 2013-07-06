@@ -16,4 +16,6 @@ public class LayerTile : FSprite
         //this.anchorY = 1;
     }
 
+
+
 }

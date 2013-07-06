@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class TiledObject
+public class TiledObject
 {
 
 
@@ -58,5 +58,23 @@ class TiledObject
         }
 
         return propertyNames;
+    }
+
+    public string GetObjectPropertyDescription()
+    {
+        string description = "";
+
+        foreach (string key in ObjProperties.Keys)
+        {
+            description += "Key[" + key + "]";
+            object value;
+            if (ObjProperties.TryGetValue(key, out value))
+            {
+                description += " Value = '" + value.ToString() + "'";
+            }
+            description += "\r\n";
+        }
+
+        return description;
     }
 }

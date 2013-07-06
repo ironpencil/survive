@@ -93,9 +93,10 @@ public class FWorldScene : FScene
                 int targetTileX = player.TileX + tileXDelta;
                 int targetTileY = player.TileY + tileYDelta;
 
-                MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
+                LayerTile targetTile = terrainLayer.GetTileAt(targetTileX, targetTileY);
+                //MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
 
-                LayerTileData targetTileData = targetTile.GetTileFromLayer(terrainLayer).TileData;
+                LayerTileData targetTileData = targetTile.TileData;
 
                 string canWalkValue = targetTileData.GetPropertyValue("canWalkOver");
 
@@ -167,20 +168,7 @@ public class FWorldScene : FScene
         this.AddChild(tileMap);
         tileMap.AddChild(player);
 
-        terrainLayer = null;
-        foreach (MapLayer mapLayer in tileMap.Layers)
-        {
-            //find the terrain layer
-            if (mapLayer.LayerType.Equals("tilelayer"))
-            {
-                TileLayer tileLayer = (TileLayer)mapLayer;
-
-                if (tileLayer.GetPropertyValue("layer_type").Equals("terrain"))
-                {
-                    terrainLayer = tileLayer;
-                }
-            }
-        }
+        terrainLayer = tileMap.GetTileLayerWithProperty("layer_type", "terrain");
 
         if (terrainLayer == null)
         {
@@ -222,7 +210,7 @@ public class FWorldScene : FScene
     {
         player.TileX = tileX;
         player.TileY = tileY;
-        player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));  
+        player.SetPosition(terrainLayer.GetTilePosition(player.TileX, player.TileY));  
     }
 
     public void MovePlayerToTile(float tileX, float tileY)
@@ -230,10 +218,11 @@ public class FWorldScene : FScene
         MovePlayerToTile((int)tileX, (int)tileY);
     }
 
-    public void MovePlayerToTile(MapTile tile)
+    //public void MovePlayerToTile(MapTile tile)
+    public void MovePlayerToTile(LayerTile tile)
     {
-        player.TileX = tile.TileX;
-        player.TileY = tile.TileY;
+        player.TileX = tile.TileData.TileX;
+        player.TileY = tile.TileData.TileY;
         player.SetPosition(tile.GetPosition());
     }
 

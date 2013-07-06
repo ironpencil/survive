@@ -10,9 +10,9 @@ public class MapLayer : FContainer
 
     public bool Visible { get; set; }
 
-    public int Width { get; set; }
+    public int WidthInTiles { get; set; }
 
-    public int Height { get; set; }
+    public int HeightInTiles { get; set; }
 
     public string LayerType { get; set; }
 
