@@ -21,8 +21,8 @@ public class FWorldScene : FScene
     //FTilemap tileMap;
     TileMapData tileMap;
     FLabel textLabel;
-    TileMapHelper mapHelper;
     TileLayer terrainLayer;
+    ObjectLayer terrainObjects;
 
     private float moveDelayTime = 0.1f;
     private float nextMoveTime = 0.0f;
@@ -47,6 +47,7 @@ public class FWorldScene : FScene
         {
             FMenuScene menu = new FMenuScene("menu");
             FSceneManager.Instance.PushScene(menu);
+            return; // don't run any other update code if they are opening the menu because this scene will be paused
         }
 
         //player Movement
@@ -93,22 +94,15 @@ public class FWorldScene : FScene
                 int targetTileX = player.TileX + tileXDelta;
                 int targetTileY = player.TileY + tileYDelta;
 
-                LayerTile targetTile = terrainLayer.GetTileAt(targetTileX, targetTileY);
-                //MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
+                //bool canMoveToTile = 
 
-                LayerTileData targetTileData = targetTile.TileData;
+                bool canWalk = CanMoveToTile(targetTileX, targetTileY);
 
-                string canWalkValue = targetTileData.GetPropertyValue("canWalkOver");
-
-                Debug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
-
-                bool canWalk = (canWalkValue.Length > 0 ? bool.Parse(canWalkValue) : false);
                 if (canWalk)
                 {
-
                     //player.MoveToFront();
                     //player.SetPosition(GetTilePosition(playerTile));
-                    MovePlayerToTile(targetTile);
+                    MovePlayerToTile(targetTileX, targetTileY);
                     //ChangePlayerTile(tileXDelta, tileYDelta);
                     //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
                     Debug.Log("Player position = " + player.GetPosition());
@@ -120,50 +114,15 @@ public class FWorldScene : FScene
             }
         }
 		
-	}
+	}    
 
     public override void OnEnter()
-	{
-        
+	{        
         Debug.Log("WorldScene OnEnter()");
         player = new Player("player");
 
-        /* This is the old TMXMap code
-        // Add tilemap 
-        tmxMap = new FTmxMap();
-        tmxMap.clipNode = player;
-        tmxMap.LoadTMX("CSVs/forestMapLarge"); // load tmx text file (within Resources/CSVs folder)
-        tileMap = null;
-
-        //bool tileMapFound = tmxMap._tileMaps.TryGetValue(tmxMap._layerNames[0], out tileMap);
-
-        //Debug.Log("tileMapFound=" + tileMapFound);
-
-        //tmx1.x = 0;
-        //tmx1.y = 0;
-
-        foreach (TmxLayer tmxLayer in tmxMap._tmxLayers)
-        {
-            if (tmxLayer.LayerType == TmxLayerType.TILE_LAYER)
-            {
-                tileMap = (FTilemap)tmxLayer.Layer;
-                mapHelper = new TileMapHelper(tileMap);
-                break;
-            }
-        }
-
-        Debug.Log("TileMap Size (x, y):" + tileMap.width + "," + tileMap.height);
-        Debug.Log("TileMap Tiles (x, y):" + tileMap.widthInTiles + "," + tileMap.heightInTiles);
-
-        this.AddChild(tmxMap);
-
-        tmxMap.AddChild(player);
-        */
-
         tileMap = new TileMapData("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
-
-        mapHelper = new TileMapHelper(tileMap);
 
         this.AddChild(tileMap);
         tileMap.AddChild(player);
@@ -174,26 +133,20 @@ public class FWorldScene : FScene
         {
             Debug.Log("No Terrain Layer found!");
         }
-        //this.AddChild(player);
+
+        terrainObjects = tileMap.GetObjectLayerWithProperty("layer_type", "terrain");
+
+        if (terrainObjects == null)
+        {
+            Debug.Log("No Terrain Objects found!");
+        }
 
         Futile.stage.Follow(player, true, true);
-
-        //maxBounds = GetSizeInTiles(new Vector2(tileMap.width, tileMap.height));
-        //maxBounds.x--;
-        //maxBounds.y--;
-
-        //player.anchorX = 0;
-        //player.anchorY = 0;
 
         Debug.Log("Stage position = " + Futile.stage.GetPosition());
         Debug.Log("Player position = " + player.GetPosition());
 
-
-        Vector2 centerTile = mapHelper.GetCenterTile();
-        MovePlayerToTile(centerTile.x, centerTile.y);
-
-        //player.TileCoordinates = mapHelper.GetCenterTile();
-        //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));        
+        MovePlayerToTile((int)terrainLayer.WidthInTiles/2, (int)terrainLayer.HeightInTiles/2);    
 	}
 
     public override void OnExit()
@@ -226,5 +179,80 @@ public class FWorldScene : FScene
         player.SetPosition(tile.GetPosition());
     }
 
+    private bool CanMoveToTile(int targetTileX, int targetTileY)
+    {
+        //get the tile we're trying to move to
+        LayerTile targetTile = terrainLayer.GetTileAt(targetTileX, targetTileY);
+        //MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
+
+        //get all objects that intersect with this tile
+        List<TiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(targetTile.GetRect().CloneAndScale(0.9f));
+
+        string canWalkValue = "";
+        bool canWalk = false;
+        bool canWalkFound = false;
+
+        foreach (TiledObject tileObject in tileObjects)
+        {
+            //if the object says it can be walked on, set canWalk to true
+            canWalkValue = tileObject.GetPropertyValue("canWalkOver");
+
+            Debug.Log("Target Tile Object = " + tileObject.Name + " | canWalkOver = " + canWalkValue);
+            //just use first object we find
+            if (canWalkValue.Length > 0)
+            {
+                canWalk = bool.Parse(canWalkValue);
+                canWalkFound = true;
+                break;
+            }
+        }
+
+        //only check the tile if we didn't find any objects with walkable definitions
+        if (!canWalkFound)
+        {
+            //check the canWalk value of the tile
+            LayerTileData targetTileData = targetTile.TileData;
+
+            canWalkValue = targetTileData.GetPropertyValue("canWalkOver");
+
+            Debug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
+
+            canWalk = (canWalkValue.Length > 0 ? bool.Parse(canWalkValue) : false);
+        }
+
+        return canWalk;
+    }
 }
 
+public static class IPRectExtensions
+{
+    public static Rect CloneAndScale(this Rect rect, float scale)
+    {
+        float left = rect.xMin;
+        float bottom = rect.yMin;
+        float width = rect.width;
+        float height = rect.height;
+
+        //we now have the original rect, check if we need to scale it
+        if (scale != 1.0f)
+        {
+            //scale the width and height
+            float newWidthMag = rect.width * scale;
+            float newHeightMag = rect.height * scale;
+
+            //find the difference
+            float widthDelta = rect.width - newWidthMag;
+            float heightDelta = rect.height - newHeightMag;
+
+            width = newWidthMag;
+            height = newHeightMag;
+
+            //move the left and top to accomodate the new size (grow/shrink around center)
+            left += widthDelta / 2;
+            bottom += heightDelta / 2;
+        }
+
+        //return a rect with the calculated top, left, and sizes
+        return new Rect(left, bottom, width, height);
+    }
+}

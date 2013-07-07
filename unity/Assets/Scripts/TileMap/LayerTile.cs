@@ -14,8 +14,33 @@ public class LayerTile : FSprite
         this.TileData = tileData;
         //this.anchorX = 0;
         //this.anchorY = 1;
+
     }
 
+    public Rect GetRect()
+    {
+        //get the magnitutde of the width and height
+        float widthMag = Mathf.Abs(this.width);
+        float heightMag = Mathf.Abs(this.height);
 
+        //this finds the left side of the sprite so long as the width is positive
+        //finds the right side of the sprite if width is negative
+        float left = this.x - (this.width * (this.anchorX));     
+    
+        //if the width is negative, subtract the magnitutde of the width to find the left side
+        if (this.width < 0)
+        {
+            left -= widthMag;
+        }
 
+        float bottom = this.y - (this.height * (this.anchorY));
+
+        if (this.height < 0)
+        {
+            bottom -= heightMag;
+        }       
+
+        //return a rect with the calculated top, left, and sizes
+        return new Rect(left, bottom, widthMag, heightMag);
+    }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TiledObject
+public class TiledObject : FContainer
 {
 
 
@@ -16,13 +16,9 @@ public class TiledObject
 
     public bool Visible { get; set; }
 
-    public int PosX { get; set; }
+    public float ObjWidth { get; set; }
 
-    public int PosY { get; set; }
-
-    public int ObjWidth { get; set; }
-
-    public int ObjHeight { get; set; }
+    public float ObjHeight { get; set; }
 
     public Dictionary<string, object> ObjProperties { get; set; }
 
@@ -76,5 +72,15 @@ public class TiledObject
         }
 
         return description;
+    }
+
+    public Rect GetRect()
+    {
+        float objLeft = this.x - (this.ObjWidth / 2);
+        float objBottom = this.y - (this.ObjHeight / 2);
+
+        Rect objectRect = new Rect(objLeft, objBottom, this.ObjWidth, this.ObjHeight);
+
+        return objectRect;
     }
 }

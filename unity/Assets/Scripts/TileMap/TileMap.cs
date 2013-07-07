@@ -23,8 +23,8 @@ public class TileMapData : FContainer
     private List<int> tileSetFirstGIDs;
     private Dictionary<int, TileSet> tileSetFoundGIDs;
 
-    public int Width { get; set; }
-    public int Height { get; set; }
+    public int Width { get { return TileWidth * WidthInTiles; } }
+    public int Height { get { return TileHeight * HeightInTiles; } }
 
     public int TileWidth { get; set; }
     public int TileHeight { get; set; }
@@ -66,8 +66,6 @@ public class TileMapData : FContainer
         HeightInTiles = int.Parse(mapData["height"].ToString());        
         TileWidth = int.Parse(mapData["tilewidth"].ToString());
         TileHeight = int.Parse(mapData["tileheight"].ToString());
-        Width = WidthInTiles * TileWidth;
-        Height = HeightInTiles * TileHeight;
 
         //InitializeMapTiles();       
 
@@ -122,6 +120,10 @@ public class TileMapData : FContainer
             mapLayer.Opacity = int.Parse(layerData["opacity"].ToString());
             mapLayer.LayerType = layerData["type"].ToString();
             mapLayer.LayerProperties = (Dictionary<string, object>)layerData["properties"];
+            
+            //these are being pulled from the map, assume same tile size for whole map
+            mapLayer.TileWidth = TileWidth;
+            mapLayer.TileHeight = TileHeight;            
 
             if (mapLayer is TileLayer) {
 
@@ -193,16 +195,26 @@ public class TileMapData : FContainer
                     tiledObject.Name = objectDef["name"].ToString();
                     tiledObject.ObjType = objectDef["type"].ToString();
                     tiledObject.Visible = bool.Parse(objectDef["visible"].ToString());
-                    tiledObject.PosX = int.Parse(objectDef["x"].ToString());
-                    tiledObject.PosY = int.Parse(objectDef["y"].ToString());
-                    tiledObject.ObjWidth = int.Parse(objectDef["width"].ToString());
-                    tiledObject.ObjHeight = int.Parse(objectDef["height"].ToString());
+                    tiledObject.x = float.Parse(objectDef["x"].ToString());
+                    tiledObject.y = float.Parse(objectDef["y"].ToString());
+                    tiledObject.ObjWidth = float.Parse(objectDef["width"].ToString());
+                    tiledObject.ObjHeight = float.Parse(objectDef["height"].ToString());
                     tiledObject.ObjProperties = (Dictionary<string, object>)objectDef["properties"];
 
                     Debug.Log(tiledObject.GetObjectPropertyDescription());
 
-                    objectLayer.objects.Add(tiledObject);
+                    //adjust y value for Futile (count upwards instead of downwards like in Tiled)
+                    tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight;
+                    
 
+                    objectLayer.AddObject(tiledObject);
+
+                    //FSprite objSprite = new FSprite("Futile_White");
+
+                    //objSprite.x = tiledObject.x;
+                    //objSprite.y = tiledObject.y;
+
+                    //objectLayer.AddChild(objSprite);
                     //should now have an object layer that contains all the object info
 
                     //TODO: Add references to the objects to the MapTile array for any tiles that they exist in?

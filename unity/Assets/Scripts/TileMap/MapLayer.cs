@@ -14,6 +14,14 @@ public class MapLayer : FContainer
 
     public int HeightInTiles { get; set; }
 
+    public int TileWidth { get; set; }
+
+    public int TileHeight { get; set; }
+
+    public int Width { get { return WidthInTiles * TileWidth; } }
+
+    public int Height { get { return HeightInTiles * TileHeight; } }
+
     public string LayerType { get; set; }
 
     public int Opacity { get; set; }
@@ -53,4 +61,5 @@ public class MapLayer : FContainer
 
         return propertyNames;
     }
+
 }
