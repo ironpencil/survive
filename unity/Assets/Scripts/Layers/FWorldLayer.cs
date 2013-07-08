@@ -199,8 +199,16 @@ public class FWorldLayer : FLayer
         FSceneManager.Instance.PushScene(menu);
     }
 
+    private bool shallowStreamTriggered = false;
     private void ShallowStreamEvent(TiledObject tileObject)
     {
+        if (!shallowStreamTriggered)
+        {
+            string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
+            FMenuScene menu = new FMenuScene("menu", msgText);
+            FSceneManager.Instance.PushScene(menu);
+            shallowStreamTriggered = true;
+        }
         Debug.Log("Running Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString()));
     }
 

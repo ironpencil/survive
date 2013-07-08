@@ -39,6 +39,8 @@ public class FMenuScene : FScene
             return;
         }
 
+        this.SetPosition(Futile.stage.GetPosition() * -1);
+
         if (Input.GetKeyDown("space"))
         {
             if (!msgBox.Next())
