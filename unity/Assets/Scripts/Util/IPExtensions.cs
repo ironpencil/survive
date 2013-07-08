@@ -36,3 +36,20 @@ public static class IPRectExtensions
         return new Rect(left, bottom, width, height);
     }
 }
+
+public static class IPFLabelExtensions
+{
+    public static Vector2 MeasureText(this FLabel label, string text)
+    {
+        string originalText = label.text;
+
+        label.text = text;
+
+        Vector2 labelSize = new Vector2(label.textRect.width, label.textRect.height);
+
+        label.text = originalText;
+
+        return labelSize;
+    }
+}
+

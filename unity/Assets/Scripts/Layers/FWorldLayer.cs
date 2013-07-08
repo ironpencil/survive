@@ -21,7 +21,7 @@ public class FWorldLayer : FLayer
     FLabel textLabel;
     TileLayer terrainLayer;
     ObjectLayer terrainObjects;
-
+    
     private float moveDelayTime = 0.1f;
     private float nextMoveTime = 0.0f;
 
@@ -43,7 +43,8 @@ public class FWorldLayer : FLayer
 
         if (Input.GetKeyDown("space"))
         {
-            FMenuScene menu = new FMenuScene("menu");
+            string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
+            FMenuScene menu = new FMenuScene("menu", msgText);
             FSceneManager.Instance.PushScene(menu);
             return; // don't run any other update code if they are opening the menu because this scene will be paused
         }
@@ -193,6 +194,9 @@ public class FWorldLayer : FLayer
     private void MessageEvent(TiledObject tileObject)
     {
         Debug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
+        string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
+        FMenuScene menu = new FMenuScene("menu", msgText);
+        FSceneManager.Instance.PushScene(menu);
     }
 
     private void ShallowStreamEvent(TiledObject tileObject)

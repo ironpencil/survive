@@ -20,11 +20,16 @@ public class FMenuScene : FScene
     FTilemap tileMap;
     FLabel textLabel;
 
+    MessageBox msgBox;
+
+    string messageText = "";
+
     Vector2 maxBounds;
-    public FMenuScene(string _name = "Default")
-        : base(_name)
+    public FMenuScene(string name, string messageText)
+        : base(name)
 	{
-		mName = _name;
+		mName = name;
+        this.messageText = messageText;
 	}
 	
 	public override void OnUpdate ()
@@ -36,19 +41,21 @@ public class FMenuScene : FScene
 
         if (Input.GetKeyDown("space"))
         {
-            FSceneManager.Instance.PopScene();
+            if (!msgBox.Next())
+            {
+                FSceneManager.Instance.PopScene();
+            }
         }		
 	}
 
     public override void OnEnter()
 	{
-        Debug.Log("MenuScene OnEnter()");
-
+        Debug.Log("MenuScene OnEnter()");       
 
         FSprite menu = new FSprite("Futile_White");
 
-        menu.width = Futile.screen.width * 0.8f;
-        menu.height = Futile.screen.height * 0.8f;
+        menu.width = Futile.screen.width * 0.25f;
+        menu.height = Futile.screen.height * 0.25f;
         
         this.SetPosition(Futile.stage.GetPosition() * -1);
 
@@ -57,12 +64,13 @@ public class FMenuScene : FScene
 
         this.AddChild(menu);
 
-        FLabel textLabel = new FLabel("ComicSans", "Hello world! This is my blank menu!");
+        //FLabel textLabel = new FLabel("ComicSans", "Hello world! This is my blank menu!");
         //Futile.stage.AddChild(textLabel);
 
-        this.AddChild(textLabel);
-        textLabel.anchorY = 1;
-        textLabel.y = Futile.screen.halfHeight * 0.8f;
+        //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
+        msgBox = new MessageBox(messageText, menu.width, menu.height);
+
+        this.AddChild(msgBox);
 	}
 
     public override void OnExit()
