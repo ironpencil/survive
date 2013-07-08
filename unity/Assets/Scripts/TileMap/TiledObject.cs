@@ -20,28 +20,25 @@ public class TiledObject : FContainer
 
     public float ObjHeight { get; set; }
 
-    public Dictionary<string, object> ObjProperties { get; set; }
+    private Dictionary<string, object> objProperties = new Dictionary<string, object>();
+    public Dictionary<string, object> ObjProperties { get { return objProperties; } set { objProperties = value; } }
 
     public string GetPropertyValue(string propertyName)
     {
         string propertyValue = "";
 
-        if (ObjProperties != null)
+        object objValue;
+        if (ObjProperties.TryGetValue(propertyName, out objValue))
         {
-
-            if (ObjProperties.ContainsKey(propertyName))
-            {
-
-                object objValue;
-                if (ObjProperties.TryGetValue(propertyName, out objValue))
-                {
-                    propertyValue = objValue.ToString();
-                }
-
-            }
+            propertyValue = objValue.ToString();
         }
 
         return propertyValue;
+    }
+
+    public bool PropertyExists(string propertyName)
+    {
+        return ObjProperties.ContainsKey(propertyName);
     }
 
     public List<string> GetPropertyNames()

@@ -7,7 +7,7 @@
          "opacity":1,
          "properties":
             {
-             "layer_type":"terrain"
+             "LAYER_TYPE":"TERRAIN"
             },
          "type":"tilelayer",
          "visible":true,
@@ -21,13 +21,13 @@
          "objects":[
                 {
                  "height":32,
-                 "name":"South Bank",
+                 "name":"Shallow Stream South Bank",
                  "properties":
                     {
-                     "SET:SHALLOW_STREAM_EVENT":"true",
-                     "text":"The water is shallow here, and the stream can be crossed safely."
+                     "EVENT_TYPE":"SHALLOW_STREAM_SOUTH",
+                     "TEXT":"The water is shallow here, and the stream can be crossed safely."
                     },
-                 "type":"event",
+                 "type":"EVENT",
                  "visible":true,
                  "width":32,
                  "x":352,
@@ -35,12 +35,12 @@
                 }, 
                 {
                  "height":32,
-                 "name":"Stream",
+                 "name":"A Shallow Stream",
                  "properties":
                     {
-                     "canWalkOver":"true"
+                     "CAN_WALK":"true"
                     },
-                 "type":"tile",
+                 "type":"TILE",
                  "visible":true,
                  "width":32,
                  "x":352,
@@ -51,9 +51,11 @@
                  "name":"A Hidden Treasure",
                  "properties":
                     {
-                     "text":"You found a dirty magazine! The porn fairy must have been here!"
+                     "CAN_WALK":"true",
+                     "EVENT_TYPE":"MESSAGE",
+                     "TEXT":"You found a dirty magazine! The porn fairy must have been here!"
                     },
-                 "type":"event",
+                 "type":"EVENT",
                  "visible":true,
                  "width":32,
                  "x":320,
@@ -61,13 +63,13 @@
                 }, 
                 {
                  "height":32,
-                 "name":"North Bank",
+                 "name":"Shallow Stream North Bank",
                  "properties":
                     {
-                     "SET:SHALLOW_STREAM_EVENT":"true",
-                     "text":"The water is shallow here, and the stream can be crossed safely."
+                     "EVENT_TYPE":"SHALLOW_STREAM_NORTH",
+                     "TEXT":"The water is shallow here, and the stream can be crossed safely."
                     },
-                 "type":"event",
+                 "type":"EVENT",
                  "visible":true,
                  "width":32,
                  "x":352,
@@ -76,7 +78,7 @@
          "opacity":1,
          "properties":
             {
-             "layer_type":"terrain"
+             "LAYER_TYPE":"TERRAIN"
             },
          "type":"objectgroup",
          "visible":true,
@@ -108,19 +110,19 @@
             {
              "0":
                 {
-                 "canWalkOver":"true"
+                 "CAN_WALK":"true"
                 },
              "1":
                 {
-                 "canWalkOver":"true"
+                 "CAN_WALK":"true"
                 },
              "2":
                 {
-                 "canWalkOver":"false"
+                 "CAN_WALK":"false"
                 },
              "3":
                 {
-                 "canWalkOver":"false"
+                 "CAN_WALK":"false"
                 }
             },
          "tilewidth":32
@@ -142,19 +144,19 @@
             {
              "0":
                 {
-                 "canWalkOver":"true"
+                 "CAN_WALK":"true"
                 },
              "1":
                 {
-                 "canWalkOver":"true"
+                 "CAN_WALK":"true"
                 },
              "2":
                 {
-                 "canWalkOver":"false"
+                 "CAN_WALK":"false"
                 },
              "3":
                 {
-                 "canWalkOver":"false"
+                 "CAN_WALK":"false"
                 }
             },
          "tilewidth":32

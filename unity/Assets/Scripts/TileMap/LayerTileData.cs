@@ -44,4 +44,11 @@ public class LayerTileData
 
         return propertyValue;
     }
+
+    public bool PropertyExists(string propertyName)
+    {
+        string propertyKey = TileSet.GeneratePropertyKey(GID, propertyName);
+
+        return TileSet.PropertyExists(propertyKey);
+    }
 }

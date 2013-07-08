@@ -14,7 +14,8 @@ public class TileSet
 
     public string Name { get; set; }
 
-    public Dictionary<string, string> TileProperties { get; private set; }
+    private Dictionary<string, string> tileProperties = new Dictionary<string, string>();
+    public Dictionary<string, string> TileProperties { get { return tileProperties; } private set { tileProperties = value; } }
 
     public void SetupTileProperties(Dictionary<string, object> tileProperties)
     {
@@ -97,21 +98,18 @@ public class TileSet
     {
         string propertyValue = "";
 
-        if (TileProperties != null)
+        string value;
+        if (TileProperties.TryGetValue(propertyKey, out value))
         {
-
-            if (TileProperties.ContainsKey(propertyKey))
-            {
-
-                string value;
-                if (TileProperties.TryGetValue(propertyKey, out value))
-                {
-                    propertyValue = value;
-                }
-            }
+            propertyValue = value;
         }
 
         return propertyValue;
+    }
+
+    public bool PropertyExists(string propertyName)
+    {
+        return TileProperties.ContainsKey(propertyName);
     }
 
     public List<string> GetPropertyNames()
