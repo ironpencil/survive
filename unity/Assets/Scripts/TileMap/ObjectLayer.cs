@@ -58,18 +58,18 @@ public class ObjectLayer : MapLayer
     {
         List<TiledObject> objectList = new List<TiledObject>();
 
-        Debug.Log("Check Rect = " + GetRectDescription(checkRect));
+        IPDebug.Log("Check Rect = " + GetRectDescription(checkRect));
 
         foreach (TiledObject tiledObject in objects)
         {
-            Debug.Log("Object Rect[" + tiledObject.Name + "] = " + GetRectDescription(tiledObject.GetRect()));
+            IPDebug.Log("Object Rect[" + tiledObject.Name + "] = " + GetRectDescription(tiledObject.GetRect()));
             if (tiledObject.GetRect().CheckIntersect(checkRect))
             {
                 objectList.Add(tiledObject);
             }
         }
 
-        Debug.Log("Objects Returned: " + objectList.Count());
+        IPDebug.Log("Objects Returned: " + objectList.Count());
         return objectList;
     }
 

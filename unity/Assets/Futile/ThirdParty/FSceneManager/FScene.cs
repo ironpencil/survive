@@ -19,7 +19,7 @@ public class FScene : FContainer
 	public bool Paused
 	{
 		get { return mPaused; }
-		set { mPaused = value; }
+        set { mPaused = value; }
 	}
 	
 	protected string mName;
@@ -41,7 +41,7 @@ public class FScene : FContainer
 		
 		this.OnEnter();
 		
-		Debug.Log("+++ Scene Added To Stage: " + mName);
+		IPDebug.Log("+++ Scene Added To Stage: " + mName);
 	}
 
 	override public void HandleRemovedFromStage()
@@ -51,7 +51,7 @@ public class FScene : FContainer
 		Futile.instance.SignalUpdate -= OnUpdate;
 		base.HandleRemovedFromStage();
 		
-		Debug.Log("--- Scene Removed From Stage: " + mName);
+		IPDebug.Log("--- Scene Removed From Stage: " + mName);
 	}
 	
 	virtual public void OnUpdate ()

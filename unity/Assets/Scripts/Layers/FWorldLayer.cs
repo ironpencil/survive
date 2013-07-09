@@ -20,10 +20,9 @@ public class FWorldLayer : FLayer
     TileMapData tileMap;
     FLabel textLabel;
     TileLayer terrainLayer;
-    ObjectLayer terrainObjects;
+    ObjectLayer terrainObjects;    
     
-    private float moveDelayTime = 0.1f;
-    private float nextMoveTime = 0.0f;
+    
 
     public FWorldLayer(FScene parent) : base(parent) { }
 
@@ -31,7 +30,7 @@ public class FWorldLayer : FLayer
 	{
 
 	}
-
+    
     public override void OnUpdate()
 	{
         if (this.Parent.Paused)
@@ -40,78 +39,88 @@ public class FWorldLayer : FLayer
         }
 
         Futile.stage.Follow(player, false, false);
-
-        if (Input.GetKeyDown("space"))
+               
+        //only handle input if player is standing still
+        if (player.IsMovingToPosition)
         {
-            string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-            FMenuScene menu = new FMenuScene("menu", msgText);
-            FSceneManager.Instance.PushScene(menu);
-            return; // don't run any other update code if they are opening the menu because this scene will be paused
-        }
-
-        //player Movement
-        if (Time.time > nextMoveTime)
-        {
-            bool playerMoved = false;
-
-            int tileYDelta = 0;
-            int tileXDelta = 0;
-
-            if (Input.GetKey("up"))
-            {
-                if (player.TileY < tileMap.HeightInTiles - 1)
-                {
-                    tileYDelta += 1;
-                    playerMoved = true;
-                }
+            if (player.ApproachTarget()) {
+                player.IsMovingToPosition = false;
+                //Check Events at new position
+                CheckEvents();
             }
-            else if (Input.GetKey("down"))
+        } else {
+
+            if (Input.GetKeyDown("space"))
             {
-                if (player.TileY > 0)
-                {
-                    tileYDelta -= 1;
-                    playerMoved = true;
-                }
-            }
-            else if (Input.GetKey("left"))
-            {
-                if (player.TileX > 0)
-                {
-                    tileXDelta -= 1;
-                    playerMoved = true;
-                }
-            }
-            else if (Input.GetKey("right"))
-            {
-                if (player.TileX < tileMap.WidthInTiles - 1)
-                {
-                    tileXDelta += 1;
-                    playerMoved = true;
-                }
+                string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
+                FMenuScene menu = new FMenuScene("menu", msgText);
+                FSceneManager.Instance.PushScene(menu);
+                return; // don't run any other update code if they are opening the menu because this scene will be paused
             }
 
-            if (playerMoved)
+            //handle player movement input
+            //if (Time.time > player.NextMoveTime)
             {
+                bool playerMoved = false;
 
-                int targetTileX = player.TileX + tileXDelta;
-                int targetTileY = player.TileY + tileYDelta;
+                int tileYDelta = 0;
+                int tileXDelta = 0;
 
-                //bool canMoveToTile = 
-
-                bool canWalk = CanMoveToTile(targetTileX, targetTileY);
-
-                if (canWalk)
+                if (Input.GetKey("up"))
                 {
-                    //player.MoveToFront();
-                    //player.SetPosition(GetTilePosition(playerTile));
-                    MovePlayerToTile(targetTileX, targetTileY);
-                    //ChangePlayerTile(tileXDelta, tileYDelta);
-                    //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
-                    Debug.Log("Player position = " + player.GetPosition());
-                    Debug.Log("Player tile = " + player.TileCoordinates);
+                    if (player.TileY < tileMap.HeightInTiles - 1)
+                    {
+                        tileYDelta += 1;
+                        playerMoved = true;
+                    }
+                }
+                else if (Input.GetKey("down"))
+                {
+                    if (player.TileY > 0)
+                    {
+                        tileYDelta -= 1;
+                        playerMoved = true;
+                    }
+                }
+                else if (Input.GetKey("left"))
+                {
+                    if (player.TileX > 0)
+                    {
+                        tileXDelta -= 1;
+                        playerMoved = true;
+                    }
+                }
+                else if (Input.GetKey("right"))
+                {
+                    if (player.TileX < tileMap.WidthInTiles - 1)
+                    {
+                        tileXDelta += 1;
+                        playerMoved = true;
+                    }
+                }
 
-                    nextMoveTime = Time.time + moveDelayTime;
-                    //Debug.Log("Background position = " + background.GetPosition());
+                if (playerMoved)
+                {
+
+                    int targetTileX = player.TileX + tileXDelta;
+                    int targetTileY = player.TileY + tileYDelta;
+
+                    //bool canMoveToTile = 
+
+                    bool canWalk = CanMoveToTile(targetTileX, targetTileY);
+
+                    if (canWalk)
+                    {
+                        player.NextMoveTime = Time.time + player.MoveDelayTime;
+                        //player.MoveToFront();
+                        //player.SetPosition(GetTilePosition(playerTile));
+                        MovePlayerToTile(targetTileX, targetTileY, true);
+                        //ChangePlayerTile(tileXDelta, tileYDelta);
+                        //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
+                        IPDebug.Log("Player position = " + player.GetPosition());
+                        IPDebug.Log("Player tile = " + player.TileCoordinates);
+                        //IPDebug.Log("Background position = " + background.GetPosition());
+                    }
                 }
             }
         }
@@ -119,7 +128,7 @@ public class FWorldLayer : FLayer
 
     public override void OnEnter()
 	{
-        Debug.Log("WorldScene OnEnter()");
+        IPDebug.Log("WorldScene OnEnter()");
         player = new Player("player");
 
         tileMap = new TileMapData("Forest", "JSON/forestMapLarge");
@@ -132,22 +141,22 @@ public class FWorldLayer : FLayer
 
         if (terrainLayer == null)
         {
-            Debug.Log("No Terrain Layer found!");
+            IPDebug.Log("No Terrain Layer found!");
         }
 
         terrainObjects = tileMap.GetObjectLayerWithProperty(IPTileMapLayerProperties.LAYER_TYPE.ToString(), IPTileMapLayerTypes.TERRAIN.ToString());
 
         if (terrainObjects == null)
         {
-            Debug.Log("No Terrain Objects found!");
+            IPDebug.Log("No Terrain Objects found!");
         }
 
-        Futile.stage.Follow(player, true, true);
+        //Futile.stage.Follow(player, true, true);
 
-        Debug.Log("Stage position = " + Futile.stage.GetPosition());
-        Debug.Log("Player position = " + player.GetPosition());
+        IPDebug.Log("Stage position = " + Futile.stage.GetPosition());
+        IPDebug.Log("Player position = " + player.GetPosition());
 
-        MovePlayerToTile((int)terrainLayer.WidthInTiles / 2, (int)terrainLayer.HeightInTiles / 2);    
+        MovePlayerToTile((int)terrainLayer.WidthInTiles / 2, (int)terrainLayer.HeightInTiles / 2, false);    
 	}
 
     public override void OnExit()
@@ -157,15 +166,52 @@ public class FWorldLayer : FLayer
 
     public void ChangePlayerTile(int tileXDelta, int tileYDelta)
     {
-        MovePlayerToTile(player.TileX + tileXDelta, player.TileY + tileYDelta);
+        MovePlayerToTile(player.TileX + tileXDelta, player.TileY + tileYDelta, false);
     }
 
-    public void MovePlayerToTile(int tileX, int tileY)
+    private void MessageEvent(TiledObject tileObject)
+    {
+        IPDebug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
+        string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
+        FMenuScene menu = new FMenuScene("menu", msgText);
+        FSceneManager.Instance.PushScene(menu);
+    }
+
+    private bool shallowStreamTriggered = false;
+    private void ShallowStreamEvent(TiledObject tileObject)
+    {
+        if (!shallowStreamTriggered)
+        {
+            string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
+            FMenuScene menu = new FMenuScene("menu", msgText);
+            FSceneManager.Instance.PushScene(menu);
+            shallowStreamTriggered = true;
+        }
+        IPDebug.Log("Running Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString()));
+    }
+
+    public void MovePlayerToTile(int tileX, int tileY, bool doApproach)
     {
         player.TileX = tileX;
         player.TileY = tileY;
-        player.SetPosition(terrainLayer.GetTilePosition(player.TileX, player.TileY));
 
+        Vector2 newPosition = terrainLayer.GetTilePosition(player.TileX, player.TileY);
+        player.IsMovingToPosition = true;
+        player.TargetPosition = newPosition;
+
+        if (doApproach)
+        {
+            //don't set the position manually, setting TargetPosition will be enough
+            //Go.to(player, player.NextMoveTime - Time.time, new TweenConfig().floatProp("x", newPosition.x).floatProp("y", newPosition.y));
+        }
+        else
+        {
+            player.SetPosition(newPosition);
+        }
+    }
+
+    private void CheckEvents()
+    {
         //check for events at player's location
         //get all objects that intersect with player
         List<TiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetRect().CloneAndScale(0.9f));
@@ -191,40 +237,6 @@ public class FWorldLayer : FLayer
         }
     }
 
-    private void MessageEvent(TiledObject tileObject)
-    {
-        Debug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
-        string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-        FMenuScene menu = new FMenuScene("menu", msgText);
-        FSceneManager.Instance.PushScene(menu);
-    }
-
-    private bool shallowStreamTriggered = false;
-    private void ShallowStreamEvent(TiledObject tileObject)
-    {
-        if (!shallowStreamTriggered)
-        {
-            string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-            FMenuScene menu = new FMenuScene("menu", msgText);
-            FSceneManager.Instance.PushScene(menu);
-            shallowStreamTriggered = true;
-        }
-        Debug.Log("Running Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString()));
-    }
-
-    public void MovePlayerToTile(float tileX, float tileY)
-    {
-        MovePlayerToTile((int)tileX, (int)tileY);
-    }
-
-    //public void MovePlayerToTile(MapTile tile)
-    public void MovePlayerToTile(LayerTile tile)
-    {
-        player.TileX = tile.TileData.TileX;
-        player.TileY = tile.TileData.TileY;
-        player.SetPosition(tile.GetPosition());
-    }
-
     private bool CanMoveToTile(int targetTileX, int targetTileY)
     {
         //get the tile we're trying to move to
@@ -245,7 +257,7 @@ public class FWorldLayer : FLayer
             {
                 canWalkValue = tileObject.GetPropertyValue(IPTileMapTileProperties.CAN_WALK.ToString());
 
-                Debug.Log("Target Tile Object = " + tileObject.Name + " | canWalkOver = " + canWalkValue);
+                IPDebug.Log("Target Tile Object = " + tileObject.Name + " | canWalkOver = " + canWalkValue);
 
                 //just use first object we find that contains a valid property value then break out
                 if (bool.TryParse(canWalkValue, out canWalk))
@@ -264,7 +276,7 @@ public class FWorldLayer : FLayer
 
             canWalkValue = targetTileData.GetPropertyValue(IPTileMapTileProperties.CAN_WALK.ToString());
 
-            Debug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
+            IPDebug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
 
             bool.TryParse(canWalkValue, out canWalk);
         }

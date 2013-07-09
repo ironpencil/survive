@@ -52,7 +52,7 @@ public class FMenuScene : FScene
 
     public override void OnEnter()
 	{
-        Debug.Log("MenuScene OnEnter()");       
+        IPDebug.Log("MenuScene OnEnter()");       
 
         FSprite menu = new FSprite("Futile_White");
 
@@ -61,8 +61,8 @@ public class FMenuScene : FScene
         
         this.SetPosition(Futile.stage.GetPosition() * -1);
 
-        Debug.Log("Stage position:" + stage.GetPosition());
-        Debug.Log("scene position: " + this.GetPosition());
+        IPDebug.Log("Stage position:" + stage.GetPosition());
+        IPDebug.Log("scene position: " + this.GetPosition());
 
         this.AddChild(menu);
 

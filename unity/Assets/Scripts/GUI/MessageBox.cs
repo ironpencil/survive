@@ -18,6 +18,7 @@ class MessageBox : FContainer
     private float TextAreaHeight { get; set; }
 
     List<FLabel> labels = new List<FLabel>();
+    List<string> labelText = new List<string>();
 
     private int displayedLabelIndex = 0;
     private FLabel displayedLabel;
@@ -27,9 +28,9 @@ class MessageBox : FContainer
         TextAreaWidth = textAreaWidth;
         TextAreaHeight = textAreaHeight;
         SetText(messageText);
-        Debug.Log("Message Text = " + messageText);
+        IPDebug.Log("Message Text = " + messageText);
 
-        displayedLabel = labels.ElementAt(displayedLabelIndex);
+        //displayedLabel = new FLabel("ComicSans", labelText.ElementAt(displayedLabelIndex));
         this.AddChild(displayedLabel);
     }
 
@@ -37,11 +38,11 @@ class MessageBox : FContainer
     {
         displayedLabelIndex++;
 
-        if (displayedLabelIndex < labels.Count())
+        if (displayedLabelIndex < labelText.Count())
         {
-            this.RemoveChild(displayedLabel);
-            displayedLabel = labels.ElementAt(displayedLabelIndex);
-            this.AddChild(displayedLabel);
+            //this.RemoveChild(displayedLabel);
+            displayedLabel.text = labelText.ElementAt(displayedLabelIndex);
+            //this.AddChild(displayedLabel);
             return true;
         }
         else
@@ -69,56 +70,59 @@ class MessageBox : FContainer
 
     private void SetupLabels()
     {
-        this.RemoveAllLabels();
+        //this.RemoveAllLabels();
 
         string[] words = messageText.Split(' ');
 
-        Debug.Log("words length = " + words.Length);
+        IPDebug.Log("words length = " + words.Length);
         //StringBuilder sb = new StringBuilder();
-
+        
         FLabel currentLabel = new FLabel("ComicSans", "");
 
+        string currentText = "";
         string space = ""; // don't start with a space
         string newLine = "\r\n";
 
         foreach (string word in words)
         {
-            string newText = currentLabel.text + space + word;
-            Debug.Log("newText = " + newText);
+            string newText = currentText + space + word;
+            IPDebug.Log("newText = " + newText);
             Vector2 size = currentLabel.MeasureText(newText);
 
             if (size.x <= TextAreaWidth)
             {
-                currentLabel.text = newText;
+                currentText = newText;
             }
             else
             {                
-                newText = currentLabel.text + newLine + word;
-                Debug.Log("newText new line = " + newText);
+                newText = currentText + newLine + word;
+                IPDebug.Log("newText new line = " + newText);
                 size = currentLabel.MeasureText(newText);
                 if (size.y <= TextAreaHeight)
                 {
-                    currentLabel.text = newText;
+                    currentText = newText;
                 }
                 else
                 {
-                    Debug.Log("word doesn't fit, new label");
+                    IPDebug.Log("word doesn't fit, new label");
                     //word doesn't fit, add new label with current text to list, put new word on new label
-                    FLabel newLabel = new FLabel("ComicSans", currentLabel.text);
-                    labels.Add(newLabel);
-                    currentLabel.text = word;
+                    //FLabel newLabel = new FLabel("ComicSans", currentLabel.text);
+                    labelText.Add(currentText);
+                    //labels.Add(newLabel);
+                    currentText = word;
                 }
             }
 
             space = " "; //update space string to actually contain a space after the first time through
         }
 
-        //add the last updated word
-        labels.Add(currentLabel);
+        //add the last updated label text
+        //labels.Add(currentLabel);
+        labelText.Add(currentText);
 
         displayedLabelIndex = 0;
-        displayedLabel = labels.ElementAt(displayedLabelIndex);
-        this.AddChild(displayedLabel);
+        displayedLabel = new FLabel("ComicSans", labelText.ElementAt(displayedLabelIndex));
+        //this.AddChild(displayedLabel);
     }
 
     private void RemoveAllLabels()
@@ -136,10 +140,10 @@ class MessageBox : FContainer
     {
         StringBuilder sb = new StringBuilder();
 
-        Debug.Log("Label Count = " + labels.Count);
+        IPDebug.Log("Label Count = " + labels.Count);
         foreach (FLabel label in labels)
         {
-            Debug.Log("Label Text = " + label.text);
+            IPDebug.Log("Label Text = " + label.text);
             sb.AppendLine("Label Text:\r\n" + label.text);
         }
 

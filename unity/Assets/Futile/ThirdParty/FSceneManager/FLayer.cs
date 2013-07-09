@@ -38,7 +38,7 @@ public class FLayer : FContainer, FMultiTouchableInterface
 		
 		this.OnEnter();
 		
-		//Debug.Log("+++ Layer Added To Stage");
+		//IPDebug.Log("+++ Layer Added To Stage");
 	}
 
 	override public void HandleRemovedFromStage()
@@ -49,7 +49,7 @@ public class FLayer : FContainer, FMultiTouchableInterface
 		Futile.instance.SignalUpdate -= OnUpdate;
 		base.HandleRemovedFromStage();
 		
-		//Debug.Log("--- Layer Removed From Stage");
+		//IPDebug.Log("--- Layer Removed From Stage");
 	}
 	
 	virtual public void HandleMultiTouch(FTouch[] touches)

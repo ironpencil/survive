@@ -37,21 +37,16 @@ public sealed class FSceneManager : FContainer
 
     public void PushScene(FScene _scene)
     {
-        Debug.Log("PushScene1::Scenes:\r\n" + GetSceneListDescription());
-
         // Pause scenes underneath
         foreach (FScene scene in mScenes)
             scene.Paused = true;
 
         mScenes.Add(_scene);
         this.AddChild(_scene);
-       
-        Debug.Log("PushScene2::Scenes:\r\n" + GetSceneListDescription());
     }
 
 	public void PopScene()
 	{
-        Debug.Log("PopScene1::Scenes:\r\n" + GetSceneListDescription());
 		if(mScenes.Count > 0)
 		{
 			FScene scene = mScenes[mScenes.Count - 1];
@@ -69,8 +64,6 @@ public sealed class FSceneManager : FContainer
             //Jim: Seems like old scene is staying on screen, let's draw over it
             scene.MoveToFront();
 		}
-
-        Debug.Log("PopScene2::Scenes:\r\n" + GetSceneListDescription());
 	}
 
 	public void SetScene(FScene _scene)
@@ -83,8 +76,6 @@ public sealed class FSceneManager : FContainer
 
     private string GetSceneListDescription()
     {
-        Debug.Log("Scene Count: " + mScenes.Count);
-
         string sceneList = "";
         for (int i = 0; i < mScenes.Count; i++)
         {

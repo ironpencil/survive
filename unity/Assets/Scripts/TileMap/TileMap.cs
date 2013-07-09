@@ -54,8 +54,7 @@ public class TileMapData : FContainer
 
         if (!mapAsset)
         {
-            Debug.Log("Map file '" + mapFile + "' not found!");
-            Debug.Break();
+            IPDebug.Log("Map file '" + mapFile + "' not found!");
         }
 
         mapData = mapAsset.text.dictionaryFromJson();
@@ -83,7 +82,7 @@ public class TileMapData : FContainer
 
             tileSet.SetupTileProperties((Dictionary<string, object>)tileSetData["tileproperties"]);
 
-            Debug.Log(tileSet.GetTilePropertyDescription());
+            IPDebug.Log(tileSet.GetTilePropertyDescription());
 
             tileSets.Add(tileSet.FirstGID, tileSet);
             tileSetFirstGIDs.Add(tileSet.FirstGID);
@@ -109,7 +108,7 @@ public class TileMapData : FContainer
             }
             else
             {
-                Debug.Log("Unknown layer type!");
+                IPDebug.Log("Unknown layer type!");
                 mapLayer = new MapLayer();
             }
 
@@ -201,7 +200,7 @@ public class TileMapData : FContainer
                     tiledObject.ObjHeight = float.Parse(objectDef["height"].ToString());
                     tiledObject.ObjProperties = (Dictionary<string, object>)objectDef["properties"];
 
-                    Debug.Log(tiledObject.GetObjectPropertyDescription());
+                    IPDebug.Log(tiledObject.GetObjectPropertyDescription());
 
                     //adjust y value for Futile (count upwards instead of downwards like in Tiled)
                     tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight;
