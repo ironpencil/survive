@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TiledObject : FContainer
+public class IPTiledObject : FContainer
 {
 
 
-    public ObjectLayer Layer { get; set; }
+    public IPObjectLayer Layer { get; set; }
 
     public string Name { get; set; }
 

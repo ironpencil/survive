@@ -40,8 +40,6 @@ public class FScene : FContainer
 		Futile.instance.SignalUpdate += OnUpdate;
 		
 		this.OnEnter();
-		
-		IPDebug.Log("+++ Scene Added To Stage: " + mName);
 	}
 
 	override public void HandleRemovedFromStage()
@@ -50,8 +48,6 @@ public class FScene : FContainer
 		
 		Futile.instance.SignalUpdate -= OnUpdate;
 		base.HandleRemovedFromStage();
-		
-		IPDebug.Log("--- Scene Removed From Stage: " + mName);
 	}
 	
 	virtual public void OnUpdate ()

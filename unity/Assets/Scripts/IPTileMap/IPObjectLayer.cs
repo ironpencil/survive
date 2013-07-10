@@ -4,31 +4,31 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ObjectLayer : MapLayer
+public class IPObjectLayer : IPMapLayer
 {
 
-    private List<TiledObject> objects = new List<TiledObject>();
-    public List<TiledObject> Objects { get { return objects; } }
+    private List<IPTiledObject> objects = new List<IPTiledObject>();
+    public List<IPTiledObject> Objects { get { return objects; } }
 
-    public void AddObject(TiledObject tiledObject)
+    public void AddObject(IPTiledObject tiledObject)
     {
         objects.Add(tiledObject);
 
         this.AddChild(tiledObject);
     }
 
-    public void RemoveObject(TiledObject tiledObject)
+    public void RemoveObject(IPTiledObject tiledObject)
     {
         objects.Remove(tiledObject);
 
         this.RemoveChild(tiledObject);
     }
 
-    public List<TiledObject> GetTiledObjectsAt(float x, float y)
+    public List<IPTiledObject> GetTiledObjectsAt(float x, float y)
     {
-        List<TiledObject> objectList = new List<TiledObject>();
+        List<IPTiledObject> objectList = new List<IPTiledObject>();
 
-        foreach (TiledObject tiledObject in objects)
+        foreach (IPTiledObject tiledObject in objects)
         {
             if (tiledObject.x == x && tiledObject.y == y)
             {
@@ -39,11 +39,11 @@ public class ObjectLayer : MapLayer
         return objectList;
     }
 
-    public List<TiledObject> GetTiledObjectsContainingPoint(float x, float y)
+    public List<IPTiledObject> GetTiledObjectsContainingPoint(float x, float y)
     {
-        List<TiledObject> objectList = new List<TiledObject>();
+        List<IPTiledObject> objectList = new List<IPTiledObject>();
 
-        foreach (TiledObject tiledObject in objects)
+        foreach (IPTiledObject tiledObject in objects)
         {
             if (tiledObject.GetRect().Contains(new Vector2(x, y)))
             {
@@ -54,22 +54,17 @@ public class ObjectLayer : MapLayer
         return objectList;
     }
 
-    public List<TiledObject> GetTiledObjectsIntersectingRect(Rect checkRect)
+    public List<IPTiledObject> GetTiledObjectsIntersectingRect(Rect checkRect)
     {
-        List<TiledObject> objectList = new List<TiledObject>();
+        List<IPTiledObject> objectList = new List<IPTiledObject>();
 
-        IPDebug.Log("Check Rect = " + GetRectDescription(checkRect));
-
-        foreach (TiledObject tiledObject in objects)
+        foreach (IPTiledObject tiledObject in objects)
         {
-            IPDebug.Log("Object Rect[" + tiledObject.Name + "] = " + GetRectDescription(tiledObject.GetRect()));
             if (tiledObject.GetRect().CheckIntersect(checkRect))
             {
                 objectList.Add(tiledObject);
             }
         }
-
-        IPDebug.Log("Objects Returned: " + objectList.Count());
         return objectList;
     }
 

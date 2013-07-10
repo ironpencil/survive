@@ -17,10 +17,10 @@ public class FWorldLayer : FLayer
 {
     Player player;
 
-    TileMapData tileMap;
+    IPTileMap tileMap;
     FLabel textLabel;
-    TileLayer terrainLayer;
-    ObjectLayer terrainObjects;    
+    IPTileLayer terrainLayer;
+    IPObjectLayer terrainObjects;    
     
     
 
@@ -38,7 +38,7 @@ public class FWorldLayer : FLayer
             return;
         }
 
-        Futile.stage.Follow(player, false, false);
+        //Futile.stage.Follow(player, false, false);
                
         //only handle input if player is standing still
         if (player.IsMovingToPosition)
@@ -48,7 +48,9 @@ public class FWorldLayer : FLayer
                 //Check Events at new position
                 CheckEvents();
             }
-        } else {
+        }
+        else
+        {
 
             if (Input.GetKeyDown("space"))
             {
@@ -131,7 +133,7 @@ public class FWorldLayer : FLayer
         IPDebug.Log("WorldScene OnEnter()");
         player = new Player("player");
 
-        tileMap = new TileMapData("Forest", "JSON/forestMapLarge");
+        tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
 
         this.AddChild(tileMap);
@@ -169,7 +171,7 @@ public class FWorldLayer : FLayer
         MovePlayerToTile(player.TileX + tileXDelta, player.TileY + tileYDelta, false);
     }
 
-    private void MessageEvent(TiledObject tileObject)
+    private void MessageEvent(IPTiledObject tileObject)
     {
         IPDebug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
         string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
@@ -178,7 +180,7 @@ public class FWorldLayer : FLayer
     }
 
     private bool shallowStreamTriggered = false;
-    private void ShallowStreamEvent(TiledObject tileObject)
+    private void ShallowStreamEvent(IPTiledObject tileObject)
     {
         if (!shallowStreamTriggered)
         {
@@ -214,9 +216,9 @@ public class FWorldLayer : FLayer
     {
         //check for events at player's location
         //get all objects that intersect with player
-        List<TiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetRect().CloneAndScale(0.9f));
+        List<IPTiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetRect().CloneAndScale(0.9f));
 
-        foreach (TiledObject tileObject in tileObjects)
+        foreach (IPTiledObject tileObject in tileObjects)
         {
             if (tileObject.ObjType.Equals(IPTileMapTileObjectTypes.EVENT.ToString()))
             {
@@ -240,17 +242,17 @@ public class FWorldLayer : FLayer
     private bool CanMoveToTile(int targetTileX, int targetTileY)
     {
         //get the tile we're trying to move to
-        LayerTile targetTile = terrainLayer.GetTileAt(targetTileX, targetTileY);
+        IPTile targetTile = terrainLayer.GetTileAt(targetTileX, targetTileY);
         //MapTile targetTile = tileMap.GetTile(targetTileX, targetTileY);
 
         //get all objects that intersect with this tile
-        List<TiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(targetTile.GetRect().CloneAndScale(0.9f));
+        List<IPTiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(targetTile.GetRect().CloneAndScale(0.9f));
 
         string canWalkValue = "";
         bool canWalk = false;
         bool canWalkFound = false;
 
-        foreach (TiledObject tileObject in tileObjects)
+        foreach (IPTiledObject tileObject in tileObjects)
         {
             //if the object says it can be walked on, set canWalk to true
             if (tileObject.PropertyExists(IPTileMapTileProperties.CAN_WALK.ToString()))
@@ -272,7 +274,7 @@ public class FWorldLayer : FLayer
         if (!canWalkFound)
         {
             //check the canWalk value of the tile
-            LayerTileData targetTileData = targetTile.TileData;
+            IPTileData targetTileData = targetTile.TileData;
 
             canWalkValue = targetTileData.GetPropertyValue(IPTileMapTileProperties.CAN_WALK.ToString());
 
@@ -282,5 +284,11 @@ public class FWorldLayer : FLayer
         }
 
         return canWalk;
+    }
+
+    public override void Redraw(bool shouldForceDirty, bool shouldUpdateDepth)
+    {
+        Futile.stage.SetPosition(-player.GetPosition());
+        base.Redraw(shouldForceDirty, shouldUpdateDepth);
     }
 }

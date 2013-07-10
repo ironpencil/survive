@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TileSet
+public class IPTileSet
 {
-
-
     public int FirstGID { get; set; }
 
     public string Image { get; set; }

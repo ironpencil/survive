@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class LayerTileData
+public class IPTileData
 {
     public int GID { get; set; }
 
-    public TileLayer Layer { get; set; }
+    public IPTileLayer Layer { get; set; }
 
-    public TileSet TileSet { get; set; }
+    public IPTileSet TileSet { get; set; }
 
     public int TileX { get; set; }
 
@@ -26,8 +26,6 @@ public class LayerTileData
         }
 
         int assetID = GID - TileSet.FirstGID;
-
-        //assetID++; //asset IDs start at 1
 
         assetName = TileSet.GetAssetBase() + "_" + assetID; // + ".png";
 

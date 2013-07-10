@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class LayerTile : FSprite
+public class IPTile : FSprite
 {
 
-    public LayerTileData TileData;
+    public IPTileData TileData;
 
-    public LayerTile(LayerTileData tileData) : base(tileData.GetAssetName())
+    public IPTile(IPTileData tileData) : base(tileData.GetAssetName())
     {
         this.TileData = tileData;
         //this.anchorX = 0;
@@ -24,7 +24,7 @@ public class LayerTile : FSprite
         float heightMag = Mathf.Abs(this.height);
 
         //this finds the left side of the sprite so long as the width is positive
-        //finds the right side of the sprite if width is negative
+        //finds the right side of the sprite if width is negative (untested)
         float left = this.x - (this.width * (this.anchorX));     
     
         //if the width is negative, subtract the magnitutde of the width to find the left side
@@ -40,7 +40,7 @@ public class LayerTile : FSprite
             bottom -= heightMag;
         }       
 
-        //return a rect with the calculated top, left, and sizes
+        //return a rect with the calculated bottm, left, and sizes
         return new Rect(left, bottom, widthMag, heightMag);
     }
 }

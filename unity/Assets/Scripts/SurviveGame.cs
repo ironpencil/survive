@@ -52,6 +52,6 @@ public class SurviveGame : MonoBehaviour {
         fps.x = -Futile.stage.x - Futile.screen.halfWidth;
         fps.y = -Futile.stage.y + Futile.screen.halfHeight;
         
-    }
+    }   
 
 }

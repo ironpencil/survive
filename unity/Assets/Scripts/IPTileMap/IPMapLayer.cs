@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class MapLayer : FContainer
+public class IPMapLayer : FContainer
 {
     public string Name { get; set; }
 

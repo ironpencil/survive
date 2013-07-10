@@ -25,6 +25,9 @@ public class FMenuScene : FScene
     string messageText = "";
 
     Vector2 maxBounds;
+
+    FStage guiStage;
+
     public FMenuScene(string name, string messageText)
         : base(name)
 	{
@@ -39,7 +42,7 @@ public class FMenuScene : FScene
             return;
         }
 
-        this.SetPosition(Futile.stage.GetPosition() * -1);
+        //this.SetPosition(Futile.stage.GetPosition() * -1);
 
         if (Input.GetKeyDown("space"))
         {
@@ -52,6 +55,8 @@ public class FMenuScene : FScene
 
     public override void OnEnter()
 	{
+        guiStage = new FStage("GUI");
+
         IPDebug.Log("MenuScene OnEnter()");       
 
         FSprite menu = new FSprite("Futile_White");
@@ -59,12 +64,13 @@ public class FMenuScene : FScene
         menu.width = Futile.screen.width * 0.25f;
         menu.height = Futile.screen.height * 0.25f;
         
-        this.SetPosition(Futile.stage.GetPosition() * -1);
+        //this.SetPosition(Futile.stage.GetPosition() * -1);
 
         IPDebug.Log("Stage position:" + stage.GetPosition());
         IPDebug.Log("scene position: " + this.GetPosition());
 
-        this.AddChild(menu);
+        //this.AddChild(menu);
+        guiStage.AddChild(menu);
 
         //FLabel textLabel = new FLabel("ComicSans", "Hello world! This is my blank menu!");
         //Futile.stage.AddChild(textLabel);
@@ -72,11 +78,15 @@ public class FMenuScene : FScene
         //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
         msgBox = new MessageBox(messageText, menu.width, menu.height);
 
-        this.AddChild(msgBox);
+        guiStage.AddChild(msgBox);
+
+        Futile.AddStage(guiStage);
 	}
 
     public override void OnExit()
 	{
+
+        Futile.RemoveStage(guiStage);
 
 	}
 }

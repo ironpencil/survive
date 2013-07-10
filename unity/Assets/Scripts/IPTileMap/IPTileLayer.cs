@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TileLayer : MapLayer
+public class IPTileLayer : IPMapLayer
 {
-    private List<LayerTile> tiles = new List<LayerTile>();
-    public List<LayerTile> Tiles { get { return tiles; } }
+    private List<IPTile> tiles = new List<IPTile>();
+    public List<IPTile> Tiles { get { return tiles; } }
 
-    private LayerTile[,] tileArray = null;
+    private IPTile[,] tileArray = null;
 
     public void InitializeTileArray(int widthInTiles, int heightInTiles) {
 
-        tileArray = new LayerTile[widthInTiles, heightInTiles];        
+        tileArray = new IPTile[widthInTiles, heightInTiles];        
 
     }
 
-    public void AddTile(LayerTile tile)
+    public void AddTile(IPTile tile)
     {
         tiles.Add(tile);
         int tileX = tile.TileData.TileX;
@@ -28,13 +28,13 @@ public class TileLayer : MapLayer
         this.AddChild(tile);
     }
 
-    public void RemoveTile(LayerTile tile)
+    public void RemoveTile(IPTile tile)
     {
         tiles.Remove(tile);
         int tileX = tile.TileData.TileX;
         int tileY = tile.TileData.TileY;
 
-        LayerTile tileToRemove = tileArray[tileX, tileY];
+        IPTile tileToRemove = tileArray[tileX, tileY];
 
         if (tile == tileToRemove)
         {
@@ -44,7 +44,7 @@ public class TileLayer : MapLayer
         this.RemoveChild(tile);
     }
 
-    public LayerTile GetTileAt(int tileX, int tileY)
+    public IPTile GetTileAt(int tileX, int tileY)
     {
         return tileArray[tileX, tileY];
     }

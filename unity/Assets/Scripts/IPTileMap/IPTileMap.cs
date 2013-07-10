@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TileMapData : FContainer
+public class IPTileMap : FContainer
 {
 
     //private MapTile[,] tiles;
 
-    private List<TileLayer> tileLayers;
-    public List<TileLayer> TileLayers { get { return tileLayers; } set { tileLayers = value; } }
+    private List<IPTileLayer> tileLayers;
+    public List<IPTileLayer> TileLayers { get { return tileLayers; } set { tileLayers = value; } }
 
-    private List<ObjectLayer> objectLayers;
-    public List<ObjectLayer> ObjectLayers { get { return objectLayers; } set { objectLayers = value; } }
+    private List<IPObjectLayer> objectLayers;
+    public List<IPObjectLayer> ObjectLayers { get { return objectLayers; } set { objectLayers = value; } }
 
     public string Name { get; set; }
 
-    private Dictionary<int, TileSet> tileSets;
+    private Dictionary<int, IPTileSet> tileSets;
 
     //these two collections are only used to cache tile data during setup
     private List<int> tileSetFirstGIDs;
-    private Dictionary<int, TileSet> tileSetFoundGIDs;
+    private Dictionary<int, IPTileSet> tileSetFoundGIDs;
 
     public int Width { get { return TileWidth * WidthInTiles; } }
     public int Height { get { return TileHeight * HeightInTiles; } }
@@ -35,7 +35,7 @@ public class TileMapData : FContainer
     private string mapFile;
     Dictionary<string, object> mapData;
 
-    public TileMapData(string name, string mapFile)
+    public IPTileMap(string name, string mapFile)
     {
         Name = name;
         this.mapFile = mapFile;
@@ -43,18 +43,18 @@ public class TileMapData : FContainer
 
     public void LoadTiles()
     {
-        tileSets = new Dictionary<int, TileSet>();
-        tileLayers = new List<TileLayer>();
-        objectLayers = new List<ObjectLayer>();
+        tileSets = new Dictionary<int, IPTileSet>();
+        tileLayers = new List<IPTileLayer>();
+        objectLayers = new List<IPObjectLayer>();
 
         tileSetFirstGIDs = new List<int>();
-        tileSetFoundGIDs = new Dictionary<int, TileSet>();
+        tileSetFoundGIDs = new Dictionary<int, IPTileSet>();
 
         TextAsset mapAsset = (TextAsset)Resources.Load(mapFile, typeof(TextAsset));
 
         if (!mapAsset)
         {
-            IPDebug.Log("Map file '" + mapFile + "' not found!");
+            //map asset not found, no error trapping though...
         }
 
         mapData = mapAsset.text.dictionaryFromJson();
@@ -64,15 +64,13 @@ public class TileMapData : FContainer
         WidthInTiles = int.Parse(mapData["width"].ToString());
         HeightInTiles = int.Parse(mapData["height"].ToString());        
         TileWidth = int.Parse(mapData["tilewidth"].ToString());
-        TileHeight = int.Parse(mapData["tileheight"].ToString());
-
-        //InitializeMapTiles();       
+        TileHeight = int.Parse(mapData["tileheight"].ToString());      
 
         List<object> tileSetsData = (List<object>)mapData["tilesets"];
 
         foreach (Dictionary<string, object> tileSetData  in tileSetsData)
         {
-            TileSet tileSet = new TileSet();
+            IPTileSet tileSet = new IPTileSet();
 
             tileSet.FirstGID = int.Parse(tileSetData["firstgid"].ToString());
             tileSet.Image = tileSetData["image"].ToString();
@@ -81,8 +79,6 @@ public class TileMapData : FContainer
             tileSet.TileHeight = int.Parse(tileSetData["tileheight"].ToString());
 
             tileSet.SetupTileProperties((Dictionary<string, object>)tileSetData["tileproperties"]);
-
-            IPDebug.Log(tileSet.GetTilePropertyDescription());
 
             tileSets.Add(tileSet.FirstGID, tileSet);
             tileSetFirstGIDs.Add(tileSet.FirstGID);
@@ -95,21 +91,20 @@ public class TileMapData : FContainer
         foreach (Dictionary<string, object> layerData in mapLayers)
         {
 
-            MapLayer mapLayer = null;
+            IPMapLayer mapLayer = null;
 
             string layerType = layerData["type"].ToString();
 
             if (layerType.Equals("tilelayer")) {
-                mapLayer = new TileLayer();
+                mapLayer = new IPTileLayer();
             }
             else if (layerType.Equals("objectgroup"))
             {
-                mapLayer = new ObjectLayer();
+                mapLayer = new IPObjectLayer();
             }
             else
             {
-                IPDebug.Log("Unknown layer type!");
-                mapLayer = new MapLayer();
+                mapLayer = new IPMapLayer();
             }
 
             mapLayer.Name = layerData["name"].ToString();
@@ -124,9 +119,9 @@ public class TileMapData : FContainer
             mapLayer.TileWidth = TileWidth;
             mapLayer.TileHeight = TileHeight;            
 
-            if (mapLayer is TileLayer) {
+            if (mapLayer is IPTileLayer) {
 
-                TileLayer tileLayer = mapLayer as TileLayer;
+                IPTileLayer tileLayer = mapLayer as IPTileLayer;
 
                 tileLayer.InitializeTileArray(mapLayer.WidthInTiles, tileLayer.HeightInTiles);
                 //load the tile layer
@@ -142,7 +137,7 @@ public class TileMapData : FContainer
                     //GID of 0 means there is no tile?
                     if (tileGID > 0)
                     {                      
-                        LayerTileData tileData = new LayerTileData();
+                        IPTileData tileData = new IPTileData();
 
                         tileData.Layer = tileLayer;
                         tileData.GID = int.Parse(tileGIDs[i].ToString());
@@ -159,17 +154,14 @@ public class TileMapData : FContainer
                             y++;
                         }
 
-                        LayerTile tile = new LayerTile(tileData);
+                        IPTile tile = new IPTile(tileData);
 
-                        tile.x = tileData.TileX * tileData.TileSet.TileWidth; // -tileData.TileSet.TileWidth;
-                        tile.y = tileData.TileY * tileData.TileSet.TileHeight; // -tileData.TileSet.TileHeight + tileLayer.Height;
+                        tile.x = tileData.TileX * tileData.TileSet.TileWidth;
+                        tile.y = tileData.TileY * tileData.TileSet.TileHeight;
 
                         //the tile physically resides in the TileLayer container
+                        //when the tile layer is added to the container, the tile will be as well
                         tileLayer.AddTile(tile);
-                        //tileLayer.AddChild(tile); // TileLayer.AddTile adds the tile to the container, no need to do so
-
-                        //add a reference to this tile to our MapTiles array
-                        //tiles[tileData.TileX, tileData.TileY].LayerTiles.Add(tileLayer, tile);
                     }
                 }
 
@@ -178,17 +170,18 @@ public class TileMapData : FContainer
                 //plus a list of tiles, each referencing the TileSet that its tile comes from
                 
             }
-            else if (mapLayer is ObjectLayer)
+            else if (mapLayer is IPObjectLayer)
             {
-                ObjectLayer objectLayer = mapLayer as ObjectLayer;
+                IPObjectLayer objectLayer = mapLayer as IPObjectLayer;
 
                 //load the object group
                 List<object> objectDefs = (List<object>)layerData["objects"];
 
 
+                //currently only supports rectangular objects with no tile image (gid)
                 foreach (Dictionary<string, object> objectDef in objectDefs)
                 {                    
-                    TiledObject tiledObject = new TiledObject();
+                    IPTiledObject tiledObject = new IPTiledObject();
 
                     tiledObject.Layer = objectLayer;
                     tiledObject.Name = objectDef["name"].ToString();
@@ -200,25 +193,11 @@ public class TileMapData : FContainer
                     tiledObject.ObjHeight = float.Parse(objectDef["height"].ToString());
                     tiledObject.ObjProperties = (Dictionary<string, object>)objectDef["properties"];
 
-                    IPDebug.Log(tiledObject.GetObjectPropertyDescription());
-
                     //adjust y value for Futile (count upwards instead of downwards like in Tiled)
                     tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight;
                     
 
-                    objectLayer.AddObject(tiledObject);
-
-                    //FSprite objSprite = new FSprite("Futile_White");
-
-                    //objSprite.x = tiledObject.x;
-                    //objSprite.y = tiledObject.y;
-
-                    //objectLayer.AddChild(objSprite);
-                    //should now have an object layer that contains all the object info
-
-                    //TODO: Add references to the objects to the MapTile array for any tiles that they exist in?
-
-                    //TODO: Create Colliders for the objects?
+                    objectLayer.AddObject(tiledObject);                    
 
                 }
 
@@ -234,51 +213,9 @@ public class TileMapData : FContainer
         tileSetFirstGIDs = null;
         tileSetFoundGIDs = null;
 
-    }
+    }    
 
-    //private void InitializeMapTiles()
-    //{
-    //    tiles = new MapTile[WidthInTiles, HeightInTiles];
-
-    //    //Debug.Log("Size of MapTiles is [" + WidthInTiles + "," + HeightInTiles + "]");
-
-    //    int x = 0;
-    //    int y = 0;
-
-    //    for (int i = 0; i < Width; i++)
-    //    {
-    //        MapTile mapTile = new MapTile();
-
-    //        mapTile.TileX = x;
-    //        mapTile.TileY = HeightInTiles - y - 1; //TileY should count up from the bottom
-
-    //        mapTile.Width = TileWidth;
-    //        mapTile.Height = TileHeight;
-
-    //        x++;
-
-    //        //Debug.Log("New x = " + x);
-
-    //        if (x % WidthInTiles == 0)
-    //        {
-    //            x = 0;
-    //            y++;
-    //        }
-
-    //        //Debug.Log("Post modulo x = " + x);
-
-    //        mapTile.x = mapTile.TileX * TileWidth; // -tileData.TileSet.TileWidth;
-    //        mapTile.y = mapTile.TileY * TileHeight; // -tileData.TileSet.TileHeight + tileLayer.Height;
-
-    //        //add to our map tile array, add to container
-    //        //Debug.Log("Initializing map tile[" + mapTile.TileX + "," + mapTile.TileY + "]");
-    //        tiles[mapTile.TileX, mapTile.TileY] = mapTile;
-    //        this.AddChild(mapTile);
-
-    //    }
-    //}
-
-    private TileSet FindTileSetContainingGID(int gid)
+    private IPTileSet FindTileSetContainingGID(int gid)
     {
         if (tileSetFirstGIDs.Contains(gid))
         {
@@ -301,7 +238,7 @@ public class TileMapData : FContainer
 
         int tileSetFirstGID = tileSetFirstGIDs[gidIndex - 1];
 
-        TileSet foundTileSet = tileSets[tileSetFirstGID];
+        IPTileSet foundTileSet = tileSets[tileSetFirstGID];
 
         //found the tileset, now clean up and save this gid for later
         tileSetFirstGIDs.RemoveAt(gidIndex);
@@ -311,11 +248,11 @@ public class TileMapData : FContainer
         return foundTileSet;
     }    
 
-    public TileLayer GetTileLayer(string layerName)
+    public IPTileLayer GetTileLayer(string layerName)
     {
-        TileLayer requestedLayer = null;
+        IPTileLayer requestedLayer = null;
 
-        foreach (TileLayer layer in tileLayers)
+        foreach (IPTileLayer layer in tileLayers)
         {
             if (layer.Name.Equals(layerName))
             {
@@ -327,12 +264,13 @@ public class TileMapData : FContainer
         return requestedLayer;
     }
 
-    public TileLayer GetTileLayerWithProperty(string propertyName, string propertyValue)
+    public IPTileLayer GetTileLayerWithProperty(string propertyName, string propertyValue)
     {
-        TileLayer requestedLayer = null;
+        IPTileLayer requestedLayer = null;
 
-        foreach (TileLayer layer in tileLayers)
+        foreach (IPTileLayer layer in tileLayers)
         {
+            //just return the first layer that matches the specified property value
             if (layer.GetPropertyValue(propertyName).Equals(propertyValue)) {
                 requestedLayer = layer;
                 break;
@@ -342,12 +280,11 @@ public class TileMapData : FContainer
         return requestedLayer;
     }
 
-    public List<TileLayer> GetTileLayersWithProperty(string propertyName, string propertyValue)
+    public List<IPTileLayer> GetTileLayersWithProperty(string propertyName, string propertyValue)
     {
-        List<TileLayer> requestedLayers = new List<TileLayer>();
-        //TileLayer requestedLayer = null;
+        List<IPTileLayer> requestedLayers = new List<IPTileLayer>();
 
-        foreach (TileLayer layer in tileLayers)
+        foreach (IPTileLayer layer in tileLayers)
         {
             if (layer.GetPropertyValue(propertyName).Equals(propertyValue))
             {
@@ -358,11 +295,11 @@ public class TileMapData : FContainer
         return requestedLayers;
     }
 
-    public ObjectLayer GetObjectLayer(string layerName)
+    public IPObjectLayer GetObjectLayer(string layerName)
     {
-        ObjectLayer requestedLayer = null;
+        IPObjectLayer requestedLayer = null;
 
-        foreach (ObjectLayer layer in objectLayers)
+        foreach (IPObjectLayer layer in objectLayers)
         {
             if (layer.Name.Equals(layerName))
             {
@@ -374,12 +311,13 @@ public class TileMapData : FContainer
         return requestedLayer;
     }
 
-    public ObjectLayer GetObjectLayerWithProperty(string propertyName, string propertyValue)
+    public IPObjectLayer GetObjectLayerWithProperty(string propertyName, string propertyValue)
     {
-        ObjectLayer requestedLayer = null;
+        IPObjectLayer requestedLayer = null;
 
-        foreach (ObjectLayer layer in objectLayers)
+        foreach (IPObjectLayer layer in objectLayers)
         {
+            //just return the first layer that matches the specified property value
             if (layer.GetPropertyValue(propertyName).Equals(propertyValue))
             {
                 requestedLayer = layer;
@@ -390,12 +328,12 @@ public class TileMapData : FContainer
         return requestedLayer;
     }
 
-    public List<ObjectLayer> GetObjectLayersWithProperty(string propertyName, string propertyValue)
+    public List<IPObjectLayer> GetObjectLayersWithProperty(string propertyName, string propertyValue)
     {
-        List<ObjectLayer> requestedLayers = new List<ObjectLayer>();
+        List<IPObjectLayer> requestedLayers = new List<IPObjectLayer>();
         //TileLayer requestedLayer = null;
 
-        foreach (ObjectLayer layer in objectLayers)
+        foreach (IPObjectLayer layer in objectLayers)
         {
             if (layer.GetPropertyValue(propertyName).Equals(propertyValue))
             {

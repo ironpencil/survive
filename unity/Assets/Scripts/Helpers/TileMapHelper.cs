@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class TileMovementManager
 {
-    public TileMapData TileMap { get; set; }
+    public IPTileMap TileMap { get; set; }
 
-    public TileMovementManager(TileMapData tileMap)
+    public TileMovementManager(IPTileMap tileMap)
     {
         this.TileMap = tileMap;
     }
