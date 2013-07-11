@@ -8,9 +8,25 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
 	"sourceSize": {"w":512,"h":512}
 },
+"menu.png":
+{
+	"frame": {"x":516,"y":2,"w":1024,"h":356},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1024,"h":356},
+	"sourceSize": {"w":1024,"h":356}
+},
+"msgBox.png":
+{
+	"frame": {"x":1542,"y":2,"w":128,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
+},
 "player.png":
 {
-	"frame": {"x":516,"y":2,"w":32,"h":32},
+	"frame": {"x":1672,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -18,7 +34,7 @@
 },
 "tiles_desert_0.png":
 {
-	"frame": {"x":550,"y":2,"w":32,"h":32},
+	"frame": {"x":1706,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -26,7 +42,7 @@
 },
 "tiles_desert_1.png":
 {
-	"frame": {"x":584,"y":2,"w":32,"h":32},
+	"frame": {"x":1740,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -34,7 +50,7 @@
 },
 "tiles_desert_2.png":
 {
-	"frame": {"x":618,"y":2,"w":32,"h":32},
+	"frame": {"x":1774,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -42,7 +58,7 @@
 },
 "tiles_desert_3.png":
 {
-	"frame": {"x":652,"y":2,"w":32,"h":32},
+	"frame": {"x":1808,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -50,7 +66,7 @@
 },
 "tiles_forest_0.png":
 {
-	"frame": {"x":686,"y":2,"w":32,"h":32},
+	"frame": {"x":1842,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -58,7 +74,7 @@
 },
 "tiles_forest_1.png":
 {
-	"frame": {"x":720,"y":2,"w":32,"h":32},
+	"frame": {"x":1876,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -66,7 +82,7 @@
 },
 "tiles_forest_2.png":
 {
-	"frame": {"x":754,"y":2,"w":32,"h":32},
+	"frame": {"x":1910,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -74,7 +90,7 @@
 },
 "tiles_forest_3.png":
 {
-	"frame": {"x":788,"y":2,"w":32,"h":32},
+	"frame": {"x":1944,"y":2,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -85,8 +101,8 @@
 	"version": "1.0",
 	"image": "survive.png",
 	"format": "RGBA8888",
-	"size": {"w":1024,"h":1024},
+	"size": {"w":2048,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f81a19944c3d9a0ca68df0d3a57bcade$"
+	"smartupdate": "$TexturePacker:SmartUpdate:e6a4ed31c94746a7c453e3883f99d7bc$"
 }
 }

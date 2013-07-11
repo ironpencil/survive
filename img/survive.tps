@@ -156,6 +156,8 @@
             <filename>tiles_forest_3.png</filename>
             <filename>tiles_desert_0.png</filename>
             <filename>tiles_desert_1.png</filename>
+            <filename>menu.png</filename>
+            <filename>msgBox.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

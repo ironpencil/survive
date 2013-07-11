@@ -154,10 +154,6 @@ public class FContainer : FNode
 		
 		if(_isOnStage)
 		{
-            if (node is FScene)
-            {
-                Debug.Log("Removing Scene from Stage:" + ((FScene)node).Name);
-            }
 			node.HandleRemovedFromStage();
 			node.stage = null;
 		}

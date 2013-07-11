@@ -13,7 +13,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FMenuScene : FScene
+public class FTextDisplayScene : FScene
 {
 
     Player player;
@@ -28,11 +28,18 @@ public class FMenuScene : FScene
 
     FStage guiStage;
 
-    public FMenuScene(string name, string messageText)
+    public float Width { get; set; }
+
+    public float Height { get; set; }
+
+    public Rect Bounds { get; set; }
+
+    public FTextDisplayScene(string name, string messageText, Rect bounds)
         : base(name)
 	{
 		mName = name;
         this.messageText = messageText;
+        this.Bounds = bounds;
 	}
 	
 	public override void OnUpdate ()
@@ -59,10 +66,10 @@ public class FMenuScene : FScene
 
         IPDebug.Log("MenuScene OnEnter()");       
 
-        FSprite menu = new FSprite("Futile_White");
+        //FSprite menu = new FSprite("Futile_White");
 
-        menu.width = Futile.screen.width * 0.25f;
-        menu.height = Futile.screen.height * 0.25f;
+        //menu.width = Futile.screen.width * 0.25f;
+        //menu.height = Futile.screen.height * 0.25f;
         
         //this.SetPosition(Futile.stage.GetPosition() * -1);
 
@@ -70,13 +77,16 @@ public class FMenuScene : FScene
         IPDebug.Log("scene position: " + this.GetPosition());
 
         //this.AddChild(menu);
-        guiStage.AddChild(menu);
+        //guiStage.AddChild(menu);
 
-        //FLabel textLabel = new FLabel("ComicSans", "Hello world! This is my blank menu!");
+        //FLabel textLabel = new FLabel(GameVars.Instance.FONT_NAME, "Hello world! This is my blank menu!");
         //Futile.stage.AddChild(textLabel);
 
         //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-        msgBox = new MessageBox(messageText, menu.width, menu.height);
+        msgBox = new MessageBox(messageText, Bounds.width, Bounds.height);
+        
+        msgBox.x = Bounds.x;
+        msgBox.y = Bounds.y;
 
         guiStage.AddChild(msgBox);
 

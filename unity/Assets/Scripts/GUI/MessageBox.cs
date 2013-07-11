@@ -23,17 +23,45 @@ class MessageBox : FContainer
     private int displayedLabelIndex = 0;
     private FLabel displayedLabel;
 
-    public MessageBox(string messageText, float textAreaWidth, float textAreaHeight)
+    private FSprite background;
+    private FSprite foreground;
+
+    public float textAreaOffset = 20;
+    
+    public MessageBox(string messageText, float width, float height)
     {
-        TextAreaWidth = textAreaWidth;
-        TextAreaHeight = textAreaHeight;
+        this.Width = width;
+        this.Height = height;
+        TextAreaWidth = width-20;
+        TextAreaHeight = height-20;
+
+        //if (backgroundAsset.Length > 0)
+        //{
+            background = new FSprite(GameVars.Instance.MENU_BACKGROUND_ASSET);            
+            background.width = this.Width;
+            background.height = this.Height;
+            background.color = GameVars.Instance.MENU_BACKGROUND_COLOR;
+            this.AddChild(background);            
+        //}
+
+        //if (foregroundAsset.Length > 0)
+        //{
+            foreground = new FSprite(GameVars.Instance.MENU_FOREGROUND_ASSET);
+            foreground.width = TextAreaWidth;
+            foreground.height = TextAreaHeight;
+            foreground.color = GameVars.Instance.MENU_FOREGROUND_COLOR;
+            this.AddChild(foreground);
+        //}
+
         SetText(messageText);
         IPDebug.Log("Message Text = " + messageText);
 
-        //displayedLabel = new FLabel("ComicSans", labelText.ElementAt(displayedLabelIndex));
+        //displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
         this.AddChild(displayedLabel);
     }
 
+    //Next() returns true if a new label was displayed
+    //Will return true when you display the last label, but not the next time you call it
     public bool Next()
     {
         displayedLabelIndex++;
@@ -47,9 +75,15 @@ class MessageBox : FContainer
         }
         else
         {
-            this.RemoveChild(displayedLabel);
+            //don't auto-close anymore, can call Close() to remove label or just remove the whole box
+            //this.RemoveChild(displayedLabel);            
             return false;
         }
+    }
+
+    public void Close()
+    {
+        this.RemoveChild(displayedLabel);
     }
 
     public string GetAllText()
@@ -70,70 +104,85 @@ class MessageBox : FContainer
 
     private void SetupLabels()
     {
-        //this.RemoveAllLabels();
-
-        string[] words = messageText.Split(' ');
-
-        IPDebug.Log("words length = " + words.Length);
-        //StringBuilder sb = new StringBuilder();
         
-        FLabel currentLabel = new FLabel("ComicSans", "");
+        //StringBuilder sb = new StringBuilder();
 
-        string currentText = "";
-        string space = ""; // don't start with a space
-        string newLine = "\r\n";
+        FLabel currentLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
 
-        foreach (string word in words)
+        string currentText = "";        
+        string newLine = "\n";
+        Vector2 size = Vector2.zero;
+        
+        //this.RemoveAllLabels();
+        string[] lines = messageText.Split(newLine.ToCharArray());
+
+        foreach (string line in lines)
         {
-            string newText = currentText + space + word;
-            IPDebug.Log("newText = " + newText);
-            Vector2 size = currentLabel.MeasureText(newText);
+            string[] words = line.Split(' ');
+            string space = ""; // don't start with a space
 
-            if (size.x <= TextAreaWidth)
+            IPDebug.Log("words length = " + words.Length);
+            foreach (string word in words)
             {
-                currentText = newText;
-            }
-            else
-            {                
-                newText = currentText + newLine + word;
-                IPDebug.Log("newText new line = " + newText);
+                string newText = currentText + space + word;
+                IPDebug.Log("newText = " + newText);
                 size = currentLabel.MeasureText(newText);
-                if (size.y <= TextAreaHeight)
+
+                if (size.x <= TextAreaWidth)
                 {
                     currentText = newText;
                 }
                 else
                 {
-                    IPDebug.Log("word doesn't fit, new label");
-                    //word doesn't fit, add new label with current text to list, put new word on new label
-                    //FLabel newLabel = new FLabel("ComicSans", currentLabel.text);
-                    labelText.Add(currentText);
-                    //labels.Add(newLabel);
-                    currentText = word;
+                    newText = currentText + newLine + word;
+                    IPDebug.Log("newText new line = " + newText);
+                    size = currentLabel.MeasureText(newText);
+                    if (size.y <= TextAreaHeight)
+                    {
+                        currentText = newText;
+                    }
+                    else
+                    {
+                        IPDebug.Log("word doesn't fit, new label");
+                        //word doesn't fit, add new label with current text to list, put new word on new label
+                        //FLabel newLabel = new FLabel(GameVars.Instance.FONT_NAME, currentLabel.text);
+                        labelText.Add(currentText);
+                        //labels.Add(newLabel);
+                        currentText = word;
+                    }
                 }
+
+                space = " "; //update space string to actually contain a space after the first time through
             }
 
-            space = " "; //update space string to actually contain a space after the first time through
+            //at the end of a line, see if we can start the next line on the current label or if we have to start a new one
+
+            size = currentLabel.MeasureText(currentText + newLine + " ");
+            if (size.y <= TextAreaHeight)
+            {
+                currentText += newLine;
+            }
+            else
+            {
+                labelText.Add(currentText);
+                currentText = "";
+            }
         }
 
         //add the last updated label text
         //labels.Add(currentLabel);
-        labelText.Add(currentText);
+        if (currentText.Length > 0)
+        {
+            labelText.Add(currentText);
+        }
 
         displayedLabelIndex = 0;
-        displayedLabel = new FLabel("ComicSans", labelText.ElementAt(displayedLabelIndex));
+        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
+        displayedLabel.anchorX = 0.0f; //left
+        displayedLabel.anchorY = 1.0f; //top
+        displayedLabel.x = -(this.Width / 2) + textAreaOffset;
+        displayedLabel.y = (this.Height / 2) - textAreaOffset; // *0.9f;
         //this.AddChild(displayedLabel);
-    }
-
-    private void RemoveAllLabels()
-    {
-        foreach (FLabel label in labels)
-        {
-            if (label.container == this)
-            {
-                this.RemoveChild(label);
-            }
-        }
     }
 
     public string GetLabelsDescription()

@@ -6,10 +6,15 @@ public class SurviveGame : MonoBehaviour {
     //FTmxMap background;    
 
     FSceneManager sceneManager;
+    FStage fpsStage;
     HUDFPS fps;
     //FStage guiStage;
 
-	// Use this for initialization
+
+    
+
+
+    // Use this for initialization
 	void Start () {
 
         //IPDebug.DoLog = true;
@@ -23,7 +28,7 @@ public class SurviveGame : MonoBehaviour {
         // load image atlas (within Resources/Atlases folder)
         Futile.atlasManager.LoadAtlas("Atlases/survive");
 
-        Futile.atlasManager.LoadFont("ComicSans", "comic-sans", "Atlases/comic-sans", 0.0f, 0.0f);
+        Futile.atlasManager.LoadFont(GameVars.Instance.FONT_NAME, "comic-sans", "Atlases/comic-sans", 0.0f, 0.0f);
 
         sceneManager = FSceneManager.Instance;
 
@@ -35,22 +40,22 @@ public class SurviveGame : MonoBehaviour {
         //IPDebug.Log("Half Width = " + Futile.screen.halfWidth + " | Half Height = " + Futile.screen.halfHeight);               
 
         //guiStage = new FStage("GUI");
-        fps = new HUDFPS("ComicSans");
+
+        fpsStage = new FStage("FPS");
+        fps = new HUDFPS(GameVars.Instance.FONT_NAME);
         fps.scale = 0.5f;
         fps.anchorX = 0;
         fps.anchorY = 1;
-        //fps.x = -Futile.screen.halfWidth;
-        //fps.y = Futile.screen.halfHeight;
-        //guiStage.AddChild(fps);
-        Futile.stage.AddChild(fps);
-        //Futile.AddStage(guiStage);
+        fps.x = -Futile.screen.halfWidth;
+        fps.y = Futile.screen.halfHeight;
+        fpsStage.AddChild(fps);
+        //Futile.AddStage(fpsStage);
 	}
 	
 	// Update is called once per frame
     void Update()
     {
-        fps.x = -Futile.stage.x - Futile.screen.halfWidth;
-        fps.y = -Futile.stage.y + Futile.screen.halfHeight;
+        //Futile.AddStage(fpsStage);
         
     }   
 

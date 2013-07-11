@@ -54,8 +54,19 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown("space"))
             {
-                string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-                FMenuScene menu = new FMenuScene("menu", msgText);
+                string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. " +
+                                 "Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? " +
+                                 "I sure can't. But maybe you can. Can you think of anything? I'm sorry, I should have let you finish your thought." + 
+                                 "\n\nThat was very rude of me to interrupt.\n\nSorry.\n\n.....\n\n\n\n\n\n\n\nTruly sorry.";
+                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+                FSceneManager.Instance.PushScene(menu);
+                return; // don't run any other update code if they are opening the menu because this scene will be paused
+            }
+
+            if (Input.GetKeyDown("i"))
+            {
+                string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
+                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.INVENTORY_RECT);
                 FSceneManager.Instance.PushScene(menu);
                 return; // don't run any other update code if they are opening the menu because this scene will be paused
             }
@@ -175,7 +186,7 @@ public class FWorldLayer : FLayer
     {
         IPDebug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
         string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-        FMenuScene menu = new FMenuScene("menu", msgText);
+        FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
         FSceneManager.Instance.PushScene(menu);
     }
 
@@ -185,7 +196,7 @@ public class FWorldLayer : FLayer
         if (!shallowStreamTriggered)
         {
             string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-            FMenuScene menu = new FMenuScene("menu", msgText);
+            FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
             FSceneManager.Instance.PushScene(menu);
             shallowStreamTriggered = true;
         }
