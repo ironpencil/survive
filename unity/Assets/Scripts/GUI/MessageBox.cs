@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class MessageBox : FContainer
+class MessageBox : FLayer
 {
 
     private string messageText { get; set; }
@@ -26,33 +26,36 @@ class MessageBox : FContainer
     private FSprite background;
     private FSprite foreground;
 
-    public float textAreaOffset = 20;
-    
-    public MessageBox(string messageText, float width, float height)
+    public float textAreaOffset;
+
+    public MessageBox(FScene parent, string messageText, float width, float height, float textOffset)
+        : base(parent)
     {
         this.Width = width;
         this.Height = height;
-        TextAreaWidth = width-20;
-        TextAreaHeight = height-20;
-
+        TextAreaWidth = width - textOffset;
+        TextAreaHeight = height - textOffset;
+        this.textAreaOffset = textOffset;
         //if (backgroundAsset.Length > 0)
         //{
-            background = new FSprite(GameVars.Instance.MENU_BACKGROUND_ASSET);            
-            background.width = this.Width;
-            background.height = this.Height;
-            background.color = GameVars.Instance.MENU_BACKGROUND_COLOR;
-            this.AddChild(background);            
+        background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
+        background.width = this.Width;
+        background.height = this.Height;
+        background.color = GameVars.Instance.MENU_BORDER_COLOR;
+        this.AddChild(background);
         //}
 
         //if (foregroundAsset.Length > 0)
         //{
-            foreground = new FSprite(GameVars.Instance.MENU_FOREGROUND_ASSET);
-            foreground.width = TextAreaWidth;
-            foreground.height = TextAreaHeight;
-            foreground.color = GameVars.Instance.MENU_FOREGROUND_COLOR;
-            this.AddChild(foreground);
+        foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
+        foreground.width = TextAreaWidth;
+        foreground.height = TextAreaHeight;
+        foreground.color = GameVars.Instance.MENU_INNER_COLOR;
+        this.AddChild(foreground);
         //}
 
+        //set up the labels
+        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
         SetText(messageText);
         IPDebug.Log("Message Text = " + messageText);
 
@@ -108,6 +111,7 @@ class MessageBox : FContainer
         //StringBuilder sb = new StringBuilder();
 
         FLabel currentLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
+        labelText.Clear();
 
         string currentText = "";        
         string newLine = "\n";
@@ -177,7 +181,7 @@ class MessageBox : FContainer
         }
 
         displayedLabelIndex = 0;
-        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
+        displayedLabel.text = labelText.ElementAt(displayedLabelIndex);
         displayedLabel.anchorX = 0.0f; //left
         displayedLabel.anchorY = 1.0f; //top
         displayedLabel.x = -(this.Width / 2) + textAreaOffset;
@@ -185,18 +189,19 @@ class MessageBox : FContainer
         //this.AddChild(displayedLabel);
     }
 
-    public string GetLabelsDescription()
+    public override void OnEnter()
     {
-        StringBuilder sb = new StringBuilder();
+        base.OnEnter();
+    }
 
-        IPDebug.Log("Label Count = " + labels.Count);
-        foreach (FLabel label in labels)
-        {
-            IPDebug.Log("Label Text = " + label.text);
-            sb.AppendLine("Label Text:\r\n" + label.text);
-        }
+    public override void OnExit()
+    {
+        base.OnExit();
+    }
 
-        return sb.ToString();
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
     }
 }
 

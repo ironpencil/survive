@@ -13,16 +13,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FTextDisplayScene : FScene
+public class FSelectionDisplayScene : FScene
 {
 
     Player player;
     FTilemap tileMap;
     FLabel textLabel;
 
-    MessageBox msgBox;
+    SelectionBox selectBox;
 
-    string messageText = "";
+    List<string> choiceList;
+
+    public string SelectedItem { get; private set; }
+    public bool ItemWasSelected { get; private set; }
 
     Vector2 maxBounds;
 
@@ -34,11 +37,11 @@ public class FTextDisplayScene : FScene
 
     public Rect Bounds { get; set; }
 
-    public FTextDisplayScene(string name, string messageText, Rect bounds)
+    public FSelectionDisplayScene(string name, List<string> choiceList, Rect bounds)
         : base(name)
 	{
 		mName = name;
-        this.messageText = messageText;
+        this.choiceList = choiceList;
         this.Bounds = bounds;
 	}
 	
@@ -50,19 +53,19 @@ public class FTextDisplayScene : FScene
         }
 
         //this.SetPosition(Futile.stage.GetPosition() * -1);
-
-        if (Input.GetKeyDown("space"))
-        {
-            if (!msgBox.Next())
-            {
-                FSceneManager.Instance.PopScene();
-            }
-        }		
+        if (selectBox.ItemIsSelected) {
+            this.ItemWasSelected = true;
+            this.SelectedItem = selectBox.SelectedItem;
+            FSceneManager.Instance.PopScene();
+        }	
 	}
 
     public override void OnEnter()
 	{
         guiStage = new FStage("GUI");
+
+        ItemWasSelected = false;
+        SelectedItem = "";
 
         IPDebug.Log("MenuScene OnEnter()");       
 
@@ -83,12 +86,12 @@ public class FTextDisplayScene : FScene
         //Futile.stage.AddChild(textLabel);
 
         //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-        msgBox = new MessageBox(this, messageText, Bounds.width, Bounds.height, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+        selectBox = new SelectionBox(this, choiceList, Bounds.width, Bounds.height, GameVars.Instance.MESSAGE_TEXT_OFFSET);
         
-        msgBox.x = Bounds.x;
-        msgBox.y = Bounds.y;
+        selectBox.x = Bounds.x;
+        selectBox.y = Bounds.y;
 
-        guiStage.AddChild(msgBox);
+        guiStage.AddChild(selectBox);
 
         Futile.AddStage(guiStage);
 	}

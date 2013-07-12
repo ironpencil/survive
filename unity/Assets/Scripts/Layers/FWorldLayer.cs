@@ -20,9 +20,10 @@ public class FWorldLayer : FLayer
     IPTileMap tileMap;
     FLabel textLabel;
     IPTileLayer terrainLayer;
-    IPObjectLayer terrainObjects;    
-    
-    
+    IPObjectLayer terrainObjects;
+
+    FSelectionDisplayScene inventoryScene = null;
+    bool inInventory = false;
 
     public FWorldLayer(FScene parent) : base(parent) { }
 
@@ -38,6 +39,19 @@ public class FWorldLayer : FLayer
             return;
         }
 
+        //check to see if we just came out of our inventory
+        if (inInventory)
+        {
+            if (inventoryScene != null && inventoryScene.ItemWasSelected)
+            {
+                string itemUsed = inventoryScene.SelectedItem;
+                string msgText = "You selected the " + itemUsed + "!";
+                FTextDisplayScene message = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+                FSceneManager.Instance.PushScene(message);
+            }
+
+            inInventory = false;
+        }
         //Futile.stage.Follow(player, false, false);
                
         //only handle input if player is standing still
@@ -65,9 +79,11 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown("i"))
             {
-                string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
-                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.INVENTORY_RECT);
-                FSceneManager.Instance.PushScene(menu);
+                List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater"};
+                //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
+                inventoryScene = new FSelectionDisplayScene("inventory", invItems, GameVars.Instance.INVENTORY_RECT);
+                FSceneManager.Instance.PushScene(inventoryScene);
+                inInventory = true;
                 return; // don't run any other update code if they are opening the menu because this scene will be paused
             }
 
