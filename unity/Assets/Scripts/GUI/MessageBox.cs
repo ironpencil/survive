@@ -17,7 +17,6 @@ class MessageBox : FLayer
 
     private float TextAreaHeight { get; set; }
 
-    List<FLabel> labels = new List<FLabel>();
     List<string> labelText = new List<string>();
 
     private int displayedLabelIndex = 0;
@@ -26,16 +25,49 @@ class MessageBox : FLayer
     private FSprite background;
     private FSprite foreground;
 
+    public float textPadding = 4;
     public float textAreaOffset;
 
-    public MessageBox(FScene parent, string messageText, float width, float height, float textOffset)
+    //public MessageBox(FScene parent, string messageText, float width, float height, float textOffset)
+    //    : base(parent)
+    //{
+    //    this.Width = width;
+    //    this.Height = height;
+    //    TextAreaWidth = width - textOffset;
+    //    TextAreaHeight = height - textOffset;
+    //    this.textAreaOffset = textOffset;
+    //    //if (backgroundAsset.Length > 0)
+    //    //{
+    //    background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
+    //    background.width = this.Width;
+    //    background.height = this.Height;
+    //    background.color = GameVars.Instance.MENU_BORDER_COLOR;
+    //    this.AddChild(background);
+    //    //}
+
+    //    //if (foregroundAsset.Length > 0)
+    //    //{
+    //    foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
+    //    foreground.width = TextAreaWidth + textPadding;
+    //    foreground.height = TextAreaHeight + textPadding;
+    //    foreground.color = GameVars.Instance.MENU_INNER_COLOR;
+    //    this.AddChild(foreground);
+    //    //}
+    //    this.messageText = messageText;
+        
+    //}
+
+    public MessageBox(FScene parent, string messageText, Rect bounds, float textOffset)
         : base(parent)
     {
-        this.Width = width;
-        this.Height = height;
-        TextAreaWidth = width - textOffset;
-        TextAreaHeight = height - textOffset;
+        this.Width = bounds.width;
+        this.Height = bounds.height;
+        TextAreaWidth = this.Width - textOffset;
+        TextAreaHeight = this.Height - textOffset;
         this.textAreaOffset = textOffset;
+        this.x = bounds.x;
+        this.y = bounds.y;
+
         //if (backgroundAsset.Length > 0)
         //{
         background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
@@ -48,19 +80,14 @@ class MessageBox : FLayer
         //if (foregroundAsset.Length > 0)
         //{
         foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
-        foreground.width = TextAreaWidth;
-        foreground.height = TextAreaHeight;
+        foreground.width = TextAreaWidth + textPadding;
+        foreground.height = TextAreaHeight + textPadding;
         foreground.color = GameVars.Instance.MENU_INNER_COLOR;
         this.AddChild(foreground);
         //}
+        this.messageText = messageText;
+        
 
-        //set up the labels
-        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
-        SetText(messageText);
-        IPDebug.Log("Message Text = " + messageText);
-
-        //displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
-        this.AddChild(displayedLabel);
     }
 
     //Next() returns true if a new label was displayed
@@ -184,14 +211,22 @@ class MessageBox : FLayer
         displayedLabel.text = labelText.ElementAt(displayedLabelIndex);
         displayedLabel.anchorX = 0.0f; //left
         displayedLabel.anchorY = 1.0f; //top
-        displayedLabel.x = -(this.Width / 2) + textAreaOffset;
-        displayedLabel.y = (this.Height / 2) - textAreaOffset; // *0.9f;
+        displayedLabel.x = -(this.Width - textAreaOffset) / 2;
+        displayedLabel.y = (this.Height - textAreaOffset) / 2;
         //this.AddChild(displayedLabel);
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
+
+        //set up the labels
+        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
+        SetText(messageText);
+        IPDebug.Log("Message Text = " + messageText);
+
+        //displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
+        this.AddChild(displayedLabel);
     }
 
     public override void OnExit()

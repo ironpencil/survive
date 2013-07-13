@@ -41,22 +41,23 @@ public class SurviveGame : MonoBehaviour {
 
         //guiStage = new FStage("GUI");
 
-        fpsStage = new FStage("FPS");
+        GameVars.Instance.GUIStage = new FStage("GUI");
+
         fps = new HUDFPS(GameVars.Instance.FONT_NAME);
         fps.scale = 0.5f;
         fps.anchorX = 0;
         fps.anchorY = 1;
         fps.x = -Futile.screen.halfWidth;
         fps.y = Futile.screen.halfHeight;
-        fpsStage.AddChild(fps);
+        GameVars.Instance.GUIStage.AddChild(fps);
         //Futile.AddStage(fpsStage);
 	}
 	
 	// Update is called once per frame
     void Update()
-    {
-        //Futile.AddStage(fpsStage);
-        
+    {        
+        Futile.AddStage(GameVars.Instance.GUIStage);
+        fps.MoveToFront();
     }   
 
 }

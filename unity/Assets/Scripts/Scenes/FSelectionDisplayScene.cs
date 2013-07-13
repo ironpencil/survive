@@ -16,90 +16,127 @@ using System.Collections.Generic;
 public class FSelectionDisplayScene : FScene
 {
 
-    Player player;
-    FTilemap tileMap;
-    FLabel textLabel;
+    public Player player;
 
-    SelectionBox selectBox;
+    public bool IsClosed { get; set; }
+    private FSelectionDisplayScene childScene = null;
+
+    private bool messageBoxInFocus = false;
+    private bool selectBoxInFocus = false;
+    MessageBox messageBox = null;
+    SelectionBox selectBox = null;
 
     List<string> choiceList;
 
-    public string SelectedItem { get; private set; }
+    TreeNode<MenuNode> rootNode;
+
+    public TreeNode<MenuNode> SelectedItem { get; private set; }
     public bool ItemWasSelected { get; private set; }
-
-    Vector2 maxBounds;
-
-    FStage guiStage;
 
     public float Width { get; set; }
 
     public float Height { get; set; }
 
-    public Rect Bounds { get; set; }
-
-    public FSelectionDisplayScene(string name, List<string> choiceList, Rect bounds)
+    public FSelectionDisplayScene(string name, TreeNode<MenuNode> rootNode)
         : base(name)
-	{
-		mName = name;
-        this.choiceList = choiceList;
-        this.Bounds = bounds;
-	}
-	
-	public override void OnUpdate ()
-	{
+    {
+        mName = name;
+        this.rootNode = rootNode;
+    }
+
+    public override void OnUpdate()
+    {
         if (this.Paused)
         {
             return;
         }
 
-        //this.SetPosition(Futile.stage.GetPosition() * -1);
-        if (selectBox.ItemIsSelected) {
-            this.ItemWasSelected = true;
-            this.SelectedItem = selectBox.SelectedItem;
-            FSceneManager.Instance.PopScene();
-        }	
-	}
+        if (messageBoxInFocus)
+        {
+            if (Input.GetKeyDown("space"))
+            {
+                if (!messageBox.Next())
+                {
+                    ShowSelectBox();
+                }
+            }
+        }
+        else if (selectBoxInFocus)
+        {
+            if (selectBox.ItemIsSelected)
+            {
+                this.ItemWasSelected = true;
+                this.SelectedItem = selectBox.SelectedItem;
+
+                //TODO: When the subScene is done, have it pass back its selectedItem to this parent
+
+                childScene = new FSelectionDisplayScene(this.SelectedItem.Value.NodeTitle, this.SelectedItem);
+                FSceneManager.Instance.PushScene(childScene);
+                selectBoxInFocus = false;
+            }
+        }
+        else
+        {
+            if (childScene == null || childScene.IsClosed)
+            {
+                //if none of our display boxes are being displayed, scrap this scene                
+                FSceneManager.Instance.PopScene();
+                this.IsClosed = true;
+            }
+        }
+    }
 
     public override void OnEnter()
-	{
-        guiStage = new FStage("GUI");
-
+    {
         ItemWasSelected = false;
-        SelectedItem = "";
-
-        IPDebug.Log("MenuScene OnEnter()");       
-
-        //FSprite menu = new FSprite("Futile_White");
-
-        //menu.width = Futile.screen.width * 0.25f;
-        //menu.height = Futile.screen.height * 0.25f;
+        SelectedItem = null;
         
-        //this.SetPosition(Futile.stage.GetPosition() * -1);
-
-        IPDebug.Log("Stage position:" + stage.GetPosition());
-        IPDebug.Log("scene position: " + this.GetPosition());
-
-        //this.AddChild(menu);
-        //guiStage.AddChild(menu);
-
-        //FLabel textLabel = new FLabel(GameVars.Instance.FONT_NAME, "Hello world! This is my blank menu!");
-        //Futile.stage.AddChild(textLabel);
-
-        //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-        selectBox = new SelectionBox(this, choiceList, Bounds.width, Bounds.height, GameVars.Instance.MESSAGE_TEXT_OFFSET);
-        
-        selectBox.x = Bounds.x;
-        selectBox.y = Bounds.y;
-
-        guiStage.AddChild(selectBox);
-
-        Futile.AddStage(guiStage);
-	}
+        if (rootNode.Value.DisplayMessage.Length > 0)
+        {
+            ShowMessageBox();
+        }
+        else
+        {
+            ShowSelectBox();
+        }
+        //Futile.AddStage(guiStage);
+	}    
 
     public override void OnExit()
 	{
-
-        Futile.RemoveStage(guiStage);
+        if (selectBox != null) { GameVars.Instance.GUIStage.RemoveChild(selectBox); }
+        if (messageBox != null) { GameVars.Instance.GUIStage.RemoveChild(messageBox); }
+        //Futile.RemoveStage(guiStage);
 
 	}
+
+    private void ShowMessageBox()
+    {
+        messageBox = new MessageBox(this, rootNode.Value.DisplayMessage, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+        GameVars.Instance.GUIStage.AddChild(messageBox);
+        messageBoxInFocus = true;
+    }
+
+    private void ShowSelectBox()
+    {
+        messageBoxInFocus = false;
+        if (rootNode.Children.Count > 0)
+        {
+            Rect boundsRect = GameVars.Instance.SELECTION_RECT;
+            switch (rootNode.Value.NodeType)
+            {
+                case MenuNodeType.TEXT:
+                    boundsRect = GameVars.Instance.SELECTION_RECT;
+                    break;
+                case MenuNodeType.INVENTORY:
+                    boundsRect = GameVars.Instance.INVENTORY_RECT;
+                    break;
+                default:
+                    break;
+            }
+            selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            GameVars.Instance.GUIStage.AddChild(selectBox);
+            selectBoxInFocus = true;
+        }
+    }
 }

@@ -22,8 +22,8 @@ public class FWorldLayer : FLayer
     IPTileLayer terrainLayer;
     IPObjectLayer terrainObjects;
 
-    FSelectionDisplayScene inventoryScene = null;
-    bool inInventory = false;
+    FSelectionDisplayScene selectionScene = null;
+    bool inSelectionDialog = false;
 
     public FWorldLayer(FScene parent) : base(parent) { }
 
@@ -40,17 +40,17 @@ public class FWorldLayer : FLayer
         }
 
         //check to see if we just came out of our inventory
-        if (inInventory)
+        if (inSelectionDialog)
         {
-            if (inventoryScene != null && inventoryScene.ItemWasSelected)
+            if (selectionScene != null && selectionScene.ItemWasSelected)
             {
-                string itemUsed = inventoryScene.SelectedItem;
-                string msgText = "You selected the " + itemUsed + "!";
-                FTextDisplayScene message = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+                MenuNode itemSelected = selectionScene.SelectedItem.Value;
+                string msgText = "You selected '" + itemSelected.NodeText + "'!";
+                FTextDisplayScene message = new FTextDisplayScene("menu", msgText);
                 FSceneManager.Instance.PushScene(message);
             }
 
-            inInventory = false;
+            inSelectionDialog = false;
         }
         //Futile.stage.Follow(player, false, false);
                
@@ -66,24 +66,41 @@ public class FWorldLayer : FLayer
         else
         {
 
+            //if (Input.GetKey("r"))
+            //{                       
+            //    tileMap.rotation += 5 * Time.deltaTime;
+            //}
+
             if (Input.GetKeyDown("space"))
             {
                 string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. " +
                                  "Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? " +
                                  "I sure can't. But maybe you can. Can you think of anything? I'm sorry, I should have let you finish your thought." + 
                                  "\n\nThat was very rude of me to interrupt.\n\nSorry.\n\n.....\n\n\n\n\n\n\n\nTruly sorry.";
-                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
                 FSceneManager.Instance.PushScene(menu);
                 return; // don't run any other update code if they are opening the menu because this scene will be paused
             }
 
             if (Input.GetKeyDown("i"))
             {
-                List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater"};
+                TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Opening Inventory... "));
+
+                MenuNode[] invItems = new MenuNode[] {
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "ATM Card", "This is an ATM Card. Your dad gave it to you."),
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "First Aid Kit", "Some leaves, a needle, and a dirty Band-Aid."),
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Honey", "I hope it was worth it."),
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Compass", "It's pointing that way."),
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Hearteater", "Kiss it."),
+                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Brad Pitt's Wife's Head in a Box", "What's in the box?\n\nOh.")};
+
+                rootNode.AddChildren(invItems);
+                        
+                //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
                 //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
-                inventoryScene = new FSelectionDisplayScene("inventory", invItems, GameVars.Instance.INVENTORY_RECT);
-                FSceneManager.Instance.PushScene(inventoryScene);
-                inInventory = true;
+                selectionScene = new FSelectionDisplayScene("inventory", rootNode);
+                FSceneManager.Instance.PushScene(selectionScene);
+                inSelectionDialog = true;
                 return; // don't run any other update code if they are opening the menu because this scene will be paused
             }
 
@@ -202,7 +219,7 @@ public class FWorldLayer : FLayer
     {
         IPDebug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
         string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-        FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+        FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
         FSceneManager.Instance.PushScene(menu);
     }
 
@@ -212,7 +229,7 @@ public class FWorldLayer : FLayer
         if (!shallowStreamTriggered)
         {
             string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-            FTextDisplayScene menu = new FTextDisplayScene("menu", msgText, GameVars.Instance.MESSAGE_RECT);
+            FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
             FSceneManager.Instance.PushScene(menu);
             shallowStreamTriggered = true;
         }

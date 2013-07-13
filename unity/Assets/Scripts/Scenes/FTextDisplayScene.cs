@@ -20,26 +20,21 @@ public class FTextDisplayScene : FScene
     FTilemap tileMap;
     FLabel textLabel;
 
-    MessageBox msgBox;
+    MessageBox msgBox = null;
 
     string messageText = "";
 
     Vector2 maxBounds;
 
-    FStage guiStage;
-
     public float Width { get; set; }
 
     public float Height { get; set; }
 
-    public Rect Bounds { get; set; }
-
-    public FTextDisplayScene(string name, string messageText, Rect bounds)
+    public FTextDisplayScene(string name, string messageText)
         : base(name)
 	{
 		mName = name;
         this.messageText = messageText;
-        this.Bounds = bounds;
 	}
 	
 	public override void OnUpdate ()
@@ -62,8 +57,6 @@ public class FTextDisplayScene : FScene
 
     public override void OnEnter()
 	{
-        guiStage = new FStage("GUI");
-
         IPDebug.Log("MenuScene OnEnter()");       
 
         //FSprite menu = new FSprite("Futile_White");
@@ -83,20 +76,18 @@ public class FTextDisplayScene : FScene
         //Futile.stage.AddChild(textLabel);
 
         //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-        msgBox = new MessageBox(this, messageText, Bounds.width, Bounds.height, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+        msgBox = new MessageBox(this, messageText, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
         
-        msgBox.x = Bounds.x;
-        msgBox.y = Bounds.y;
+        //msgBox.x = Bounds.x;
+        //msgBox.y = Bounds.y;
 
-        guiStage.AddChild(msgBox);
+        GameVars.Instance.GUIStage.AddChild(msgBox);
 
-        Futile.AddStage(guiStage);
 	}
 
     public override void OnExit()
 	{
-
-        Futile.RemoveStage(guiStage);
+        if (msgBox != null) { GameVars.Instance.GUIStage.RemoveChild(msgBox); }
 
 	}
 }

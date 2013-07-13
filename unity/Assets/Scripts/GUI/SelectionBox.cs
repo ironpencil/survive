@@ -25,20 +25,22 @@ class SelectionBox : FLayer
     private FSprite foreground;
     private FSprite highlight;
 
-    public string SelectedItem { get; private set; }
+    public TreeNode<MenuNode> SelectedItem { get; private set; }
     public bool ItemIsSelected { get; private set; }
 
-    public float textPadding = 20;
-    public float textAreaOffset;
+    public float textPadding = 4;
+    public float textAreaOffset;    
 
-    public SelectionBox(FScene parent, List<string> choices, float width, float height, float textOffset)
+    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset)
         : base(parent)
     {
-        this.Width = width;
-        this.Height = height;
-        TextAreaWidth = width - textOffset;
-        TextAreaHeight = height - textOffset;
+        this.Width = bounds.width;
+        this.Height = bounds.height;
+        TextAreaWidth = this.Width - textOffset;
+        TextAreaHeight = this.Height - textOffset;
         this.textAreaOffset = textOffset;
+        this.x = bounds.x;
+        this.y = bounds.y;
         //if (backgroundAsset.Length > 0)
         //{
         background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
@@ -51,24 +53,22 @@ class SelectionBox : FLayer
         //if (foregroundAsset.Length > 0)
         //{
         foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
-        foreground.width = TextAreaWidth;
-        foreground.height = TextAreaHeight;
+        foreground.width = TextAreaWidth + textPadding;
+        foreground.height = TextAreaHeight + textPadding;
         foreground.color = GameVars.Instance.MENU_INNER_COLOR;
         this.AddChild(foreground);
 
         highlight = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
-        highlight.color = GameVars.Instance.MENU_HIGHLIGHT_COLOR;        
+        highlight.color = GameVars.Instance.MENU_HIGHLIGHT_COLOR;
         //}        
 
         //set up the labels        
-        SetupLabels(choices);
+        SetupLabels(rootNode);
 
         foreach (FLabel label in labels)
         {
             this.AddChild(label);
         }
-        //displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, labelText.ElementAt(displayedLabelIndex));
-        //this.AddChild(displayedLabel);
     }
 
     //Next() returns true if a new label was displayed
@@ -114,21 +114,22 @@ class SelectionBox : FLayer
     //{
     //    this.messageText = messageText;
     //    SetupLabels();
-    //}
+    //}    
 
-    private void SetupLabels(List<string> choices)
+    private void SetupLabels(TreeNode<MenuNode> rootNode)
     {
-        
+
         //StringBuilder sb = new StringBuilder();
         labels.Clear();
 
-        SelectedItem = "";
+        SelectedItem = null;
         ItemIsSelected = false;
 
         float heightRemaining = TextAreaHeight;
 
-        foreach (string choiceText in choices)
+        foreach (TreeNode<MenuNode> childNode in rootNode.Children)
         {
+            string choiceText = childNode.Value.NodeText;
             FLabel currentLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
 
             string currentText = "";
@@ -157,7 +158,7 @@ class SelectionBox : FLayer
                     else
                     {
                         //selection box choices can't wrap to a new dialog
-                        newText = currentText + newLine + word;
+                        newText = currentText + newLine + " " + word;
                         currentText = newText;
                     }
 
@@ -167,16 +168,16 @@ class SelectionBox : FLayer
                 //at the end of a line
                 currentText += newLine;
             }
-            
+
             //add the label to the list
             currentLabel.text = currentText;
-            currentLabel.data = choiceText;
+            currentLabel.data = childNode;
             labels.Add(currentLabel);
 
             currentLabel.anchorX = 0.0f; //left
             currentLabel.anchorY = 1.0f; //top
-            currentLabel.x = -(this.Width / 2) + textPadding;
-            currentLabel.y = ((this.Height / 2) - textPadding) - (TextAreaHeight - heightRemaining);
+            currentLabel.x = -(this.Width - textAreaOffset) / 2;
+            currentLabel.y = ((this.Height - textAreaOffset) / 2) - (TextAreaHeight - heightRemaining);
             heightRemaining -= currentLabel.textRect.height;
         }
         //this.AddChild(displayedLabel);
@@ -192,7 +193,7 @@ class SelectionBox : FLayer
             currentlySelectedIndex = 0;
             currentlySelectedLabel = labels[currentlySelectedIndex];
 
-            highlight.width = TextAreaWidth - textPadding;
+            highlight.width = TextAreaWidth;
             highlight.height = currentlySelectedLabel.textRect.height;
 
             highlight.anchorX = 0.0f;
@@ -224,7 +225,8 @@ class SelectionBox : FLayer
 
                 FLabel currentLabel = labels[i];
                 Vector2 mousePos = currentLabel.GetLocalMousePosition();
-                if (currentLabel.textRect.Contains(mousePos))
+                Rect checkRect = new Rect(currentLabel.textRect.x, currentLabel.textRect.y, TextAreaWidth, currentLabel.textRect.height);
+                if (checkRect.Contains(mousePos))
                 {
                     highlighted = true;
                     currentlySelectedLabel = currentLabel;
@@ -274,7 +276,7 @@ class SelectionBox : FLayer
         if (Input.GetKeyDown("space"))
         {
             //select currently highlighted item
-            SelectedItem = (string)currentlySelectedLabel.data;
+            SelectedItem = (TreeNode<MenuNode>)currentlySelectedLabel.data;
             ItemIsSelected = true;
         }
     }
@@ -292,10 +294,11 @@ class SelectionBox : FLayer
                 foreach (FLabel label in labels)
                 {
                     Vector2 touchPos = label.GlobalToLocal(touch.position);
-                    if (label.textRect.Contains(touchPos))
+                    Rect checkRect = new Rect(label.textRect.x, label.textRect.y, TextAreaWidth, label.textRect.height);
+                    if (checkRect.Contains(touchPos))
                     {
                         //label.data is used to store the un-altered choice text. label.text may include additional linebreaks
-                        SelectedItem = (string)label.data;
+                        SelectedItem = (TreeNode<MenuNode>)label.data;
                         ItemIsSelected = true;
                     }
                 }

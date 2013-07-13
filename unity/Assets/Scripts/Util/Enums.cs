@@ -1,26 +1,32 @@
-﻿enum IPTileMapTileProperties
+﻿public enum IPTileMapTileProperties
 {
     CAN_WALK
 }
 
-enum IPTileMapTileObjectTypes
+public enum IPTileMapTileObjectTypes
 {
     EVENT,
     TILE
 }
 
-enum IPTileMapTileObjectProperties
+public enum IPTileMapTileObjectProperties
 {
     EVENT_TYPE,
     TEXT    
 }
 
-enum IPTileMapLayerProperties
+public enum IPTileMapLayerProperties
 {
     LAYER_TYPE
 }
 
-enum IPTileMapLayerTypes
+public enum IPTileMapLayerTypes
 {
     TERRAIN
+}
+
+public enum MenuNodeType
+{
+    TEXT,
+    INVENTORY
 }
