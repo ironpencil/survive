@@ -36,6 +36,13 @@ public class TreeNode<T>
         return node;
     }
 
+    public TreeNode<T> AddChild(TreeNode<T> value)
+    {
+        value.Parent = this;
+        _children.Add(value);
+        return value;
+    }
+
     public TreeNode<T>[] AddChildren(params T[] values)
     {
         TreeNode<T>[] nodeList = new TreeNode<T>[values.Length];

@@ -90,14 +90,19 @@ class MessageBox : FLayer
 
     }
 
+    public bool HasNext()
+    {
+        //returns true if there is another label to be shown
+        return displayedLabelIndex < labelText.Count() - 1;
+    }
+
     //Next() returns true if a new label was displayed
     //Will return true when you display the last label, but not the next time you call it
     public bool Next()
     {
-        displayedLabelIndex++;
+        if (this.HasNext()) {
 
-        if (displayedLabelIndex < labelText.Count())
-        {
+            displayedLabelIndex++;
             //this.RemoveChild(displayedLabel);
             displayedLabel.text = labelText.ElementAt(displayedLabelIndex);
             //this.AddChild(displayedLabel);

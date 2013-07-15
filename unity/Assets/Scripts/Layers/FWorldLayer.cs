@@ -12,6 +12,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class FWorldLayer : FLayer
 {
@@ -44,8 +45,20 @@ public class FWorldLayer : FLayer
         {
             if (selectionScene != null && selectionScene.ItemWasSelected)
             {
-                MenuNode itemSelected = selectionScene.SelectedItem.Value;
-                string msgText = "You selected '" + itemSelected.NodeText + "'!";
+                TreeNode<MenuNode> selectedNode = selectionScene.ResultPath;
+                List<MenuNode> selectedItems = selectionScene.ResultPath.Flatten().ToList();
+
+                //List<MenuNode> selectedItems = new List<MenuNode>();
+                //selectedItems.Add(selectedNode.Value);
+                //while (selectedNode.Children.Count > 0)
+                //{
+                //    selectedNode = selectedNode.Children[0];
+                //    selectedItems.Add(selectedNode.Value);
+                //}
+                
+                string msgText = "You selected \"" + string.Join(" -> ", selectedItems.Select(node => node.NodeText).ToArray()) + "\"!";
+                //MenuNode itemSelected = selectionScene.SelectedItem.Value;
+                //string msgText = "You selected '" + itemSelected.NodeText + "'!";
                 FTextDisplayScene message = new FTextDisplayScene("menu", msgText);
                 FSceneManager.Instance.PushScene(message);
             }
@@ -84,21 +97,41 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown("i"))
             {
-                TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Opening Inventory... "));
+                TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
+
+                MenuNode[] menuSubNodes = new MenuNode[] {
+                    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
+                    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
+                };
+
+                TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
 
                 MenuNode[] invItems = new MenuNode[] {
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "ATM Card", "This is an ATM Card. Your dad gave it to you."),
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "First Aid Kit", "Some leaves, a needle, and a dirty Band-Aid."),
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Honey", "I hope it was worth it."),
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Compass", "It's pointing that way."),
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Hearteater", "Kiss it."),
-                    new MenuNode(MenuNodeType.TEXT, "Use Item", "Brad Pitt's Wife's Head in a Box", "What's in the box?\n\nOh.")};
+                    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
+                    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
+                    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
+                    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
+                    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
+                    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
+                
 
-                rootNode.AddChildren(invItems);
+                TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
+
+                foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
+                {
+                    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
+                    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
+
+                    useNode.AddChild(MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, ""));
+                    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
+                }
+
+                rootNode.AddChildren(menuSubNodes);
+                rootNode.AddChild(inventoryNode);
                         
                 //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
                 //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
-                selectionScene = new FSelectionDisplayScene("inventory", rootNode);
+                selectionScene = new FSelectionDisplayScene("Menu", rootNode);
                 FSceneManager.Instance.PushScene(selectionScene);
                 inSelectionDialog = true;
                 return; // don't run any other update code if they are opening the menu because this scene will be paused

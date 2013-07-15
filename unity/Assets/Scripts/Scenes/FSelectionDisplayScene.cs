@@ -33,6 +33,8 @@ public class FSelectionDisplayScene : FScene
     public TreeNode<MenuNode> SelectedItem { get; private set; }
     public bool ItemWasSelected { get; private set; }
 
+    public TreeNode<MenuNode> ResultPath { get; private set; }
+
     public float Width { get; set; }
 
     public float Height { get; set; }
@@ -53,35 +55,112 @@ public class FSelectionDisplayScene : FScene
 
         if (messageBoxInFocus)
         {
-            if (Input.GetKeyDown("space"))
+            if (messageBox.HasNext())
             {
-                if (!messageBox.Next())
+                if (Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Escape))
                 {
-                    ShowSelectBox();
+                    //if (!messageBox.Next())
+                    //{
+                    //    ShowSelectBox();
+                    //}
+                    messageBox.Next();
+                }
+            }
+            else
+            {
+                //display the select box
+                //if there is no select box to display, await input to close the dialog
+                if (!ShowSelectBox())
+                {
+                    if (Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        this.Close();
+                    }
                 }
             }
         }
         else if (selectBoxInFocus)
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                this.ItemWasSelected = false;
+                this.SelectedItem = null;
+                selectBoxInFocus = false;
+            }
             if (selectBox.ItemIsSelected)
             {
                 this.ItemWasSelected = true;
                 this.SelectedItem = selectBox.SelectedItem;
 
-                //TODO: When the subScene is done, have it pass back its selectedItem to this parent
-
                 childScene = new FSelectionDisplayScene(this.SelectedItem.Value.NodeTitle, this.SelectedItem);
                 FSceneManager.Instance.PushScene(childScene);
                 selectBoxInFocus = false;
+                //try fading out this selection box
+                //TODO: Fade the selectBox out if the selected node has a HideAfterSelection value of true
+                if (HasDisplayMessage()) { this.messageBox.alpha = this.SelectedItem.Value.ParentAlphaWhenSelected; }
+                this.selectBox.alpha = this.SelectedItem.Value.ParentAlphaWhenSelected;
+                //this.selectBox.alpha = 0.5f;
+                //this.selectBox.isVisible = false;
             }
+        }
+        else if (childScene == null)
+        {
+            FSceneManager.Instance.PopScene();
+            this.IsClosed = true;
         }
         else
         {
-            if (childScene == null || childScene.IsClosed)
+            if (childScene.IsClosed)
             {
-                //if none of our display boxes are being displayed, scrap this scene                
-                FSceneManager.Instance.PopScene();
-                this.IsClosed = true;
+                //TODO: Decide whether a child scene closing should or should not close this scene. May want multiple branching paths.
+                //Example: Select item in inventory, "Use item?", click No, get shown Inventory again.
+
+
+
+                //if none of our display boxes are being displayed, scrap this scene         
+
+                //return a tree with all of the "selected" items from child scenes
+                bool shouldPopScene = true;
+                switch (this.SelectedItem.Value.AfterSelection)
+                {
+                    case MenuNode.AfterSelectionBehavior.CLOSE_PARENT:
+                        shouldPopScene = true;
+                        break;
+                    case MenuNode.AfterSelectionBehavior.CLOSE_ALL:
+                        shouldPopScene = true;
+                        break;
+                    case MenuNode.AfterSelectionBehavior.KEEP_PARENT_OPEN:
+                        shouldPopScene = false;
+                        break;
+                    default:
+                        break;
+                }
+
+                this.ResultPath = new TreeNode<MenuNode>(this.SelectedItem.Value);
+
+                if (childScene.ItemWasSelected)
+                {
+                    this.ResultPath.AddChild(childScene.ResultPath);
+                    if (childScene.SelectedItem.Value.AfterSelection == MenuNode.AfterSelectionBehavior.CLOSE_ALL)
+                    {
+                        shouldPopScene = true;
+                        this.SelectedItem.Value.AfterSelection = MenuNode.AfterSelectionBehavior.CLOSE_ALL;
+                    }
+                }
+
+                if (shouldPopScene)
+                {
+                    FSceneManager.Instance.PopScene();
+                    this.IsClosed = true;
+                }
+                else
+                {
+                    if (HasDisplayMessage()) { messageBox.alpha = 1.0f; }
+                    if (HasSelectionOptions()) { selectBox.alpha = 1.0f; }
+                    //TODO: Have to reset the selection box
+                    this.Reset();
+                    this.ShowSelectBox();
+                }
             }
         }
     }
@@ -91,15 +170,11 @@ public class FSelectionDisplayScene : FScene
         ItemWasSelected = false;
         SelectedItem = null;
         
-        if (rootNode.Value.DisplayMessage.Length > 0)
-        {
-            ShowMessageBox();
-        }
-        else
+        //show the message box. if none exists, show the select box.
+        if (!ShowMessageBox())
         {
             ShowSelectBox();
         }
-        //Futile.AddStage(guiStage);
 	}    
 
     public override void OnExit()
@@ -110,18 +185,32 @@ public class FSelectionDisplayScene : FScene
 
 	}
 
-    private void ShowMessageBox()
-    {
-        messageBox = new MessageBox(this, rootNode.Value.DisplayMessage, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
-        GameVars.Instance.GUIStage.AddChild(messageBox);
-        messageBoxInFocus = true;
-    }
-
-    private void ShowSelectBox()
+    private bool ShowMessageBox()
     {
         messageBoxInFocus = false;
-        if (rootNode.Children.Count > 0)
+        if (HasDisplayMessage())
         {
+            messageBox = new MessageBox(this, rootNode.Value.DisplayMessage, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            GameVars.Instance.GUIStage.AddChild(messageBox);
+            messageBoxInFocus = true;
+        }
+        return messageBoxInFocus;
+    }
+
+    private bool HasDisplayMessage()
+    {
+        return rootNode.Value.DisplayMessage.Length > 0;
+    }
+
+    private bool ShowSelectBox()
+    {
+        selectBoxInFocus = false;
+        if (HasSelectionOptions())
+        {
+            if (selectBox != null)
+            {
+                selectBox.stage.RemoveChild(selectBox);
+            }
             Rect boundsRect = GameVars.Instance.SELECTION_RECT;
             switch (rootNode.Value.NodeType)
             {
@@ -137,6 +226,27 @@ public class FSelectionDisplayScene : FScene
             selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET);
             GameVars.Instance.GUIStage.AddChild(selectBox);
             selectBoxInFocus = true;
+            messageBoxInFocus = false;
         }
+        return selectBoxInFocus;
+    }
+
+    private bool HasSelectionOptions()
+    {
+        return rootNode.Children.Count > 0;
+    }
+
+    private void Close()
+    {
+        //remove focus from message/select boxes, Update() will close
+        messageBoxInFocus = false;
+        selectBoxInFocus = false;
+    }
+
+    private void Reset()
+    {
+        this.ItemWasSelected = false;
+        this.SelectedItem = null;
+        this.childScene = null;
     }
 }

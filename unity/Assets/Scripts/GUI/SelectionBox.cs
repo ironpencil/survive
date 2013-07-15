@@ -306,6 +306,12 @@ class SelectionBox : FLayer
 
         }
     }
+
+    public void Reset()
+    {
+        this.SelectedItem = null;
+        this.ItemIsSelected = false;
+    }
 }
 
 
