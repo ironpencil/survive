@@ -7,6 +7,8 @@ public class MenuNode
 {
     public MenuNodeType NodeType { get; private set; }
 
+    public List<IGameEvent> OnSelectionEvents = new List<IGameEvent>();
+
     public string NodeTitle { get; set; }
 
     public string NodeText { get; private set; }

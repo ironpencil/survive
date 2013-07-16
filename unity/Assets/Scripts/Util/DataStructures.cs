@@ -54,6 +54,16 @@ public class TreeNode<T>
         //return values.Select(AddChild).ToArray();
     }
 
+    public TreeNode<T>[] AddChildren(params TreeNode<T>[] values)
+    {
+        for (int i = 0; i < values.Length; i++)
+        {
+            AddChild(values[i]);
+        }
+        return values;
+        //return values.Select(AddChild).ToArray();
+    }
+
     public bool RemoveChild(TreeNode<T> node)
     {
         return _children.Remove(node);

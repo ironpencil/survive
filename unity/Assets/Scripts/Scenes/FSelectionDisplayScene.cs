@@ -16,7 +16,7 @@ using System.Collections.Generic;
 public class FSelectionDisplayScene : FScene
 {
 
-    public Player player;
+    public Mob player;
 
     public bool IsClosed { get; set; }
     private FSelectionDisplayScene childScene = null;
@@ -43,6 +43,11 @@ public class FSelectionDisplayScene : FScene
         : base(name)
     {
         mName = name;
+        if (rootNode.Value.NodeType == MenuNodeType.INVENTORY)
+        {
+            rootNode = new TreeNode<MenuNode>(rootNode.Value); //add inventory items to a copy of the root node
+            rootNode.AddChildren(GameData.Instance.GenerateInventoryNodes());
+        }
         this.rootNode = rootNode;
     }
 
@@ -169,7 +174,14 @@ public class FSelectionDisplayScene : FScene
     {
         ItemWasSelected = false;
         SelectedItem = null;
-        
+
+        List<IGameEvent> gameEvents = rootNode.Value.OnSelectionEvents;
+
+        foreach (IGameEvent gameEvent in gameEvents)
+        {
+            gameEvent.Execute();
+        }
+
         //show the message box. if none exists, show the select box.
         if (!ShowMessageBox())
         {
@@ -219,6 +231,8 @@ public class FSelectionDisplayScene : FScene
                     break;
                 case MenuNodeType.INVENTORY:
                     boundsRect = GameVars.Instance.INVENTORY_RECT;
+                    //rootNode = new TreeNode<MenuNode>(rootNode.Value); //add inventory items to a copy of the root node
+                    //rootNode.AddChildren(GameData.Instance.GenerateInventoryNodes());
                     break;
                 default:
                     break;
@@ -233,7 +247,7 @@ public class FSelectionDisplayScene : FScene
 
     private bool HasSelectionOptions()
     {
-        return rootNode.Children.Count > 0;
+        return (rootNode.Children.Count > 0);
     }
 
     private void Close()

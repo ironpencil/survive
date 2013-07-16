@@ -1,0 +1,87 @@
+{
+   "items" : {
+      "ATM_CARD" : {
+         "description" : "This is an ATM Card. Your dad gave it to you.",
+         "name" : "ATM Card",
+         "type" : "item"
+      },
+      "COMPASS" : {
+         "description" : "It's pointing that way.",
+         "name" : "Compass",
+         "type" : "item"
+      },
+      "FIRST_AID_KIT" : {
+         "charges" : 10,
+         "description" : "Some leaves, a needle, and a dirty Band-Aid.",
+         "events" : [
+            {
+               "stat" : "hp",
+               "type" : "modify_mob_stat",
+               "value" : 5.0
+            }
+         ],
+         "name" : "First Aid Kit",
+         "target" : "self",
+         "type" : "item"
+      },
+      "HEARTEATER" : {
+         "description" : "Kiss it, for luck.",
+         "name" : "Hearteater",
+         "type" : "item"
+      },
+      "HONEY" : {
+         "charges" : 10,
+         "description" : "It's shaped like a bear.",
+         "events" : [
+            {
+               "stat" : "energy",
+               "type" : "modify_mob_stat",
+               "value" : 10.0
+            }
+         ],
+         "name" : "Honey",
+         "target" : "self",
+         "type" : "item"
+      },
+      "SE7EN" : {
+         "description" : "What's in the box?\r\n\r\n\r\n.......oh.",
+         "name" : "Brad Pitt's Wife's Head in a Box",
+         "type" : "item"
+      }
+   },
+   "menus" : {
+      "main" : {
+         "children" : {
+            "inventory" : {
+               "children" : {},
+               "description" : "\"\"",
+               "displayMessage" : "View inventory.",
+               "text" : "Inventory",
+               "title" : "Inventory",
+               "type" : "inventory"
+            },
+            "skills" : {
+               "children" : {},
+               "description" : "\"\"",
+               "displayMessage" : "View character skills.",
+               "text" : "Skills",
+               "title" : "Skills",
+               "type" : "text"
+            },
+            "status" : {
+               "children" : {},
+               "description" : "\"\"",
+               "displayMessage" : "View character status.",
+               "text" : "Status",
+               "title" : "Status",
+               "type" : "text"
+            }
+         },
+         "description" : "",
+         "displayMessage" : "",
+         "text" : "Menu",
+         "title" : "Menu",
+         "type" : "text"
+      }
+   }
+}

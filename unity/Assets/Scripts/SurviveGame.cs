@@ -30,6 +30,8 @@ public class SurviveGame : MonoBehaviour {
 
         Futile.atlasManager.LoadFont(GameVars.Instance.FONT_NAME, "comic-sans", "Atlases/comic-sans", 0.0f, 0.0f);
 
+        GameData.Instance.LoadData();
+
         sceneManager = FSceneManager.Instance;
 
         FWorldScene gameScene = new FWorldScene("world");

@@ -16,7 +16,7 @@ using System.Linq;
 
 public class FWorldLayer : FLayer
 {
-    Player player;
+    Mob player;
 
     IPTileMap tileMap;
     FLabel textLabel;
@@ -78,7 +78,15 @@ public class FWorldLayer : FLayer
         }
         else
         {
-
+            if (Input.GetKeyDown("h"))
+            {
+                //ModifyMobEvent modifyMob = new ModifyMobEvent(player, MobStats.ENERGY, -5);
+                //modifyMob.Execute();
+                string msgText = "Player Energy = " + player.GetStat(MobStats.ENERGY);
+                FTextDisplayScene menu = new FTextDisplayScene("energy", msgText);
+                FSceneManager.Instance.PushScene(menu);
+                return; // don't run any other update code if they are opening the menu because this scene will be paused
+            }
             //if (Input.GetKey("r"))
             //{                       
             //    tileMap.rotation += 5 * Time.deltaTime;
@@ -97,37 +105,57 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown("i"))
             {
-                TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
 
-                MenuNode[] menuSubNodes = new MenuNode[] {
-                    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
-                    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
-                };
 
-                TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
 
-                MenuNode[] invItems = new MenuNode[] {
-                    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
-                    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
-                    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
-                    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
-                    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
-                    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
+                //ModifyMobEvent reduceEnergy = new ModifyMobEvent(player, MobStats.ENERGY, -5);
+                //ModifyMobEvent increaseEnergy = new ModifyMobEvent(player, MobStats.ENERGY, 5);
+
+                //TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
+
+                //MenuNode[] menuSubNodes = new MenuNode[] {
+                //    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
+                //    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
+                //};
+
+                //TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
+
+                //MenuNode[] invItems = new MenuNode[] {
+                //    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
+                //    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
+                //    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
+                //    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
+                //    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
+                //    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
                 
 
-                TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
+                //TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
 
-                foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
-                {
-                    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
-                    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
+                //foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
+                //{
+                //    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
+                //    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
 
-                    useNode.AddChild(MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, ""));
-                    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
-                }
+                //    MenuNode okNode = MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, "");
+                //    if (invItemNode.Value.NodeText.Equals("Hearteater"))
+                //    {
+                //        okNode.OnSelectionEvents.Add(reduceEnergy);
+                //    }
+                //    else if (invItemNode.Value.NodeText.Equals("First Aid Kit"))
+                //    {
+                //        okNode.OnSelectionEvents.Add(increaseEnergy);
+                //    }
 
-                rootNode.AddChildren(menuSubNodes);
-                rootNode.AddChild(inventoryNode);
+                //    useNode.AddChild(okNode);
+                //    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
+                //}
+
+                //rootNode.AddChildren(menuSubNodes);
+                //rootNode.AddChild(inventoryNode);
+
+                TreeNode<MenuNode> rootNode = GameData.Instance.MainMenu;
+
+
                         
                 //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
                 //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
@@ -208,7 +236,17 @@ public class FWorldLayer : FLayer
     public override void OnEnter()
 	{
         IPDebug.Log("WorldScene OnEnter()");
-        player = new Player("player");
+        player = new Mob("player");
+        GameVars.Instance.Player = player;
+        player.SetStat(MobStats.ENERGY, 100);
+        player.SetStat(MobStats.HP, 10);
+
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.ATM_CARD));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.COMPASS));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.FIRST_AID_KIT));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HEARTEATER));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HONEY));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SE7EN));
 
         tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();

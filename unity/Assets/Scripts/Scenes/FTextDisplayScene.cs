@@ -16,7 +16,7 @@ using System.Collections.Generic;
 public class FTextDisplayScene : FScene
 {
 
-    Player player;
+    Mob player;
     FTilemap tileMap;
     FLabel textLabel;
 

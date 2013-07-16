@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Player : FSprite
+public class Mob : FSprite
 {
 
-    private Vector2 tileCoordinates;
+    protected Dictionary<MobStats, float> mobStats = new Dictionary<MobStats, float>();
+
+    protected Vector2 tileCoordinates;
 
     public Vector2 TileCoordinates { get { return new Vector2(TileX, TileY); } set { tileCoordinates = new Vector2(value.x, value.y); } }
 
@@ -20,14 +22,21 @@ public class Player : FSprite
 
     public bool IsMovingToPosition = false;
     public Vector2 TargetPosition = Vector2.zero;
-    private Vector2 speed = Vector2.zero;
+    protected Vector2 speed = Vector2.zero;
 
-    public Player(string elementName)
+    public List<Item> Inventory { get; set; }
+
+    public Mob(string elementName)
         : base(elementName)
     {
         speed.x = this.width / MoveDelayTime;
         speed.y = this.height / MoveDelayTime;
+        Inventory = new List<Item>();
     }
+
+
+
+
 
     public bool ApproachTarget()
     {
@@ -93,6 +102,39 @@ public class Player : FSprite
 
         //return a rect with the calculated top, left, and sizes
         return new Rect(left, bottom, widthMag, heightMag);
+    }
+
+    public float GetStat(MobStats stat)
+    {
+        float statValue = 0.0f;
+        mobStats.TryGetValue(stat, out statValue);
+        return statValue;
+    }
+
+    public void SetStat(MobStats stat, float value)
+    {
+        if (mobStats.ContainsKey(stat))
+        {
+            mobStats[stat] = value;
+        }
+        else
+        {
+            mobStats.Add(stat, value);
+        }
+    }
+
+    //returns true if the stat exists and was modified
+    public bool TryModifyStat(MobStats stat, float value)
+    {
+        float statValue = 0.0f;
+        bool statExists = mobStats.TryGetValue(stat, out statValue);
+
+        if (statExists)
+        {
+            mobStats[stat] = statValue + value;
+        }
+        
+        return statExists;
     }
    
 }

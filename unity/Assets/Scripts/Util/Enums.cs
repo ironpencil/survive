@@ -30,3 +30,30 @@ public enum MenuNodeType
     TEXT,
     INVENTORY
 }
+
+public enum MobStats
+{
+    NONE,
+    HP,
+    ENERGY
+}
+
+public enum ItemIDs
+{
+    NONE,
+    ATM_CARD,
+    COMPASS,
+    FIRST_AID_KIT,
+    HEARTEATER,
+    HONEY,
+    SE7EN
+}
+
+public enum Targets
+{
+    NONE,
+    SELF,
+    ANY,
+    ENEMIES,
+    ALL
+}
