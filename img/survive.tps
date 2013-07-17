@@ -152,12 +152,11 @@
             <filename>tiles_desert_3.png</filename>
             <filename>tiles_forest_0.png</filename>
             <filename>tiles_forest_1.png</filename>
-            <filename>tiles_forest_2.png</filename>
-            <filename>tiles_forest_3.png</filename>
             <filename>tiles_desert_0.png</filename>
             <filename>tiles_desert_1.png</filename>
-            <filename>menu.png</filename>
-            <filename>msgBox.png</filename>
+            <filename>tiles_forest_5.png</filename>
+            <filename>tiles_forest_4.png</filename>
+            <filename>tiles_forest_2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

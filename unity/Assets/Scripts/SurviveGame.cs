@@ -52,6 +52,9 @@ public class SurviveGame : MonoBehaviour {
         fps.x = -Futile.screen.halfWidth;
         fps.y = Futile.screen.halfHeight;
         GameVars.Instance.GUIStage.AddChild(fps);
+
+        IPDebug.DoLog = true;
+
         //Futile.AddStage(fpsStage);
 	}
 	

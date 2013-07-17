@@ -78,6 +78,14 @@ public class FWorldLayer : FLayer
         }
         else
         {
+            if (Input.GetKeyDown("m"))
+            {
+                MushroomsEncounter encounter = new MushroomsEncounter("Mushrooms");
+
+                FSceneManager.Instance.PushScene(encounter);
+                return;
+
+            }
             if (Input.GetKeyDown("h"))
             {
                 //ModifyMobEvent modifyMob = new ModifyMobEvent(player, MobStats.ENERGY, -5);
@@ -251,6 +259,8 @@ public class FWorldLayer : FLayer
         tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
 
+        GameVars.Instance.TileHelper = new TileMapHelper(tileMap);
+
         this.AddChild(tileMap);
         tileMap.AddChild(player);
 
@@ -338,19 +348,42 @@ public class FWorldLayer : FLayer
             if (tileObject.ObjType.Equals(IPTileMapTileObjectTypes.EVENT.ToString()))
             {
                 //this is an event object, run the event
-                string eventType = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString());
+                string eventName = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString());
 
-                switch (eventType)
-                {
-                    case "MESSAGE": MessageEvent(tileObject);
-                        break;
-                    case "SHALLOW_STREAM_NORTH":
-                    case "SHALLOW_STREAM_SOUTH": ShallowStreamEvent(tileObject);
-                        break;
-                    default:
-                        break;
-                }
+                ExecuteObjectEvent(eventName, tileObject);                
             }
+        }
+
+        IPTile currentTile = terrainLayer.GetTileAt(player.TileX, player.TileY);
+        IPTileData currentTileData = currentTile.TileData;
+
+        if (currentTileData.PropertyExists("EVENT"))
+        {
+            string eventName = currentTileData.GetPropertyValue("EVENT");
+
+            ExecuteTileEvent(eventName, currentTile);
+        }
+    }
+
+    private void ExecuteTileEvent(string eventName, IPTile eventTile)
+    {
+        Vector2 tileVector = new Vector2(player.TileX, player.TileY);
+        FEventHandlerScene eventScene = new FEventHandlerScene(eventName, eventTile, tileVector);
+
+        FSceneManager.Instance.PushScene(eventScene);
+    }    
+
+    private void ExecuteObjectEvent(string eventName, IPTiledObject tileObject)
+    {
+        switch (eventName)
+        {
+            case "MESSAGE": MessageEvent(tileObject);
+                break;
+            case "SHALLOW_STREAM_NORTH":
+            case "SHALLOW_STREAM_SOUTH": ShallowStreamEvent(tileObject);
+                break;
+            default:
+                break;
         }
     }
 

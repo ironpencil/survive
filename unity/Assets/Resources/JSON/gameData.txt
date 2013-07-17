@@ -52,15 +52,15 @@
    "menus" : {
       "main" : {
          "children" : {
-            "inventory" : {
+            "1status" : {
                "children" : {},
                "description" : "\"\"",
-               "displayMessage" : "View inventory.",
-               "text" : "Inventory",
-               "title" : "Inventory",
-               "type" : "inventory"
+               "displayMessage" : "View character status.",
+               "text" : "Status",
+               "title" : "Status",
+               "type" : "text"
             },
-            "skills" : {
+            "2skills" : {
                "children" : {},
                "description" : "\"\"",
                "displayMessage" : "View character skills.",
@@ -68,13 +68,13 @@
                "title" : "Skills",
                "type" : "text"
             },
-            "status" : {
+            "3inventory" : {
                "children" : {},
                "description" : "\"\"",
-               "displayMessage" : "View character status.",
-               "text" : "Status",
-               "title" : "Status",
-               "type" : "text"
+               "displayMessage" : "View inventory.",
+               "text" : "Inventory",
+               "title" : "Inventory",
+               "type" : "inventory"
             }
          },
          "description" : "",

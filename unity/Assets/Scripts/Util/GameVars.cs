@@ -42,4 +42,59 @@ public sealed class GameVars
 
     public Mob Player;
 
+    public TileMapHelper TileHelper;
+
+    #region GameParams
+    private Dictionary<string, object> gameParams = new Dictionary<string, object>();
+
+    public object GetParamValue(string paramName)
+    {
+        object paramValue = null;
+
+        gameParams.TryGetValue(paramName, out paramValue);
+
+        return paramValue;
+    }
+
+    public string GetParamValueString(string paramName)
+    {
+        string returnValue = "";
+        object paramValue = this.GetParamValue(paramName);
+
+        try
+        {
+            returnValue = paramValue.ToString();
+        }
+        catch { }
+
+        return returnValue;
+    }
+
+    public bool GetParamValueBool(string paramName)
+    {
+        bool returnValue = false;
+        object paramValue = this.GetParamValue(paramName);
+
+        try
+        {
+            returnValue = bool.Parse(paramValue.ToString());
+        }
+        catch { }
+
+        return returnValue;
+    }
+
+    public void SetParamValue(string paramName, object paramValue)
+    {
+        if (gameParams.ContainsKey(paramName))
+        {
+            gameParams[paramName] = paramValue;
+        }
+        else
+        {
+            gameParams.Add(paramName, paramValue);
+        }
+    }
+    #endregion
+
 }

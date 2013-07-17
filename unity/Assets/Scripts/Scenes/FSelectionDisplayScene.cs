@@ -62,7 +62,7 @@ public class FSelectionDisplayScene : FScene
         {
             if (messageBox.HasNext())
             {
-                if (Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyDown("space"))
                 {
                     //if (!messageBox.Next())
                     //{
@@ -77,7 +77,7 @@ public class FSelectionDisplayScene : FScene
                 //if there is no select box to display, await input to close the dialog
                 if (!ShowSelectBox())
                 {
-                    if (Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Escape))
+                    if (Input.GetKeyDown("space"))
                     {
                         this.Close();
                     }
@@ -86,12 +86,15 @@ public class FSelectionDisplayScene : FScene
         }
         else if (selectBoxInFocus)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            //can only currently cancel Inventory nodes
+            if (Input.GetKeyDown(KeyCode.Escape) &&
+                this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
             {
                 this.ItemWasSelected = false;
                 this.SelectedItem = null;
                 selectBoxInFocus = false;
             }
+
             if (selectBox.ItemIsSelected)
             {
                 this.ItemWasSelected = true;
@@ -262,5 +265,17 @@ public class FSelectionDisplayScene : FScene
         this.ItemWasSelected = false;
         this.SelectedItem = null;
         this.childScene = null;
+    }
+
+    public static TreeNode<MenuNode> GetLastResultNode(TreeNode<MenuNode> resultPath)
+    {
+        TreeNode<MenuNode> returnNode = resultPath;
+
+        if (returnNode.Children.Count > 0)
+        {
+            returnNode = GetLastResultNode(returnNode.Children[0]);
+        }
+
+        return returnNode;
     }
 }
