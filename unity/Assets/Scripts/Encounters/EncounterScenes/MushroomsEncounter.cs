@@ -21,17 +21,30 @@ class MushroomsEncounter : FEncounterScene
 
     }
 
+    private int GetBrightEnergy()
+    {
+        return UnityEngine.Random.Range(5, 16);
+    }
+    private int GetDullEnergy()
+    {
+        return UnityEngine.Random.Range(7, 13);
+    }
+
     protected override void HandleResult()
     {
         MenuNode selectedNode = FSelectionDisplayScene.GetLastResultNode(this.resultNode).Value;
+
+        int addEnergy = 0;
 
         switch (selectedNode.NodeTitle)
         {
             case CHOICE1_BRIGHT: //result of eating bright mushrooms
                 GameVars.Instance.SetParamValue(this.Name + ":" + CHOICE1_BRIGHT, true);
+                addEnergy = GetBrightEnergy();
                 break;
             case CHOICE1_DULL: //result of eating dull mushrooms
                 GameVars.Instance.SetParamValue(this.Name + ":" + CHOICE1_DULL, true);
+                addEnergy = GetDullEnergy();
                 break;
             case CHOICE1_IGNORE: //result of ignoring mushrooms
                 GameVars.Instance.SetParamValue(this.Name + ":" + CHOICE1_IGNORE, true);
@@ -39,9 +52,15 @@ class MushroomsEncounter : FEncounterScene
                 break;
             case CHOICE1_ALL: //result of eating all mushrooms
                 GameVars.Instance.SetParamValue(this.Name + ":" + CHOICE1_ALL, true);
+                addEnergy = GetBrightEnergy() + GetDullEnergy();
                 break;
             default:
                 break;
+        }
+
+        if (this.MushroomsEaten)
+        {
+            GameVars.Instance.Player.Energy += addEnergy;
         }
 
         IPDebug.Log(selectedNode.NodeTitle);      
@@ -57,6 +76,7 @@ class MushroomsEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, "", "You find a cluster of mushrooms here on the forest floor. There are many different sizes, shapes, and colors.");
 
+        rootMenu.DisplayImageAsset = "mushroom";
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         bool hasEatenBright = GameVars.Instance.GetParamValueBool(this.Name + ":" + CHOICE1_BRIGHT);

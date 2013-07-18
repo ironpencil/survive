@@ -25,6 +25,7 @@ public class FSelectionDisplayScene : FScene
     private bool selectBoxInFocus = false;
     MessageBox messageBox = null;
     SelectionBox selectBox = null;
+    MessageBox imageBox = null;
 
     List<string> choiceList;
 
@@ -185,6 +186,8 @@ public class FSelectionDisplayScene : FScene
             gameEvent.Execute();
         }
 
+        ShowImage();
+
         //show the message box. if none exists, show the select box.
         if (!ShowMessageBox())
         {
@@ -196,6 +199,7 @@ public class FSelectionDisplayScene : FScene
 	{
         if (selectBox != null) { GameVars.Instance.GUIStage.RemoveChild(selectBox); }
         if (messageBox != null) { GameVars.Instance.GUIStage.RemoveChild(messageBox); }
+        if (imageBox != null) { GameVars.Instance.GUIStage.RemoveChild(imageBox); }
         //Futile.RemoveStage(guiStage);
 
 	}
@@ -251,6 +255,22 @@ public class FSelectionDisplayScene : FScene
     private bool HasSelectionOptions()
     {
         return (rootNode.Children.Count > 0);
+    }
+
+    private void ShowImage()
+    {
+        if (HasImage())
+        {
+            FSprite image = new FSprite(rootNode.Value.DisplayImageAsset);
+            imageBox = new MessageBox(this, "", GameVars.Instance.IMAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            imageBox.AddChild(image);
+            GameVars.Instance.GUIStage.AddChild(imageBox);
+        }
+    }
+
+    private bool HasImage()
+    {
+        return (rootNode.Value.DisplayImageAsset.Length > 0);
     }
 
     private void Close()

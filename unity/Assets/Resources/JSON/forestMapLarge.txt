@@ -30,8 +30,8 @@
                  "type":"EVENT",
                  "visible":true,
                  "width":32,
-                 "x":352,
-                 "y":448
+                 "x":1056,
+                 "y":480
                 }, 
                 {
                  "height":32,
@@ -43,8 +43,8 @@
                  "type":"TILE",
                  "visible":true,
                  "width":32,
-                 "x":352,
-                 "y":416
+                 "x":1056,
+                 "y":448
                 }, 
                 {
                  "height":32,
@@ -72,8 +72,8 @@
                  "type":"EVENT",
                  "visible":true,
                  "width":32,
-                 "x":352,
-                 "y":384
+                 "x":1056,
+                 "y":416
                 }],
          "opacity":1,
          "properties":
@@ -127,7 +127,8 @@
                 },
              "5":
                 {
-                 "CAN_WALK":"false"
+                 "CAN_WALK":"true",
+                 "EVENT":"GET_WATER"
                 }
             },
          "tilewidth":32

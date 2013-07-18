@@ -8,6 +8,7 @@ public class SurviveGame : MonoBehaviour {
     FSceneManager sceneManager;
     FStage fpsStage;
     HUDFPS fps;
+    bool showFPS = false;
     //FStage guiStage;
 
 
@@ -22,7 +23,7 @@ public class SurviveGame : MonoBehaviour {
         FutileParams fparams = new FutileParams(true, true, false, false);
         fparams.AddResolutionLevel(960.0f, 1.0f, 1.0f, "");
         fparams.origin = new Vector2(0.5f, 0.5f);
-        fparams.backgroundColor = Color.magenta;
+        fparams.backgroundColor = Color.black;
         Futile.instance.Init(fparams);
 
         // load image atlas (within Resources/Atlases folder)
@@ -30,39 +31,46 @@ public class SurviveGame : MonoBehaviour {
 
         Futile.atlasManager.LoadFont(GameVars.Instance.FONT_NAME, "comic-sans", "Atlases/comic-sans", 0.0f, 0.0f);
 
+        GameVars.Instance.GUIStage = new FStage("GUI");
+
         GameData.Instance.LoadData();
 
         sceneManager = FSceneManager.Instance;
 
-        FWorldScene gameScene = new FWorldScene("world");
+        //FWorldScene gameScene = new FWorldScene("world");
 
-        sceneManager.PushScene(gameScene);
+        FSceneManager.Instance.PushScene(new FNewGameScene("NewGame"));
         
         //IPDebug.Log("Player position = " + player.GetPosition());
         //IPDebug.Log("Half Width = " + Futile.screen.halfWidth + " | Half Height = " + Futile.screen.halfHeight);               
 
         //guiStage = new FStage("GUI");
 
-        GameVars.Instance.GUIStage = new FStage("GUI");
 
+        fpsStage = new FStage("FPSHud");
         fps = new HUDFPS(GameVars.Instance.FONT_NAME);
         fps.scale = 0.5f;
         fps.anchorX = 0;
         fps.anchorY = 1;
         fps.x = -Futile.screen.halfWidth;
         fps.y = Futile.screen.halfHeight;
-        GameVars.Instance.GUIStage.AddChild(fps);
+        fpsStage.AddChild(fps);
+        showFPS = true;
 
         IPDebug.DoLog = true;
 
-        //Futile.AddStage(fpsStage);
+        Futile.AddStage(fpsStage);
 	}
 	
 	// Update is called once per frame
     void Update()
     {        
         Futile.AddStage(GameVars.Instance.GUIStage);
-        fps.MoveToFront();
+
+        if (showFPS)
+        {
+            Futile.AddStage(fpsStage);
+        }
     }   
 
 }

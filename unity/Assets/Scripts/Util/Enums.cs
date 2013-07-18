@@ -57,3 +57,10 @@ public enum Targets
     ENEMIES,
     ALL
 }
+
+public enum EncounterSource
+{
+    TILE,
+    OBJECT,
+    RANDOM
+}

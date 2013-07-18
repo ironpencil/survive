@@ -13,16 +13,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FWorldScene : FScene
+public class FNewGameScene : FScene
 {
-
-    FWorldLayer worldLayer;
-    FWorldUILayer guiLayer;
-
-    
+   
 
     //Vector2 maxBounds;
-    public FWorldScene(string _name = "Default")
+    public FNewGameScene(string _name = "Default")
         : base(_name)
 	{
 		mName = _name;
@@ -30,17 +26,28 @@ public class FWorldScene : FScene
 	
 	public override void OnUpdate ()
 	{
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //set new game scene
+            FWorldScene gameScene = new FWorldScene("Game");
+
+            FSceneManager.Instance.SetScene(gameScene);
+        }
 		
 	}
 
     public override void OnEnter()
 	{
-        worldLayer = new FWorldLayer(this);
-        this.AddChild(worldLayer);
+        this.stage.ResetPosition();
+        GameVars.Instance.GUIStage.RemoveAllChildren();
+        FSprite newGameImage = new FSprite("Futile_White");
+        newGameImage.color = Color.black;
+        newGameImage.width = Futile.screen.width;
+        newGameImage.height = Futile.screen.height;
+        this.AddChild(newGameImage);
 
-        guiLayer = new FWorldUILayer(this);
-        this.AddChild(guiLayer);
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "New Game - Press Space to Start");
+        this.AddChild(label);
 	}
 
     public override void OnExit()

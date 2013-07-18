@@ -157,6 +157,7 @@
             <filename>tiles_forest_5.png</filename>
             <filename>tiles_forest_4.png</filename>
             <filename>tiles_forest_2.png</filename>
+            <filename>mushroom.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

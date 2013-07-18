@@ -26,12 +26,38 @@ public class Mob : FSprite
 
     public List<Item> Inventory { get; set; }
 
+    private int energy;
+    public int Energy
+    {
+        get { return energy; }
+        set
+        {
+            if (value < 0) { value = 0; }
+            if (value > GameVars.Instance.PLAYER_FULL_ENERGY) { value = GameVars.Instance.PLAYER_FULL_ENERGY; }
+            energy = value;
+        }
+    }
+
+    private int water;
+    public int Water
+    {
+        get { return water; }
+        set
+        {
+            if (value < 0) { value = 0; }
+            if (value > GameVars.Instance.PLAYER_FULL_WATER) { value = GameVars.Instance.PLAYER_FULL_WATER; }
+            water = value;
+        }
+    }
+
     public Mob(string elementName)
         : base(elementName)
     {
         speed.x = this.width / MoveDelayTime;
         speed.y = this.height / MoveDelayTime;
         Inventory = new List<Item>();
+        Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
+        Water = GameVars.Instance.PLAYER_FULL_WATER;
     }
 
 

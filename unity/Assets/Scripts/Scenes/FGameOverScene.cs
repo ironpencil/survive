@@ -13,16 +13,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FWorldScene : FScene
+public class FGameOverScene : FScene
 {
-
-    FWorldLayer worldLayer;
-    FWorldUILayer guiLayer;
-
-    
+   
 
     //Vector2 maxBounds;
-    public FWorldScene(string _name = "Default")
+    public FGameOverScene(string _name = "Default")
         : base(_name)
 	{
 		mName = _name;
@@ -30,22 +26,30 @@ public class FWorldScene : FScene
 	
 	public override void OnUpdate ()
 	{
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //set new game scene
+            FSceneManager.Instance.SetScene(new FNewGameScene("NewGame"));
+        }
 		
 	}
 
     public override void OnEnter()
 	{
-        worldLayer = new FWorldLayer(this);
-        this.AddChild(worldLayer);
-
-        guiLayer = new FWorldUILayer(this);
-        this.AddChild(guiLayer);
+        this.stage.ResetPosition();
+        GameVars.Instance.GUIStage.RemoveAllChildren();
+        FSprite gameOverImage = new FSprite("Futile_White");
+        gameOverImage.color = Color.black;
+        gameOverImage.width = Futile.screen.width;
+        gameOverImage.height = Futile.screen.height;
+        this.AddChild(gameOverImage);
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Game Over - Press Space to Try Again");
+        this.AddChild(label);
 	}
 
     public override void OnExit()
 	{
-
+        
 	}
 
     

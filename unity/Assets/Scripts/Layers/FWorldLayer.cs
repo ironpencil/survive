@@ -26,6 +26,11 @@ public class FWorldLayer : FLayer
     FSelectionDisplayScene selectionScene = null;
     bool inSelectionDialog = false;
 
+    long turnNumber = 0;
+    bool gameOver = false;
+
+    private Queue eventQueue = new Queue();
+
     public FWorldLayer(FScene parent) : base(parent) { }
 
     public override void HandleMultiTouch(FTouch[] touches)
@@ -35,8 +40,27 @@ public class FWorldLayer : FLayer
     
     public override void OnUpdate()
 	{
+        if (!this.gameOver && player.Energy <= 0)
+        {
+            player.Energy = 0;
+            FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
+            FSceneManager.Instance.PushScene(gameOverMessage);
+            this.gameOver = true;
+        }
+
         if (this.Parent.Paused)
         {
+            return;
+        }
+
+        if (this.gameOver)
+        {
+            FSceneManager.Instance.SetScene(new FGameOverScene("GameOver"));
+        }
+
+        if (RunEvents())
+        {
+            //if there are any events queued, keep running them until they are gone
             return;
         }
 
@@ -73,105 +97,106 @@ public class FWorldLayer : FLayer
             if (player.ApproachTarget()) {
                 player.IsMovingToPosition = false;
                 //Check Events at new position
-                CheckEvents();
+                TakeTurn();
+                CheckForEvents();
             }
         }
         else
         {
-            if (Input.GetKeyDown("m"))
-            {
-                MushroomsEncounter encounter = new MushroomsEncounter("Mushrooms");
+            //if (Input.GetKeyDown("m"))
+            //{
+            //    MushroomsEncounter encounter = new MushroomsEncounter("Mushrooms");
 
-                FSceneManager.Instance.PushScene(encounter);
-                return;
+            //    FSceneManager.Instance.PushScene(encounter);
+            //    return;
 
-            }
-            if (Input.GetKeyDown("h"))
-            {
-                //ModifyMobEvent modifyMob = new ModifyMobEvent(player, MobStats.ENERGY, -5);
-                //modifyMob.Execute();
-                string msgText = "Player Energy = " + player.GetStat(MobStats.ENERGY);
-                FTextDisplayScene menu = new FTextDisplayScene("energy", msgText);
-                FSceneManager.Instance.PushScene(menu);
-                return; // don't run any other update code if they are opening the menu because this scene will be paused
-            }
-            //if (Input.GetKey("r"))
-            //{                       
-            //    tileMap.rotation += 5 * Time.deltaTime;
+            //}
+            //if (Input.GetKeyDown("h"))
+            //{
+            //    //ModifyMobEvent modifyMob = new ModifyMobEvent(player, MobStats.ENERGY, -5);
+            //    //modifyMob.Execute();
+            //    string msgText = "Player Energy = " + player.GetStat(MobStats.ENERGY);
+            //    FTextDisplayScene menu = new FTextDisplayScene("energy", msgText);
+            //    FSceneManager.Instance.PushScene(menu);
+            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
+            //}
+            ////if (Input.GetKey("r"))
+            ////{                       
+            ////    tileMap.rotation += 5 * Time.deltaTime;
+            ////}
+
+            //if (Input.GetKeyDown("space"))
+            //{
+            //    string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. " +
+            //                     "Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? " +
+            //                     "I sure can't. But maybe you can. Can you think of anything? I'm sorry, I should have let you finish your thought." + 
+            //                     "\n\nThat was very rude of me to interrupt.\n\nSorry.\n\n.....\n\n\n\n\n\n\n\nTruly sorry.";
+            //    FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
+            //    FSceneManager.Instance.PushScene(menu);
+            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
             //}
 
-            if (Input.GetKeyDown("space"))
-            {
-                string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. " +
-                                 "Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? " +
-                                 "I sure can't. But maybe you can. Can you think of anything? I'm sorry, I should have let you finish your thought." + 
-                                 "\n\nThat was very rude of me to interrupt.\n\nSorry.\n\n.....\n\n\n\n\n\n\n\nTruly sorry.";
-                FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
-                FSceneManager.Instance.PushScene(menu);
-                return; // don't run any other update code if they are opening the menu because this scene will be paused
-            }
-
-            if (Input.GetKeyDown("i"))
-            {
+            //if (Input.GetKeyDown("i"))
+            //{
 
 
 
-                //ModifyMobEvent reduceEnergy = new ModifyMobEvent(player, MobStats.ENERGY, -5);
-                //ModifyMobEvent increaseEnergy = new ModifyMobEvent(player, MobStats.ENERGY, 5);
+            //    //ModifyMobEvent reduceEnergy = new ModifyMobEvent(player, MobStats.ENERGY, -5);
+            //    //ModifyMobEvent increaseEnergy = new ModifyMobEvent(player, MobStats.ENERGY, 5);
 
-                //TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
+            //    //TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
 
-                //MenuNode[] menuSubNodes = new MenuNode[] {
-                //    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
-                //    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
-                //};
+            //    //MenuNode[] menuSubNodes = new MenuNode[] {
+            //    //    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
+            //    //    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
+            //    //};
 
-                //TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
+            //    //TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
 
-                //MenuNode[] invItems = new MenuNode[] {
-                //    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
-                //    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
-                //    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
-                //    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
-                //    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
-                //    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
+            //    //MenuNode[] invItems = new MenuNode[] {
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
+            //    //    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
                 
 
-                //TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
+            //    //TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
 
-                //foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
-                //{
-                //    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
-                //    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
+            //    //foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
+            //    //{
+            //    //    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
+            //    //    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
 
-                //    MenuNode okNode = MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, "");
-                //    if (invItemNode.Value.NodeText.Equals("Hearteater"))
-                //    {
-                //        okNode.OnSelectionEvents.Add(reduceEnergy);
-                //    }
-                //    else if (invItemNode.Value.NodeText.Equals("First Aid Kit"))
-                //    {
-                //        okNode.OnSelectionEvents.Add(increaseEnergy);
-                //    }
+            //    //    MenuNode okNode = MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, "");
+            //    //    if (invItemNode.Value.NodeText.Equals("Hearteater"))
+            //    //    {
+            //    //        okNode.OnSelectionEvents.Add(reduceEnergy);
+            //    //    }
+            //    //    else if (invItemNode.Value.NodeText.Equals("First Aid Kit"))
+            //    //    {
+            //    //        okNode.OnSelectionEvents.Add(increaseEnergy);
+            //    //    }
 
-                //    useNode.AddChild(okNode);
-                //    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
-                //}
+            //    //    useNode.AddChild(okNode);
+            //    //    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
+            //    //}
 
-                //rootNode.AddChildren(menuSubNodes);
-                //rootNode.AddChild(inventoryNode);
+            //    //rootNode.AddChildren(menuSubNodes);
+            //    //rootNode.AddChild(inventoryNode);
 
-                TreeNode<MenuNode> rootNode = GameData.Instance.MainMenu;
+            //    TreeNode<MenuNode> rootNode = GameData.Instance.MainMenu;
 
 
                         
-                //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
-                //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
-                selectionScene = new FSelectionDisplayScene("Menu", rootNode);
-                FSceneManager.Instance.PushScene(selectionScene);
-                inSelectionDialog = true;
-                return; // don't run any other update code if they are opening the menu because this scene will be paused
-            }
+            //    //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
+            //    //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
+            //    selectionScene = new FSelectionDisplayScene("Menu", rootNode);
+            //    FSceneManager.Instance.PushScene(selectionScene);
+            //    inSelectionDialog = true;
+            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
+            //}
 
             //handle player movement input
             //if (Time.time > player.NextMoveTime)
@@ -254,12 +279,13 @@ public class FWorldLayer : FLayer
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.FIRST_AID_KIT));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HEARTEATER));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HONEY));
-        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SE7EN));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SE7EN));        
 
         tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
 
         GameVars.Instance.TileHelper = new TileMapHelper(tileMap);
+        GameVars.Instance.ResetGame();
 
         this.AddChild(tileMap);
         tileMap.AddChild(player);
@@ -337,7 +363,7 @@ public class FWorldLayer : FLayer
         }
     }
 
-    private void CheckEvents()
+    private void CheckForEvents()
     {
         //check for events at player's location
         //get all objects that intersect with player
@@ -350,7 +376,8 @@ public class FWorldLayer : FLayer
                 //this is an event object, run the event
                 string eventName = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString());
 
-                ExecuteObjectEvent(eventName, tileObject);                
+                EncounterEvent objectEvent = EncounterEvent.CreateObjectEvent(eventName, tileObject);
+                eventQueue.Enqueue(objectEvent);
             }
         }
 
@@ -361,13 +388,71 @@ public class FWorldLayer : FLayer
         {
             string eventName = currentTileData.GetPropertyValue("EVENT");
 
-            ExecuteTileEvent(eventName, currentTile);
+            EncounterEvent tileEvent = EncounterEvent.CreateTileEvent(eventName, currentTile);
+            eventQueue.Enqueue(tileEvent);
         }
+    }    
+
+    private bool RunEvents()
+    {        
+        if (eventQueue.Count > 0)
+        {
+            IPDebug.Log("Event Queue Count : " + eventQueue.Count);
+            EncounterEvent gameEvent = (EncounterEvent) eventQueue.Dequeue();
+            IPDebug.Log("Running Event : " + gameEvent.Name);
+            switch (gameEvent.Source)
+            {
+                case EncounterSource.TILE:
+                    ExecuteTileEvent(gameEvent.Name, gameEvent.EventTile);
+                    break;
+                case EncounterSource.OBJECT:
+                    ExecuteObjectEvent(gameEvent.Name, gameEvent.EventObject);
+                    break;
+                case EncounterSource.RANDOM:
+                    break;
+                default:
+                    break;
+            }
+
+            //return true if we started an event
+            return true;
+        }
+
+        return false;
+    }
+
+    private void TakeTurn()
+    {        
+   
+        if (turnNumber > 0)
+        {
+            IPDebug.Log("Taking Turn: " + turnNumber);
+            if (turnNumber % 3 == 0)
+            {
+                player.Energy--;
+            }
+
+            if (player.Water > 0)
+            {
+                if (turnNumber % 10 == 0)
+                {
+                    player.Water--;
+                }
+            }
+            else
+            {
+                //lose 1 energy a turn when you don't have water in addition to the normal energy loss
+                player.Energy--;
+            }
+        }
+
+        turnNumber++;
     }
 
     private void ExecuteTileEvent(string eventName, IPTile eventTile)
     {
-        Vector2 tileVector = new Vector2(player.TileX, player.TileY);
+        IPDebug.Log("Executing Tile Event: " + eventName);
+        Vector2 tileVector = new Vector2(eventTile.TileData.TileX, eventTile.TileData.TileY);
         FEventHandlerScene eventScene = new FEventHandlerScene(eventName, eventTile, tileVector);
 
         FSceneManager.Instance.PushScene(eventScene);

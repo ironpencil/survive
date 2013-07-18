@@ -51,10 +51,12 @@ class FEventHandlerScene : FScene
         {
             case "FOUND_MUSHROOMS": FoundMushroomEnter();
                 break;
+            case "GET_WATER": GetWaterEnter();
+                break;
             default:
                 break;
         }
-	}
+	}   
 
     public override void OnExit()
 	{
@@ -62,6 +64,8 @@ class FEventHandlerScene : FScene
         switch (mName)
         {
             case "FOUND_MUSHROOMS": FoundMushroomExit();
+                break;
+            case "GET_WATER": GetWaterExit();
                 break;
             default:
                 break;
@@ -93,5 +97,23 @@ class FEventHandlerScene : FScene
                 GameVars.Instance.TileHelper.SetTilePropertyValue(tileLocation, "MUSHROOMS_EATEN", true);
             }
         }
+    }
+
+    private void GetWaterEnter()
+    {
+        if (GameVars.Instance.Player.Water < GameVars.Instance.PLAYER_FULL_WATER)
+        {
+            encounter = new GetWaterEncounter("GET_WATER");
+            FSceneManager.Instance.PushScene(encounter);
+        }
+        else
+        {
+            ShouldPop = true;
+        }
+    }
+
+    private void GetWaterExit()
+    {
+
     }
 }

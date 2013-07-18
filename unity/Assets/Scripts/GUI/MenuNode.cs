@@ -17,6 +17,8 @@ public class MenuNode
 
     public string NodeDescription { get; private set; }
 
+    public string DisplayImageAsset { get; set; }
+
     public AfterSelectionBehavior AfterSelection { get; set; }
 
     public float ParentAlphaWhenSelected { get; private set; }
@@ -36,6 +38,7 @@ public class MenuNode
         this.NodeDescription = nodeDescription;
         this.AfterSelection = AfterSelectionBehavior.CLOSE_PARENT;
         this.ParentAlphaWhenSelected = 1.0f;
+        this.DisplayImageAsset = "";
     }
 
     public enum AfterSelectionBehavior {
