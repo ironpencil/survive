@@ -1,51 +1,48 @@
 {
    "items" : {
       "ATM_CARD" : {
-         "description" : "This is an ATM Card. Your dad gave it to you.",
+         "description" : "Your dad gave it to you. It even works overseas!",
          "name" : "ATM Card",
          "type" : "item"
       },
+      "BUG_SPRAY" : {
+         "description" : "Contains no DEET... well then what's the point?",
+         "name" : "Bug Spray",
+         "type" : "item"
+      },
       "COMPASS" : {
-         "description" : "It's pointing that way.",
+         "description" : "It's pointing... that way.",
          "name" : "Compass",
          "type" : "item"
       },
       "FIRST_AID_KIT" : {
-         "charges" : 10,
          "description" : "Some leaves, a needle, and a dirty Band-Aid.",
-         "events" : [
-            {
-               "stat" : "hp",
-               "type" : "modify_mob_stat",
-               "value" : 5.0
-            }
-         ],
          "name" : "First Aid Kit",
-         "target" : "self",
-         "type" : "item"
-      },
-      "HEARTEATER" : {
-         "description" : "Kiss it, for luck.",
-         "name" : "Hearteater",
          "type" : "item"
       },
       "HONEY" : {
-         "charges" : 10,
-         "description" : "It's shaped like a bear.",
-         "events" : [
-            {
-               "stat" : "energy",
-               "type" : "modify_mob_stat",
-               "value" : 10.0
-            }
-         ],
+         "description" : "It's shaped like a bear... cute!",
          "name" : "Honey",
-         "target" : "self",
          "type" : "item"
       },
-      "SE7EN" : {
-         "description" : "What's in the box?\r\n\r\n\r\n.......oh.",
-         "name" : "Brad Pitt's Wife's Head in a Box",
+      "LASER_POINTER" : {
+         "description" : "DANGER: Laser Radiation - Avoid Direct Eye Exposure. This device complies with 21 CFR Chapter 1. Subchapter 3.",
+         "name" : "Laser Pointer",
+         "type" : "item"
+      },
+      "MARSHMALLOWS" : {
+         "description" : "We used to roast Stay Puft marshmallows by the fire at Camp Wakonda.",
+         "name" : "Marshmallows",
+         "type" : "item"
+      },
+      "RAW_MEAT" : {
+         "description" : "Apply oil, salt, and pepper to ribeye. Heat cast-iron skillet to 500 degrees F, sear steak 30 seconds on each side, place in oven for 2 minutes. Remove and let rest for 2 minutes. Enjoy.",
+         "name" : "Raw Meat",
+         "type" : "item"
+      },
+      "SALT" : {
+         "description" : "Well I mean there's salt inside, it's not just an empty shaker, that would be stupid.",
+         "name" : "Salt Shaker",
          "type" : "item"
       }
    },

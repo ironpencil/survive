@@ -58,6 +58,7 @@ public class SurviveGame : MonoBehaviour {
         showFPS = true;
 
         IPDebug.DoLog = true;
+        IPDebug.DoLog = false;
 
         Futile.AddStage(fpsStage);
 	}

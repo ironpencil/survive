@@ -50,6 +50,8 @@ public class Mob : FSprite
         }
     }
 
+    public int WildernessPoints { get; set; }
+
     public Mob(string elementName)
         : base(elementName)
     {

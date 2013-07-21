@@ -63,8 +63,8 @@ class MushroomsEncounter : FEncounterScene
             GameVars.Instance.Player.Energy += addEnergy;
         }
 
-        IPDebug.Log(selectedNode.NodeTitle);      
-        FSceneManager.Instance.PopScene();
+        IPDebug.Log(selectedNode.NodeTitle);
+        this.ShouldPop = true;
     }
 
     protected override void HandleCancel()
@@ -74,7 +74,7 @@ class MushroomsEncounter : FEncounterScene
 
     public override void OnEnter()
     {
-        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, "", "You find a cluster of mushrooms here on the forest floor. There are many different sizes, shapes, and colors.");
+        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "You find a cluster of mushrooms here on the forest floor. There are many different sizes, shapes, and colors.");
 
         rootMenu.DisplayImageAsset = "mushroom";
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);

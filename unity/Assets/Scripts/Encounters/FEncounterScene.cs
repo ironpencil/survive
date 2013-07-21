@@ -11,6 +11,7 @@ public abstract class FEncounterScene : FScene
     protected FSelectionDisplayScene currentScene = null;
 
     public bool IsFinished { get; private set; }
+    public bool ShouldPop { get; protected set; }
 
     //Vector2 maxBounds;
     public FEncounterScene(string _name = "Default")
@@ -25,6 +26,12 @@ public abstract class FEncounterScene : FScene
 
         if (this.Paused)
         {
+            return;
+        }
+
+        if (this.ShouldPop)
+        {
+            FSceneManager.Instance.PopScene();
             return;
         }
 
@@ -60,6 +67,12 @@ public abstract class FEncounterScene : FScene
     {
         this.currentScene = new FSelectionDisplayScene(name, rootNode);
         FSceneManager.Instance.PushScene(this.currentScene);
+    }
+
+    protected void DisplayTextMessage(string messageTitle, string messageText)
+    {
+        FTextDisplayScene textScene = new FTextDisplayScene(messageTitle, messageText);
+        FSceneManager.Instance.PushScene(textScene);
     }
 
     protected virtual void HandleResult() { }

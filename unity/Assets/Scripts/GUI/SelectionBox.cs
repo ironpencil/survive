@@ -20,10 +20,14 @@ class SelectionBox : FLayer
     List<FLabel> labels = new List<FLabel>();
     private int currentlySelectedIndex = -1;
     private FLabel currentlySelectedLabel = null;
+    private FLabel previouslySelectedLabel = null;
 
     private FSprite background;
     private FSprite foreground;
     private FSprite highlight;
+
+    MessageBox itemDescBox = null;
+    private bool showNodeDescriptions = false;
 
     public TreeNode<MenuNode> SelectedItem { get; private set; }
     public bool ItemIsSelected { get; private set; }
@@ -68,6 +72,17 @@ class SelectionBox : FLayer
         foreach (FLabel label in labels)
         {
             this.AddChild(label);
+        }
+    }
+
+    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset, bool showDescriptions)
+        : this(parent, rootNode, bounds, textOffset)
+    {
+        showNodeDescriptions = showDescriptions;
+
+        if (showNodeDescriptions)
+        {
+            this.itemDescBox = new MessageBox(parent, "", GameVars.Instance.SELECTION_DESC_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
         }
     }
 
@@ -207,6 +222,10 @@ class SelectionBox : FLayer
 
     public override void OnExit()
     {
+        if (this.itemDescBox != null)
+        {
+            this.stage.RemoveChild(this.itemDescBox);
+        }
         base.OnExit();
     }
 
@@ -266,10 +285,25 @@ class SelectionBox : FLayer
                 }
             }
 
-            highlight.x = currentlySelectedLabel.x;
-            highlight.y = currentlySelectedLabel.y;
-            highlight.height = currentlySelectedLabel.textRect.height;
-            currentlySelectedLabel.MoveToFront();
+            if (previouslySelectedLabel == null || previouslySelectedLabel != currentlySelectedLabel)
+            {
+
+                previouslySelectedLabel = currentlySelectedLabel;
+
+                highlight.x = currentlySelectedLabel.x;
+                highlight.y = currentlySelectedLabel.y;
+                highlight.height = currentlySelectedLabel.textRect.height;
+                currentlySelectedLabel.MoveToFront();
+
+                if (showNodeDescriptions)
+                {
+                    TreeNode<MenuNode> currentlyHighlightedItem = (TreeNode<MenuNode>)currentlySelectedLabel.data;
+                    string descText = currentlyHighlightedItem.Value.NodeDescription;
+                    this.itemDescBox.SetText(descText);
+                    this.itemDescBox.y = currentlySelectedLabel.y - (this.itemDescBox.Height/2);
+                    this.stage.AddChild(itemDescBox);
+                }
+            }
 
         }
 

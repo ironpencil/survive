@@ -44,9 +44,14 @@ public enum ItemIDs
     ATM_CARD,
     COMPASS,
     FIRST_AID_KIT,
-    HEARTEATER,
     HONEY,
-    SE7EN
+    RAW_MEAT,
+    LASER_POINTER,
+    BUG_SPRAY,
+    MARSHMALLOWS,
+    SALT,
+    SWORD,
+    DIRTY_MAGAZINE
 }
 
 public enum Targets

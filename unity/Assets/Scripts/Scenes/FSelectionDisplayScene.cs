@@ -25,7 +25,7 @@ public class FSelectionDisplayScene : FScene
     private bool selectBoxInFocus = false;
     MessageBox messageBox = null;
     SelectionBox selectBox = null;
-    MessageBox imageBox = null;
+    MessageBox imageBox = null;    
 
     List<string> choiceList;
 
@@ -88,13 +88,13 @@ public class FSelectionDisplayScene : FScene
         else if (selectBoxInFocus)
         {
             //can only currently cancel Inventory nodes
-            if (Input.GetKeyDown(KeyCode.Escape) &&
-                this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
-            {
-                this.ItemWasSelected = false;
-                this.SelectedItem = null;
-                selectBoxInFocus = false;
-            }
+            //if (Input.GetKeyDown(KeyCode.Escape) &&
+            //    this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
+            //{
+            //    this.ItemWasSelected = false;
+            //    this.SelectedItem = null;
+            //    selectBoxInFocus = false;
+            //}
 
             if (selectBox.ItemIsSelected)
             {
@@ -231,6 +231,7 @@ public class FSelectionDisplayScene : FScene
                 selectBox.stage.RemoveChild(selectBox);
             }
             Rect boundsRect = GameVars.Instance.SELECTION_RECT;
+            bool showSelectionDescriptions = false;
             switch (rootNode.Value.NodeType)
             {
                 case MenuNodeType.TEXT:
@@ -238,13 +239,14 @@ public class FSelectionDisplayScene : FScene
                     break;
                 case MenuNodeType.INVENTORY:
                     boundsRect = GameVars.Instance.INVENTORY_RECT;
+                    showSelectionDescriptions = true;
                     //rootNode = new TreeNode<MenuNode>(rootNode.Value); //add inventory items to a copy of the root node
                     //rootNode.AddChildren(GameData.Instance.GenerateInventoryNodes());
                     break;
                 default:
                     break;
-            }
-            selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            }            
+            selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET, showSelectionDescriptions);
             GameVars.Instance.GUIStage.AddChild(selectBox);
             selectBoxInFocus = true;
             messageBoxInFocus = false;

@@ -30,6 +30,7 @@ public sealed class GameVars
     public Rect INVENTORY_RECT = new Rect((Futile.screen.halfWidth * 0.7f), (-Futile.screen.halfHeight * 0.19f), Futile.screen.width * 0.25f, Futile.screen.height * 0.64f);
     public Rect IMAGE_RECT = new Rect((-Futile.screen.halfWidth * 0.7f), (Futile.screen.halfHeight * 0.055f), Futile.screen.width * 0.25f, Futile.screen.height * 0.395f);
     public Rect STATUS_UI_RECT = new Rect(0, (-Futile.screen.halfHeight * 0.915f), Futile.screen.width * 0.95f, Futile.screen.height * 0.085f);
+    public Rect SELECTION_DESC_RECT = new Rect((-Futile.screen.halfWidth * 0.25f), 0, Futile.screen.width * 0.7f, Futile.screen.height * 0.25f);
     public float MESSAGE_TEXT_OFFSET = 20.0f;
     #endregion
 
@@ -47,8 +48,10 @@ public sealed class GameVars
 
     #region GameVariables
 
-    public int PLAYER_FULL_ENERGY = 50;
+    public int PLAYER_FULL_ENERGY = 100;
     public int PLAYER_FULL_WATER = 10;
+
+    public int RANDOM_ENCOUNTER_INTERVAL = 5;
 
 
     #endregion
@@ -110,5 +113,4 @@ public sealed class GameVars
         }
     }
     #endregion
-
 }

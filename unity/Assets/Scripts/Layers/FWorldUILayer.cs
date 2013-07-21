@@ -28,10 +28,10 @@ public class FWorldUILayer : FLayer
     
     public override void OnUpdate()
 	{
-        if (this.Parent.Paused)
-        {
-            return;
-        }
+        //if (this.Parent.Paused)
+        //{
+        //    return;
+        //}
 
         if (player != null)
         {            
@@ -55,13 +55,14 @@ public class FWorldUILayer : FLayer
 		
 	}
 
-    private const string UIFormat = "Energy : {0}     Water : {1}";
+    private const string UIFormat = "Energy : {0}     Hydration : {1}     Points : {2}";
 
     private void UpdateUIText()
     {
         int energy = GameVars.Instance.Player.Energy;
         int water = GameVars.Instance.Player.Water;
-        string newText = string.Format(UIFormat, energy, water);
+        int points = GameVars.Instance.Player.WildernessPoints;
+        string newText = string.Format(UIFormat, energy, water, points);
         if (!playerStatus.GetAllText().Equals(newText))
         {
             playerStatus.SetText(newText);

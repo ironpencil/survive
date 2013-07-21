@@ -33,4 +33,15 @@ public class EncounterEvent
 
         return tileEvent;
     }
+
+    public static EncounterEvent CreateRandomEvent(string eventName)
+    {
+        EncounterEvent randomEvent = new EncounterEvent();
+        randomEvent.Source = EncounterSource.RANDOM;
+        randomEvent.Name = eventName;
+        randomEvent.EventTile = null;
+        randomEvent.EventObject = null;
+
+        return randomEvent;
+    }
 }

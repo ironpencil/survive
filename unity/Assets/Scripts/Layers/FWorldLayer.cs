@@ -25,11 +25,16 @@ public class FWorldLayer : FLayer
 
     FSelectionDisplayScene selectionScene = null;
     bool inSelectionDialog = false;
-
+    
     long turnNumber = 0;
     bool gameOver = false;
 
     private Queue eventQueue = new Queue();
+
+    private int nextRandomEncounterIndex = 0;
+    private int currentRandomEncounterInterval = 0;
+    private int encounterBagFills = 0;
+    private List<EncounterEvent> randomEncounterBag = new List<EncounterEvent>();
 
     public FWorldLayer(FScene parent) : base(parent) { }
 
@@ -40,13 +45,7 @@ public class FWorldLayer : FLayer
     
     public override void OnUpdate()
 	{
-        if (!this.gameOver && player.Energy <= 0)
-        {
-            player.Energy = 0;
-            FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
-            FSceneManager.Instance.PushScene(gameOverMessage);
-            this.gameOver = true;
-        }
+        CheckGameOver();
 
         if (this.Parent.Paused)
         {
@@ -56,6 +55,7 @@ public class FWorldLayer : FLayer
         if (this.gameOver)
         {
             FSceneManager.Instance.SetScene(new FGameOverScene("GameOver"));
+            return;
         }
 
         if (RunEvents())
@@ -99,10 +99,18 @@ public class FWorldLayer : FLayer
                 //Check Events at new position
                 TakeTurn();
                 CheckForEvents();
+                RunEvents();
             }
         }
         else
         {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+
+                string eventName = "MAKE_CAMP_QUIZ"; //generate random event from available events and tile type
+                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
+                eventQueue.Enqueue(randomEvent);
+            }
             //if (Input.GetKeyDown("m"))
             //{
             //    MushroomsEncounter encounter = new MushroomsEncounter("Mushrooms");
@@ -275,11 +283,17 @@ public class FWorldLayer : FLayer
         player.SetStat(MobStats.HP, 10);
 
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.ATM_CARD));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.BUG_SPRAY));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.COMPASS));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.FIRST_AID_KIT));
-        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HEARTEATER));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.HONEY));
-        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SE7EN));        
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.LASER_POINTER));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.MARSHMALLOWS));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.RAW_MEAT));
+        player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SALT));
+
+        currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL;
+        FillEncounterBag();
 
         tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
@@ -365,6 +379,7 @@ public class FWorldLayer : FLayer
 
     private void CheckForEvents()
     {
+        if (this.gameOver) { return; }
         //check for events at player's location
         //get all objects that intersect with player
         List<IPTiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetRect().CloneAndScale(0.9f));
@@ -391,10 +406,29 @@ public class FWorldLayer : FLayer
             EncounterEvent tileEvent = EncounterEvent.CreateTileEvent(eventName, currentTile);
             eventQueue.Enqueue(tileEvent);
         }
+
+        
+        //check for random event
+        bool randomEventHappens = false;
+        if (turnNumber % currentRandomEncounterInterval == 0)
+        {
+            int randomRoll = UnityEngine.Random.Range(0, 2);
+            randomEventHappens = (randomRoll == 0);
+
+            Debug.Log("Turn: " + turnNumber + " | Encounter Roll: " + randomRoll + " | Encounter: " + randomEventHappens);
+            
+        }
+
+        if (randomEventHappens)
+        {
+            eventQueue.Enqueue(PullRandomEncounter());
+        }
     }    
 
     private bool RunEvents()
-    {        
+    {
+        if (this.gameOver) { return false; }
+
         if (eventQueue.Count > 0)
         {
             IPDebug.Log("Event Queue Count : " + eventQueue.Count);
@@ -409,6 +443,7 @@ public class FWorldLayer : FLayer
                     ExecuteObjectEvent(gameEvent.Name, gameEvent.EventObject);
                     break;
                 case EncounterSource.RANDOM:
+                    ExecuteRandomEvent(gameEvent.Name);
                     break;
                 default:
                     break;
@@ -447,15 +482,28 @@ public class FWorldLayer : FLayer
         }
 
         turnNumber++;
+
+        CheckGameOver();
+    }
+
+    private void CheckGameOver()
+    {
+        if (!this.gameOver && player.Energy <= 0)
+        {
+            player.Energy = 0;
+            FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
+            FSceneManager.Instance.PushScene(gameOverMessage);
+            this.gameOver = true;
+        }
     }
 
     private void ExecuteTileEvent(string eventName, IPTile eventTile)
     {
         IPDebug.Log("Executing Tile Event: " + eventName);
         Vector2 tileVector = new Vector2(eventTile.TileData.TileX, eventTile.TileData.TileY);
-        FEventHandlerScene eventScene = new FEventHandlerScene(eventName, eventTile, tileVector);
+        FEventHandlerLayer eventHandler = new FEventHandlerLayer(this.Parent, eventName, eventTile, tileVector);
 
-        FSceneManager.Instance.PushScene(eventScene);
+        this.Parent.AddChild(eventHandler);
     }    
 
     private void ExecuteObjectEvent(string eventName, IPTiledObject tileObject)
@@ -470,6 +518,59 @@ public class FWorldLayer : FLayer
             default:
                 break;
         }
+    }
+
+    private void ExecuteRandomEvent(string eventName)
+    {        
+        FEventHandlerLayer eventHandler = new FEventHandlerLayer(this.Parent, eventName);
+        this.Parent.AddChild(eventHandler);
+    }
+
+    private void FillEncounterBag()
+    {
+        randomEncounterBag.Clear();
+        if (encounterBagFills == 0)
+        {
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FIND_FOOD_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BATHROOM_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FISHING_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("QUICKSAND_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_FIRE_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_CAMP_QUIZ"));
+            //do initial fill
+
+        }
+        else
+        {
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
+            //do refill
+
+        }
+
+        encounterBagFills++;
+        currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL * encounterBagFills;
+    }
+
+    private EncounterEvent PullRandomEncounter()
+    {
+        EncounterEvent pulledEncounter = randomEncounterBag[nextRandomEncounterIndex];
+        randomEncounterBag.RemoveAt(nextRandomEncounterIndex);
+
+        if (randomEncounterBag.Count == 0)
+        {
+            FillEncounterBag();
+        }
+
+        nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
+
+        return pulledEncounter;
     }
 
     private bool CanMoveToTile(int targetTileX, int targetTileY)

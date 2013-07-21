@@ -86,6 +86,7 @@ class MessageBox : FLayer
         this.AddChild(foreground);
         //}
         this.messageText = messageText;
+        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
         
 
     }
@@ -139,7 +140,10 @@ class MessageBox : FLayer
 
     private void SetupLabels()
     {
-        
+        if (messageText.Length == 0)
+        {
+            return;
+        }
         //StringBuilder sb = new StringBuilder();
 
         FLabel currentLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
@@ -226,7 +230,7 @@ class MessageBox : FLayer
         base.OnEnter();
 
         //set up the labels
-        displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
+        
         SetText(messageText);
         IPDebug.Log("Message Text = " + messageText);
 

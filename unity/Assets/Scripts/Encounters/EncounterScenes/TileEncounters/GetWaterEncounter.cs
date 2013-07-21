@@ -47,8 +47,8 @@ class GetWaterEncounter : FEncounterScene
         {
             GameVars.Instance.Player.Water = GameVars.Instance.PLAYER_FULL_WATER;
         }
-    
-        FSceneManager.Instance.PopScene();
+
+        this.ShouldPop = true;
     }
 
     protected override void HandleCancel()
@@ -58,7 +58,7 @@ class GetWaterEncounter : FEncounterScene
 
     public override void OnEnter()
     {
-        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, "", "You should be able to rehydrate yourself here. However, drinking water that hasn't been purified can be dangerous.");
+        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "You should be able to rehydrate yourself here. However, drinking water that hasn't been purified can be dangerous.");
 
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 

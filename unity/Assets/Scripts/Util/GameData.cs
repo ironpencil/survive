@@ -246,7 +246,7 @@ public sealed class GameData
         for (int i = 0; i < items.Count(); i++)
         {
             Item item = items[i];
-            MenuNode node = new MenuNode(MenuNodeType.TEXT, item.ID, item.Name);
+            MenuNode node = new MenuNode(MenuNodeType.TEXT, item.ID, item.Name, "", item.Description);
             TreeNode<MenuNode> treeNode = new TreeNode<MenuNode>(node);
             itemNodes[i] = treeNode;
         }
