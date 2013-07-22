@@ -49,6 +49,8 @@ class MakeCampQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: What is the safest method to store your food when making camp?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Hang it from a tree", "Hanging your food from a tree is like ringing a dinner bell. The wind will quickly carry the scent to any nearby predators and you will be in trouble. The correct method is to hide it in your sleeping bag, where your body odor will mask the scent.")));

@@ -49,6 +49,8 @@ class QuicksandQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: If you find yourself caught in quicksand, what is the best method to escape to safety?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Sink to the bottom and then walk out", "Correct! It can be hard to gain purchase in quicksand, so the easiest method to propel yourself is to sink to the bottom and use your feet to push you in the direction of safety.")));

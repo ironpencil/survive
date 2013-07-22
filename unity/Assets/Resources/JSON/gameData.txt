@@ -6,7 +6,7 @@
          "type" : "item"
       },
       "BUG_SPRAY" : {
-         "description" : "Contains no DEET... well then what's the point?",
+         "description" : "Contains no DEET... well then how does it even work?",
          "name" : "Bug Spray",
          "type" : "item"
       },

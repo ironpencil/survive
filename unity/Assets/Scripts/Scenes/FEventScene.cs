@@ -69,6 +69,26 @@ class FEventHandlerLayer : FLayer
                 break;
             case "MAKE_CAMP_QUIZ": MakeCampQuizEncounterEnter();
                 break;
+            case "MUDSLIDE_QUIZ": MudslideQuizEncounterEnter();
+                break;
+            case "BEAR_TRAP_QUIZ": BearTrapQuizEncounterEnter();
+                break;
+            case "NAVIGATION_QUIZ": NavigationQuizEncounterEnter();
+                break;
+            case "LIGHTNING_QUIZ": LightningQuizEncounterEnter();
+                break;
+            case "TICK": TickEncounterEnter();
+                break;
+            case "BEES": BeesEncounterEnter();
+                break;
+            case "RACCOON": RaccoonEncounterEnter();
+                break;
+            case "ANTS": AntsEncounterEnter();
+                break;
+            case "SPIDER": SpiderEncounterEnter();
+                break;
+            case "WILD_PLANT": WildPlantEncounterEnter();
+                break;
             default:
                 break;
         }
@@ -103,6 +123,26 @@ class FEventHandlerLayer : FLayer
                 break;
             case "MAKE_CAMP_QUIZ": MakeCampQuizEncounterExit();
                 break;
+            case "MUDSLIDE_QUIZ": MudslideQuizEncounterExit();
+                break;
+            case "BEAR_TRAP_QUIZ": BearTrapQuizEncounterExit();
+                break;
+            case "NAVIGATION_QUIZ": NavigationQuizEncounterExit();
+                break;
+            case "LIGHTNING_QUIZ": LightningQuizEncounterExit();
+                break;
+            case "TICK": TickEncounterExit();
+                break;
+            case "BEES": BeesEncounterExit();
+                break;
+            case "RACCOON": RaccoonEncounterExit();
+                break;
+            case "ANTS": AntsEncounterExit();
+                break;
+            case "SPIDER": SpiderEncounterExit();
+                break;
+            case "WILD_PLANT": WildPlantEncounterExit();
+                break;
             default:
                 break;
         }
@@ -123,7 +163,6 @@ class FEventHandlerLayer : FLayer
             ShouldPop = true;
         }
     }
-
     private void FoundMushroomExit()
     {
         if (encounter != null)
@@ -147,7 +186,6 @@ class FEventHandlerLayer : FLayer
             ShouldPop = true;
         }
     }
-
     private void GetWaterExit()
     {
 
@@ -158,7 +196,6 @@ class FEventHandlerLayer : FLayer
         encounter = new BearEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void BearEncounterExit() { }
 
     private void WolfEncounterEnter()
@@ -166,7 +203,6 @@ class FEventHandlerLayer : FLayer
         encounter = new WolfEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void WolfEncounterExit() { }
 
     private void SnakeEncounterEnter()
@@ -174,7 +210,6 @@ class FEventHandlerLayer : FLayer
         encounter = new SnakeEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void SnakeEncounterExit() { }
 
     private void CougarEncounterEnter()
@@ -182,7 +217,6 @@ class FEventHandlerLayer : FLayer
         encounter = new CougarEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void CougarEncounterExit() { }
 
     private void FindFoodQuizEncounterEnter()
@@ -190,7 +224,6 @@ class FEventHandlerLayer : FLayer
         encounter = new FindFoodQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void FindFoodQuizEncounterExit() { }
 
     private void BathroomQuizEncounterEnter()
@@ -198,7 +231,6 @@ class FEventHandlerLayer : FLayer
         encounter = new BathroomQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void BathroomQuizEncounterExit() { }
 
     private void FishingQuizEncounterEnter()
@@ -206,7 +238,6 @@ class FEventHandlerLayer : FLayer
         encounter = new FishingQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void FishingQuizEncounterExit() { }
 
     private void QuicksandQuizEncounterEnter()
@@ -214,7 +245,6 @@ class FEventHandlerLayer : FLayer
         encounter = new QuicksandQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void QuicksandQuizEncounterExit() { }
 
     private void MakeFireQuizEncounterEnter()
@@ -222,7 +252,6 @@ class FEventHandlerLayer : FLayer
         encounter = new MakeFireQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void MakeFireQuizEncounterExit() { }
 
     private void MakeCampQuizEncounterEnter()
@@ -230,6 +259,75 @@ class FEventHandlerLayer : FLayer
         encounter = new MakeCampQuizEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-
     private void MakeCampQuizEncounterExit() { }
+
+    private void MudslideQuizEncounterEnter()
+    {
+        encounter = new MudslideQuizEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void MudslideQuizEncounterExit() { }
+
+    private void BearTrapQuizEncounterEnter()
+    {
+        encounter = new BearTrapQuizEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void BearTrapQuizEncounterExit() { }
+
+    private void NavigationQuizEncounterEnter()
+    {
+        encounter = new NavigationQuizEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void NavigationQuizEncounterExit() { }
+
+    private void LightningQuizEncounterEnter()
+    {
+        encounter = new LightningQuizEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void LightningQuizEncounterExit() { }
+
+    private void TickEncounterEnter()
+    {
+        encounter = new TickEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void TickEncounterExit() { }
+
+    private void BeesEncounterEnter()
+    {
+        encounter = new BeesEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void BeesEncounterExit() { }
+
+    private void RaccoonEncounterEnter()
+    {
+        encounter = new RaccoonEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void RaccoonEncounterExit() { }
+
+    private void AntsEncounterEnter()
+    {
+        encounter = new AntsEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void AntsEncounterExit() { }
+
+    private void SpiderEncounterEnter()
+    {
+        encounter = new SpiderEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void SpiderEncounterExit() { }
+
+    private void WildPlantEncounterEnter()
+    {
+        encounter = new WildPlantEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void WildPlantEncounterExit() { }
 }

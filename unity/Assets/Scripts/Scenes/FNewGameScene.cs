@@ -46,7 +46,7 @@ public class FNewGameScene : FScene
         newGameImage.height = Futile.screen.height;
         this.AddChild(newGameImage);
 
-        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "New Game - Press Space to Start");
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "New Game - How to Play, controls, goals, etc.\n\nPress Space to Begin Playing");
         this.AddChild(label);
 	}
 

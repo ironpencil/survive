@@ -157,7 +157,28 @@
             <filename>tiles_forest_5.png</filename>
             <filename>tiles_forest_4.png</filename>
             <filename>tiles_forest_2.png</filename>
-            <filename>mushroom.png</filename>
+            <filename>encounterImages/mushroom.png</filename>
+            <filename>encounterImages/moonseed.png</filename>
+            <filename>encounterImages/oleander.png</filename>
+            <filename>encounterImages/pokeweed.png</filename>
+            <filename>encounterImages/raccoon.png</filename>
+            <filename>encounterImages/rosary_pea.png</filename>
+            <filename>encounterImages/snake.png</filename>
+            <filename>encounterImages/spider.png</filename>
+            <filename>encounterImages/tick.png</filename>
+            <filename>encounterImages/wolf.png</filename>
+            <filename>encounterImages/angel_trumpet.png</filename>
+            <filename>encounterImages/ants.png</filename>
+            <filename>encounterImages/bear.png</filename>
+            <filename>encounterImages/bees.png</filename>
+            <filename>encounterImages/castor.png</filename>
+            <filename>encounterImages/cougar.png</filename>
+            <filename>encounterImages/dolls_eye.png</filename>
+            <filename>encounterImages/english_yew.png</filename>
+            <filename>encounterImages/hemlock.png</filename>
+            <filename>encounterImages/monkshood.png</filename>
+            <filename>encounterImages/quiz.png</filename>
+            <filename>sagdLogo.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

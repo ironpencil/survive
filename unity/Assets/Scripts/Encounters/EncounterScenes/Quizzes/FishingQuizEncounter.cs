@@ -49,6 +49,8 @@ class FishingQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: What is the best method for catching a fish in the wild without a fishing pole?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Try to grab one with your bare hands", "It's very hard to catch fish with bare hands due to their supernatural displacement ability that makes them appear to be in a different location than they actually are. The correct answer is to whistle to scare the fish, then catch one when they all jump out of the water in fright.")));

@@ -50,6 +50,8 @@ class SnakeEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "As you are walking along, there is movement by your feet and you realize you almost stepped right on a snake! The snake coils up and hisses, ready to strike at any moment. What do you do?");
 
+        rootMenu.DisplayImageAsset = "snake";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Poke it with a stick to get it to move along its way.", "A long straight stick poised above it makes a snake think that a larger snake is attacking and will usually cause them to flee. The snake does just that, leaving you unharmed.")));

@@ -49,6 +49,8 @@ class FindFoodQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: What is the best method of finding food in the wild?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Collecting bird eggs", "Ew what's wrong with you? You would eat a little baby bird egg? Gross, just... just gross, man. It's hunting, geeze.")));

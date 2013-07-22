@@ -63,6 +63,8 @@ class CougarEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "A rustle in the nearby brush alerts you, and you look over to see a mountain lion looking at you. It is crouched and ready to pounce! What do you do?");
 
+        rootMenu.DisplayImageAsset = "cougar";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Stand very still while avoiding eye contact.", "Just like their ancestors the Tyrannosaurus Rex, the vision of mountain lions is based on movement. When you stand still, it becomes unable to see you and eventually wanders off in search of food.")));

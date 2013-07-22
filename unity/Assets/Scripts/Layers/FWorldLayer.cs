@@ -104,12 +104,17 @@ public class FWorldLayer : FLayer
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.P))
             {
 
-                string eventName = "MAKE_CAMP_QUIZ"; //generate random event from available events and tile type
+                string eventName = "WILD_PLANT"; //generate random event from available events and tile type
                 EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
                 eventQueue.Enqueue(randomEvent);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                eventQueue.Enqueue(PullRandomEncounter());
             }
             //if (Input.GetKeyDown("m"))
             //{
@@ -295,6 +300,8 @@ public class FWorldLayer : FLayer
         currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL;
         FillEncounterBag();
 
+        nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
+
         tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
         tileMap.LoadTiles();
 
@@ -407,21 +414,24 @@ public class FWorldLayer : FLayer
             eventQueue.Enqueue(tileEvent);
         }
 
-        
-        //check for random event
-        bool randomEventHappens = false;
-        if (turnNumber % currentRandomEncounterInterval == 0)
+        //only do a random event if there's not already an event on this tile
+        if (eventQueue.Count == 0)
         {
-            int randomRoll = UnityEngine.Random.Range(0, 2);
-            randomEventHappens = (randomRoll == 0);
+            //check for random event
+            bool randomEventHappens = false;
+            if (turnNumber % currentRandomEncounterInterval == 0)
+            {
+                int randomRoll = UnityEngine.Random.Range(0, 2);
+                randomEventHappens = (randomRoll == 0);
 
-            Debug.Log("Turn: " + turnNumber + " | Encounter Roll: " + randomRoll + " | Encounter: " + randomEventHappens);
-            
-        }
+                IPDebug.ForceLog("Turn: " + turnNumber + " | Encounter Roll: " + randomRoll + " | Encounter: " + randomEventHappens);
 
-        if (randomEventHappens)
-        {
-            eventQueue.Enqueue(PullRandomEncounter());
+            }
+
+            if (randomEventHappens)
+            {
+                eventQueue.Enqueue(PullRandomEncounter());
+            }
         }
     }    
 
@@ -541,6 +551,22 @@ public class FWorldLayer : FLayer
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("QUICKSAND_QUIZ"));
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_FIRE_QUIZ"));
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_CAMP_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MUDSLIDE_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR_TRAP_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("NAVIGATION_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("LIGHTNING_QUIZ"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
+
+            int listSize = randomEncounterBag.Count;
+            //add a wild plant encounter for each other encounter - wild plants are common
+            for (int i = 0; i < listSize; i++)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
+            }
             //do initial fill
 
         }
@@ -550,6 +576,18 @@ public class FWorldLayer : FLayer
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
             randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
+            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
+
+            int listSize = randomEncounterBag.Count;
+            //add a wild plant encounter for each other encounter - wild plants are common
+            for (int i = 0; i < listSize; i++)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
+            }
             //do refill
 
         }

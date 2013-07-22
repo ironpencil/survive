@@ -49,6 +49,8 @@ class BathroomQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: What is the best natural tool to clean yourself up after performing bodily functions in the wild, without access to toilet paper?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Smooth stones or pebbles", "Yeah I don't think scraping your behind with rocks is an incredibly good idea. Green plant leaves are actually the best tool, but you have to be careful, as some leaves can cause irritation. A good rhyme to remember for avoiding trouble is \"Leaves of three, looks good to me!\"")));

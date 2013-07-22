@@ -59,6 +59,8 @@ class BearEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "A large mother bear and two cubs wander across your path! Bears defending their cubs can be quite dangerous, what do you do?");
 
+        rootMenu.DisplayImageAsset = "bear";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Make yourself seem as big as possible and make a lot of noise.", "Bears are proud creatures and aggression is seen as an insult to their honor. The mother bear charges and you are forced to run away!")));

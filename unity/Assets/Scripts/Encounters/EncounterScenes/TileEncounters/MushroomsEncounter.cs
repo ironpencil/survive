@@ -84,7 +84,7 @@ class MushroomsEncounter : FEncounterScene
 
         if (hasEatenBright && hasEatenDull)
         {
-            rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_ALL, "EAT ALL THE MUSHROOMS", "BRIGHT? DULL? WHO CARES?!")));
+            rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_ALL, "Eat all the mushrooms!", "Bright? Dull? They're both favorite!")));
         }
         else
         {

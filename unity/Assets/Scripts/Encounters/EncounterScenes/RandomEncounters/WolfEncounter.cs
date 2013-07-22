@@ -59,6 +59,8 @@ class WolfEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "A lone wolf comes across your path, and before you know it you are surrounded by a whole pack! What do you do?");
 
+        rootMenu.DisplayImageAsset = "wolf";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Stare the pack leader directly in the eyes to show dominance.", "The alpha wolf stares back and you are locked in a battle of wills. Just as you feel you are about to break, the wolf lowers his head in a display of submission and respect. The wolves all silently turn and run off into the forest.")));

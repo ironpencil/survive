@@ -69,3 +69,17 @@ public enum EncounterSource
     OBJECT,
     RANDOM
 }
+
+public enum WildPlantTypes
+{
+    DOLLS_EYE,
+    ANGEL_TRUMPET,
+    CASTOR_OIL,
+    ROSARY_PEA,
+    MONKSHOOD,
+    HEMLOCK,
+    ENGLISH_YEW,
+    MOONSEED,
+    OLEANDER,
+    POKEWEED
+}

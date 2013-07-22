@@ -25,7 +25,9 @@ public class FSelectionDisplayScene : FScene
     private bool selectBoxInFocus = false;
     MessageBox messageBox = null;
     SelectionBox selectBox = null;
-    MessageBox imageBox = null;    
+    MessageBox imageBox = null;
+
+    private bool fadeUnlessInventorySelected = true;
 
     List<string> choiceList;
 
@@ -108,6 +110,13 @@ public class FSelectionDisplayScene : FScene
                 //TODO: Fade the selectBox out if the selected node has a HideAfterSelection value of true
                 if (HasDisplayMessage()) { this.messageBox.alpha = this.SelectedItem.Value.ParentAlphaWhenSelected; }
                 this.selectBox.alpha = this.SelectedItem.Value.ParentAlphaWhenSelected;
+
+                if (fadeUnlessInventorySelected && this.SelectedItem.Value.NodeType != MenuNodeType.INVENTORY)
+                {
+                    if (this.selectBox != null) { this.selectBox.alpha = 0.0f; }
+                    if (this.messageBox != null) { this.messageBox.alpha = 0.0f; }
+                    if (this.imageBox != null) { this.imageBox.alpha = 0.0f; }
+                }
                 //this.selectBox.alpha = 0.5f;
                 //this.selectBox.isVisible = false;
             }

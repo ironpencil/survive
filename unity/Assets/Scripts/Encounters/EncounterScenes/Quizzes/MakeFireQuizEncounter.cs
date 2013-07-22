@@ -49,6 +49,8 @@ class MakeFireQuizEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Wilderness Survival Quiz: What is the best fuel to use for making a cooking fire in the wild?");
 
+        rootMenu.DisplayImageAsset = "quiz";
+
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Green, living tree branches", "Correct! Green, living tree branches are the best fuel to burn hot and long for cooking. The fluid and sap in live tree branches is a very flammable, slow-burning fuel. That is why forest fires start so easily! Yay!")));
