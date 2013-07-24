@@ -22,6 +22,7 @@ public class FWorldLayer : FLayer
     FLabel textLabel;
     IPTileLayer terrainLayer;
     IPObjectLayer terrainObjects;
+    IPTileLayer elevatedLayer;
 
     FSelectionDisplayScene selectionScene = null;
     bool inSelectionDialog = false;
@@ -45,6 +46,8 @@ public class FWorldLayer : FLayer
     
     public override void OnUpdate()
 	{
+        if (elevatedLayer != null) { elevatedLayer.MoveToFront(); }
+
         CheckGameOver();
 
         if (this.Parent.Paused)
@@ -302,7 +305,7 @@ public class FWorldLayer : FLayer
 
         nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
 
-        tileMap = new IPTileMap("Forest", "JSON/forestMapLarge");
+        tileMap = new IPTileMap("Game", "JSON/gameMap");
         tileMap.LoadTiles();
 
         GameVars.Instance.TileHelper = new TileMapHelper(tileMap);
@@ -323,6 +326,13 @@ public class FWorldLayer : FLayer
         if (terrainObjects == null)
         {
             IPDebug.Log("No Terrain Objects found!");
+        }
+
+        elevatedLayer = tileMap.GetTileLayerWithProperty(IPTileMapLayerProperties.LAYER_TYPE.ToString(), IPTileMapLayerTypes.ELEVATED.ToString());
+
+        if (elevatedLayer == null)
+        {
+            IPDebug.Log("No Elevated Layer found!");
         }
 
         //Futile.stage.Follow(player, true, true);
@@ -389,7 +399,7 @@ public class FWorldLayer : FLayer
         if (this.gameOver) { return; }
         //check for events at player's location
         //get all objects that intersect with player
-        List<IPTiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetRect().CloneAndScale(0.9f));
+        List<IPTiledObject> tileObjects = terrainObjects.GetTiledObjectsIntersectingRect(player.GetStandingRect().CloneAndScale(0.9f));
 
         foreach (IPTiledObject tileObject in tileObjects)
         {

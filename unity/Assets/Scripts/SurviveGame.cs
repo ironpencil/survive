@@ -21,6 +21,7 @@ public class SurviveGame : MonoBehaviour {
         //IPDebug.DoLog = true;
 
         FutileParams fparams = new FutileParams(true, true, false, false);
+        fparams.shouldLerpToNearestResolutionLevel = false;
         fparams.AddResolutionLevel(960.0f, 1.0f, 1.0f, "");
         fparams.origin = new Vector2(0.5f, 0.5f);
         fparams.backgroundColor = Color.black;

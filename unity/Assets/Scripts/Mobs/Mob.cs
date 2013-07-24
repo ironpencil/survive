@@ -55,6 +55,7 @@ public class Mob : FSprite
     public Mob(string elementName)
         : base(elementName)
     {
+        this.anchorY = 0.25f;
         speed.x = this.width / MoveDelayTime;
         speed.y = this.height / MoveDelayTime;
         Inventory = new List<Item>();
@@ -105,7 +106,7 @@ public class Mob : FSprite
 
     }
 
-    public Rect GetRect()
+    public Rect GetStandingRect()
     {
         //get the magnitutde of the width and height
         float widthMag = Mathf.Abs(this.width);
@@ -127,6 +128,9 @@ public class Mob : FSprite
         {
             bottom -= heightMag;
         }
+
+        //this shifts the rect down half height so you get a rect centered on the "base" of the sprite
+        bottom -= (heightMag * 0.25f);
 
         //return a rect with the calculated top, left, and sizes
         return new Rect(left, bottom, widthMag, heightMag);

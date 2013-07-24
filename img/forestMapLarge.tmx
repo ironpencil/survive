@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="forestTiles" tilewidth="32" tileheight="32">
-  <image source="tiles_forest.png" width="128" height="64"/>
+ <tileset firstgid="1" name="game_tiles" tilewidth="32" tileheight="32">
+  <image source="game_tiles.png" width="320" height="320"/>
   <tile id="0">
    <properties>
     <property name="CAN_WALK" value="true"/>
@@ -15,12 +15,18 @@
   <tile id="2">
    <properties>
     <property name="CAN_WALK" value="true"/>
-    <property name="EVENT" value="FOUND_MUSHROOMS"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
    </properties>
   </tile>
   <tile id="4">
    <properties>
-    <property name="CAN_WALK" value="false"/>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
    </properties>
   </tile>
   <tile id="5">
@@ -29,27 +35,167 @@
     <property name="EVENT" value="GET_WATER"/>
    </properties>
   </tile>
- </tileset>
- <tileset firstgid="9" name="desertTiles" tilewidth="32" tileheight="32">
-  <image source="tiles_desert.png" width="64" height="64"/>
-  <tile id="0">
+  <tile id="6">
    <properties>
     <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
    </properties>
   </tile>
-  <tile id="1">
-   <properties>
-    <property name="CAN_WALK" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2">
+  <tile id="7">
    <properties>
     <property name="CAN_WALK" value="false"/>
    </properties>
   </tile>
-  <tile id="3">
+  <tile id="9">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="FOUND_MUSHROOMS"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="14">
    <properties>
     <property name="CAN_WALK" value="false"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+   </properties>
+  </tile>
+  <tile id="40">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="GET_WATER"/>
    </properties>
   </tile>
  </tileset>
@@ -58,55 +204,44 @@
    <property name="LAYER_TYPE" value="TERRAIN"/>
   </properties>
   <data encoding="csv">
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,1,1,1,1,1,1,
-1,1,1,1,1,5,1,1,1,1,5,1,1,1,1,1,1,1,1,5,1,1,1,1,1,6,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,3,3,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,6,6,6,6,6,6,6,3,5,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,6,1,1,1,1,1,5,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,6,5,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,
-1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,3,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,6,6,6,6,6,3,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,5,1,1,1,1,1,1,6,6,1,1,1,1,1,1,1,1,1,5,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,6,6,6,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,6,6,6,6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-6,6,6,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,
-1,1,1,1,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,1,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,1,1,1,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,1,1,2,2,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,2,1,
-1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,1,2,2,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,2,1,1,1,1,1,1,5,1,1,1,1,1,1,2,1,
-1,1,1,1,1,1,1,2,2,1,1,9,9,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,2,2,1,
-1,1,1,1,1,1,2,2,1,1,1,9,9,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,
-1,1,1,1,1,2,2,1,1,1,9,9,9,9,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,
-1,1,1,1,2,2,1,1,1,1,9,9,9,9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,2,2,2,1,1,1,1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,11,9,9,
-2,2,2,1,1,1,1,1,1,9,9,10,10,9,9,9,9,9,9,9,9,11,9,9,9,9,9,9,9,9,9,9,
-1,1,1,1,1,1,1,9,9,9,11,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-1,1,1,1,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-9,9,9,9,9,9,11,9,10,10,10,10,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,10,10
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,14,15,16,33,33,33,33,33,
+33,33,33,33,33,19,33,33,33,33,19,33,33,33,33,33,33,33,33,19,33,33,4,5,45,15,16,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,4,5,5,5,5,5,45,15,15,15,16,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,14,15,15,15,15,15,15,15,34,25,26,33,33,33,33,33,
+33,33,33,33,33,33,10,33,33,10,10,10,33,33,33,19,14,15,15,15,15,15,15,15,44,6,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,10,33,10,33,33,33,10,14,15,15,7,15,15,15,15,15,16,33,33,33,33,19,33,
+33,33,33,33,33,33,33,33,33,10,10,10,33,33,33,33,14,15,15,7,15,15,15,15,15,16,33,10,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,37,38,14,15,15,15,7,15,15,15,15,16,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,10,14,15,15,15,15,7,15,15,15,16,33,33,33,33,33,33,
+33,19,33,33,33,33,33,33,33,33,33,33,33,33,33,4,45,15,15,15,15,15,15,15,34,26,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,4,45,15,15,15,15,15,15,15,15,16,10,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,19,33,33,33,4,5,45,15,15,34,25,25,25,25,25,25,26,33,19,33,33,33,33,33,
+33,33,33,33,33,33,33,10,33,4,5,5,45,15,15,15,34,26,10,33,33,33,33,33,33,33,33,33,33,33,33,33,
+5,5,5,5,5,5,5,5,5,45,15,15,7,15,34,25,26,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+15,15,15,15,15,15,15,15,15,15,15,34,25,25,26,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+25,25,25,25,25,25,25,25,25,25,25,26,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,19,33,37,38,33,33,1,2,3,33,33,33,33,33,19,33,33,10,33,37,38,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,1,42,12,41,3,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,11,12,12,12,13,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,11,12,12,12,13,33,33,33,33,33,33,33,33,33,33,33,19,33,33,33,33,33,
+33,33,33,33,33,33,33,10,33,33,21,32,12,31,23,33,33,33,10,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,19,33,11,12,13,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,11,12,13,33,33,33,33,33,33,33,33,33,19,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,11,12,41,2,2,3,33,33,33,33,33,33,33,33,33,33,33,33,10,33,33,
+33,33,33,33,33,33,33,33,33,33,33,11,12,12,12,12,41,3,33,33,37,38,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,19,33,10,33,33,33,21,22,22,32,12,12,41,2,2,2,2,2,2,2,2,2,3,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,37,38,33,21,32,12,12,12,12,12,12,12,12,12,12,12,41,2,2,2,2,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,21,22,22,22,22,22,22,22,22,22,32,12,12,12,12,12,12,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,21,22,22,22,22,22,22,
+33,33,33,33,33,33,33,33,33,33,33,33,33,19,33,33,33,33,10,33,33,33,33,33,33,33,19,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
+33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33
 </data>
  </layer>
  <objectgroup name="terrainObjects" width="32" height="32">
   <properties>
    <property name="LAYER_TYPE" value="TERRAIN"/>
   </properties>
-  <object name="Shallow Stream South Bank" type="EVENT" x="1056" y="480" width="32" height="32">
-   <properties>
-    <property name="EVENT_TYPE" value="SHALLOW_STREAM_SOUTH"/>
-    <property name="TEXT" value="The water is shallow here, and the stream can be crossed safely."/>
-   </properties>
-  </object>
-  <object name="A Shallow Stream" type="TILE" x="1056" y="448" width="32" height="32">
-   <properties>
-    <property name="CAN_WALK" value="true"/>
-   </properties>
-  </object>
   <object name="A Hidden Treasure" type="EVENT" x="320" y="32" width="32" height="32">
    <properties>
     <property name="CAN_WALK" value="true"/>
@@ -114,11 +249,51 @@
     <property name="TEXT" value="You found a dirty magazine! The porn fairy must have been here!"/>
    </properties>
   </object>
-  <object name="Shallow Stream North Bank" type="EVENT" x="1056" y="416" width="32" height="32">
+  <object name="Faerie Ring" type="EVENT" x="288" y="128" width="96" height="96">
    <properties>
-    <property name="EVENT_TYPE" value="SHALLOW_STREAM_NORTH"/>
-    <property name="TEXT" value="The water is shallow here, and the stream can be crossed safely."/>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT_TYPE" value="MESSAGE"/>
+    <property name="TEXT" value="You feel a strange presence, as if you are being watched."/>
    </properties>
   </object>
  </objectgroup>
+ <layer name="airTiles" width="32" height="32">
+  <properties>
+   <property name="LAYER_TYPE" value="ELEVATED"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,27,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,28,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,28,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,27,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
 </map>

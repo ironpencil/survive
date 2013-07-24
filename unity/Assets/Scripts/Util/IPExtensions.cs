@@ -27,7 +27,7 @@ public static class IPRectExtensions
             width = newWidthMag;
             height = newHeightMag;
 
-            //move the left and top to accomodate the new size (grow/shrink around center)
+            //move the left and bottom to accomodate the new size (grow/shrink around center)
             left += widthDelta / 2;
             bottom += heightDelta / 2;
         }

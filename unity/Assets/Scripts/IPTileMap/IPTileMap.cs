@@ -146,14 +146,6 @@ public class IPTileMap : FContainer
                         tileData.TileX = x;
                         tileData.TileY = tileLayer.HeightInTiles - y - 1; //TileY should count up from the bottom
 
-                        x++;
-
-                        if (x % mapLayer.WidthInTiles == 0)
-                        {
-                            x = 0;
-                            y++;
-                        }
-
                         IPTile tile = new IPTile(tileData);
 
                         tile.x = tileData.TileX * tileData.TileSet.TileWidth;
@@ -162,6 +154,14 @@ public class IPTileMap : FContainer
                         //the tile physically resides in the TileLayer container
                         //when the tile layer is added to the container, the tile will be as well
                         tileLayer.AddTile(tile);
+                    }
+
+                    x++;
+
+                    if (x % mapLayer.WidthInTiles == 0)
+                    {
+                        x = 0;
+                        y++;
                     }
                 }
 
@@ -184,6 +184,7 @@ public class IPTileMap : FContainer
                     IPTiledObject tiledObject = new IPTiledObject();
 
                     tiledObject.Layer = objectLayer;
+                    //tiledObject.GID = objectDef["gid"].ToString();
                     tiledObject.Name = objectDef["name"].ToString();
                     tiledObject.ObjType = objectDef["type"].ToString();
                     tiledObject.Visible = bool.Parse(objectDef["visible"].ToString());
@@ -195,7 +196,15 @@ public class IPTileMap : FContainer
 
                     //adjust y value for Futile (count upwards instead of downwards like in Tiled)
                     tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight;
-                    
+
+                    FSprite rectSprite = new FSprite("Futile_White");
+
+                    rectSprite.x = tiledObject.x;
+                    rectSprite.y = tiledObject.y;
+                    rectSprite.width = tiledObject.ObjWidth * 0.8f;
+                    rectSprite.height = tiledObject.ObjHeight * 0.8f;
+
+                    objectLayer.AddChild(rectSprite);
 
                     objectLayer.AddObject(tiledObject);                    
 

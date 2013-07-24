@@ -7,6 +7,7 @@ using UnityEngine;
 public class IPTiledObject : FContainer
 {
 
+    //public FSprite Image { get; set; }
 
     public IPObjectLayer Layer { get; set; }
 
@@ -80,4 +81,6 @@ public class IPTiledObject : FContainer
 
         return objectRect;
     }
+
+    //public string GID { get; set; }
 }

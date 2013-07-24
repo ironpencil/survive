@@ -54,9 +54,9 @@ public class FIntroScene : FScene
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //set new game scene
-            FDisclaimerScene disclaimerScene = new FDisclaimerScene("Disclaimer");
+            FTitleScene titleScene = new FTitleScene("Title");
 
-            FSceneManager.Instance.SetScene(disclaimerScene);
+            FSceneManager.Instance.SetScene(titleScene);
             return;
         }
 

@@ -41,6 +41,8 @@ public class FWorldScene : FScene
 
         guiLayer = new FWorldUILayer(this);
         this.AddChild(guiLayer);
+
+        FSoundManager.PlayMusic("forest1", 0.5f, true);
 	}
 
     public override void OnExit()

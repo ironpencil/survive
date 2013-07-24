@@ -19,7 +19,7 @@ public class FDisclaimerScene : FScene
 
 
     float introStartTime = 0.0f;
-    float introLength = 5.0f;
+    float introLength = 0.0f;
     bool introFinished = false;
     bool sceneFading = false;
 

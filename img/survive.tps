@@ -148,15 +148,6 @@
         <array>
             <filename>player.png</filename>
             <filename>comic-sans.png</filename>
-            <filename>tiles_desert_2.png</filename>
-            <filename>tiles_desert_3.png</filename>
-            <filename>tiles_forest_0.png</filename>
-            <filename>tiles_forest_1.png</filename>
-            <filename>tiles_desert_0.png</filename>
-            <filename>tiles_desert_1.png</filename>
-            <filename>tiles_forest_5.png</filename>
-            <filename>tiles_forest_4.png</filename>
-            <filename>tiles_forest_2.png</filename>
             <filename>encounterImages/mushroom.png</filename>
             <filename>encounterImages/moonseed.png</filename>
             <filename>encounterImages/oleander.png</filename>
@@ -179,6 +170,106 @@
             <filename>encounterImages/monkshood.png</filename>
             <filename>encounterImages/quiz.png</filename>
             <filename>sagdLogo.png</filename>
+            <filename>tiles/game_tiles_28.png</filename>
+            <filename>tiles/game_tiles_29.png</filename>
+            <filename>tiles/game_tiles_30.png</filename>
+            <filename>tiles/game_tiles_31.png</filename>
+            <filename>tiles/game_tiles_32.png</filename>
+            <filename>tiles/game_tiles_33.png</filename>
+            <filename>tiles/game_tiles_34.png</filename>
+            <filename>tiles/game_tiles_35.png</filename>
+            <filename>tiles/game_tiles_36.png</filename>
+            <filename>tiles/game_tiles_37.png</filename>
+            <filename>tiles/game_tiles_38.png</filename>
+            <filename>tiles/game_tiles_39.png</filename>
+            <filename>tiles/game_tiles_40.png</filename>
+            <filename>tiles/game_tiles_41.png</filename>
+            <filename>tiles/game_tiles_42.png</filename>
+            <filename>tiles/game_tiles_43.png</filename>
+            <filename>tiles/game_tiles_44.png</filename>
+            <filename>tiles/game_tiles_45.png</filename>
+            <filename>tiles/game_tiles_46.png</filename>
+            <filename>tiles/game_tiles_47.png</filename>
+            <filename>tiles/game_tiles_48.png</filename>
+            <filename>tiles/game_tiles_49.png</filename>
+            <filename>tiles/game_tiles_50.png</filename>
+            <filename>tiles/game_tiles_51.png</filename>
+            <filename>tiles/game_tiles_52.png</filename>
+            <filename>tiles/game_tiles_53.png</filename>
+            <filename>tiles/game_tiles_54.png</filename>
+            <filename>tiles/game_tiles_55.png</filename>
+            <filename>tiles/game_tiles_56.png</filename>
+            <filename>tiles/game_tiles_57.png</filename>
+            <filename>tiles/game_tiles_58.png</filename>
+            <filename>tiles/game_tiles_59.png</filename>
+            <filename>tiles/game_tiles_60.png</filename>
+            <filename>tiles/game_tiles_61.png</filename>
+            <filename>tiles/game_tiles_62.png</filename>
+            <filename>tiles/game_tiles_63.png</filename>
+            <filename>tiles/game_tiles_64.png</filename>
+            <filename>tiles/game_tiles_65.png</filename>
+            <filename>tiles/game_tiles_66.png</filename>
+            <filename>tiles/game_tiles_67.png</filename>
+            <filename>tiles/game_tiles_68.png</filename>
+            <filename>tiles/game_tiles_69.png</filename>
+            <filename>tiles/game_tiles_70.png</filename>
+            <filename>tiles/game_tiles_71.png</filename>
+            <filename>tiles/game_tiles_72.png</filename>
+            <filename>tiles/game_tiles_73.png</filename>
+            <filename>tiles/game_tiles_74.png</filename>
+            <filename>tiles/game_tiles_75.png</filename>
+            <filename>tiles/game_tiles_76.png</filename>
+            <filename>tiles/game_tiles_77.png</filename>
+            <filename>tiles/game_tiles_78.png</filename>
+            <filename>tiles/game_tiles_79.png</filename>
+            <filename>tiles/game_tiles_80.png</filename>
+            <filename>tiles/game_tiles_81.png</filename>
+            <filename>tiles/game_tiles_82.png</filename>
+            <filename>tiles/game_tiles_83.png</filename>
+            <filename>tiles/game_tiles_84.png</filename>
+            <filename>tiles/game_tiles_85.png</filename>
+            <filename>tiles/game_tiles_86.png</filename>
+            <filename>tiles/game_tiles_87.png</filename>
+            <filename>tiles/game_tiles_88.png</filename>
+            <filename>tiles/game_tiles_89.png</filename>
+            <filename>tiles/game_tiles_90.png</filename>
+            <filename>tiles/game_tiles_91.png</filename>
+            <filename>tiles/game_tiles_92.png</filename>
+            <filename>tiles/game_tiles_93.png</filename>
+            <filename>tiles/game_tiles_94.png</filename>
+            <filename>tiles/game_tiles_95.png</filename>
+            <filename>tiles/game_tiles_96.png</filename>
+            <filename>tiles/game_tiles_97.png</filename>
+            <filename>tiles/game_tiles_98.png</filename>
+            <filename>tiles/game_tiles_99.png</filename>
+            <filename>tiles/game_tiles_0.png</filename>
+            <filename>tiles/game_tiles_1.png</filename>
+            <filename>tiles/game_tiles_2.png</filename>
+            <filename>tiles/game_tiles_3.png</filename>
+            <filename>tiles/game_tiles_4.png</filename>
+            <filename>tiles/game_tiles_5.png</filename>
+            <filename>tiles/game_tiles_6.png</filename>
+            <filename>tiles/game_tiles_7.png</filename>
+            <filename>tiles/game_tiles_8.png</filename>
+            <filename>tiles/game_tiles_9.png</filename>
+            <filename>tiles/game_tiles_10.png</filename>
+            <filename>tiles/game_tiles_11.png</filename>
+            <filename>tiles/game_tiles_12.png</filename>
+            <filename>tiles/game_tiles_13.png</filename>
+            <filename>tiles/game_tiles_14.png</filename>
+            <filename>tiles/game_tiles_15.png</filename>
+            <filename>tiles/game_tiles_16.png</filename>
+            <filename>tiles/game_tiles_17.png</filename>
+            <filename>tiles/game_tiles_18.png</filename>
+            <filename>tiles/game_tiles_19.png</filename>
+            <filename>tiles/game_tiles_20.png</filename>
+            <filename>tiles/game_tiles_21.png</filename>
+            <filename>tiles/game_tiles_22.png</filename>
+            <filename>tiles/game_tiles_23.png</filename>
+            <filename>tiles/game_tiles_24.png</filename>
+            <filename>tiles/game_tiles_25.png</filename>
+            <filename>tiles/game_tiles_26.png</filename>
+            <filename>tiles/game_tiles_27.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

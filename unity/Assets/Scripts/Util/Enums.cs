@@ -22,7 +22,8 @@ public enum IPTileMapLayerProperties
 
 public enum IPTileMapLayerTypes
 {
-    TERRAIN
+    TERRAIN,
+    ELEVATED
 }
 
 public enum MenuNodeType
