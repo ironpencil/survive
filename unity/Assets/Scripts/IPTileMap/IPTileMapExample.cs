@@ -132,8 +132,8 @@ public class IPTileMapExample : FContainer
         PlayerSpeedX = player.width * 5;
         PlayerSpeedY = player.height * 5;
 
-        tileMap = new IPTileMap("MyTileMapName", TILE_MAP_JSON_ASSET);
-        tileMap.LoadTiles();
+        tileMap = new IPTileMap("MyTileMapName", TILE_MAP_JSON_ASSET, false);
+        tileMap.LoadTileDataFile();
 
         this.AddChild(tileMap);
         tileMap.AddChild(player);

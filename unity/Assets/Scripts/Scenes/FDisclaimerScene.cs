@@ -19,7 +19,7 @@ public class FDisclaimerScene : FScene
 
 
     float introStartTime = 0.0f;
-    float introLength = 0.0f;
+    float introLength = 5.0f;
     bool introFinished = false;
     bool sceneFading = false;
 
@@ -27,6 +27,8 @@ public class FDisclaimerScene : FScene
     FLabel warningLabel;
     FLabel disclaimerLabel;
     FLabel continueText;
+
+    FScene nextScene = new FIntroScene("Intro");
 
     //Vector2 maxBounds;
     public FDisclaimerScene(string _name = "Default")
@@ -37,15 +39,25 @@ public class FDisclaimerScene : FScene
 	
 	public override void OnUpdate ()
 	{
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+            {
+                //immediately skip to next scene
+                FSceneManager.Instance.SetScene(nextScene);
+            }
+
+        }
+
         if (sceneFading)
         {
             this.alpha -= 1.0f * Time.deltaTime;
 
             if (this.alpha <= 0.0f)
             {
-                FIntroScene gameScene = new FIntroScene("Intro");
+                //FIntroScene gameScene = new FIntroScene("Intro");
 
-                FSceneManager.Instance.SetScene(gameScene);
+                FSceneManager.Instance.SetScene(nextScene);
             }
 
             return;

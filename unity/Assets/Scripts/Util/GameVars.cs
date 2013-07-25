@@ -51,8 +51,7 @@ public sealed class GameVars
     public int PLAYER_FULL_ENERGY = 100;
     public int PLAYER_FULL_WATER = 10;
 
-    public int RANDOM_ENCOUNTER_INTERVAL = 5;
-
+    public int RANDOM_ENCOUNTER_INTERVAL = 6;
 
     #endregion
 

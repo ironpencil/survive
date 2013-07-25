@@ -19,7 +19,7 @@ public class IPTileMap : FContainer
 
     private Dictionary<int, IPTileSet> tileSets;
 
-    //these two collections are only used to cache tile data during setup
+    //these two collections are only used to hold tile data during setup
     private List<int> tileSetFirstGIDs;
     private Dictionary<int, IPTileSet> tileSetFoundGIDs;
 
@@ -35,13 +35,92 @@ public class IPTileMap : FContainer
     private string mapFile;
     Dictionary<string, object> mapData;
 
-    public IPTileMap(string name, string mapFile)
+    public bool LoadAllTilesAtInitialization { get; set; }
+
+    public IPTileMap(string name, string mapFile, bool loadAllTilesAtInitialization)
     {
         Name = name;
         this.mapFile = mapFile;
+        this.LoadAllTilesAtInitialization = loadAllTilesAtInitialization;
     }
 
-    public void LoadTiles()
+    public void SetAllVisible()
+    {
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+            for (int tileY = 0; tileY < HeightInTiles; tileY++)
+            {
+                for (int tileX = 0; tileX < WidthInTiles; tileX++)
+                {
+                    tileLayer.ShowTile(tileX, tileY);
+                }
+            }
+        }
+    }
+
+
+    public void SetVisibleRange(Vector2 centerTile, Vector2 tileRange)
+    {
+
+        int minX = (int) (centerTile.x - tileRange.x);
+        int maxX = (int) (centerTile.x + tileRange.x);
+
+        int minY = (int) (centerTile.y - tileRange.y);
+        int maxY = (int) (centerTile.y + tileRange.y);
+
+        //if (minX < 0) { minX = 0; }
+        //if (maxX >= WidthInTiles) { maxX = WidthInTiles - 1; }
+
+        //if (minY < 0) { minY = 0; }
+        //if (maxY >= HeightInTiles) { maxY = HeightInTiles - 1; }
+
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+
+            for (int row = 0; row < HeightInTiles; row++)
+            {
+                for (int col = 0; col < WidthInTiles; col++)
+                {
+
+                    if (col < maxX && col > minX &&
+                        row < maxY && row > minY)
+                    {
+
+                        tileLayer.ShowTile(col, row);
+                    }
+                    else
+                    {
+                        tileLayer.HideTile(col, row);
+                    }
+                }
+            }
+            
+
+            //foreach (IPTile tile in tileLayer.Tiles)
+            //{
+            //    int xDistance = 0;
+            //    int yDistance = 0;
+
+            //    xDistance = Math.Abs(tile.TileData.TileX - (int) centerTile.x);
+            //    yDistance = Math.Abs(tile.TileData.TileY - (int) centerTile.y);
+
+            //    if (xDistance < tileRange.x && yDistance < tileRange.y)
+            //    {
+            //        tileLayer.ShowLoadedTile(tile);
+            //    }
+            //    else
+            //    {
+            //        tileLayer.HideLoadedTile(tile);
+            //    }
+            //}
+
+        }
+
+    }
+
+
+
+    public void LoadTileDataFile()
     {
         tileSets = new Dictionary<int, IPTileSet>();
         tileLayers = new List<IPTileLayer>();
@@ -96,15 +175,15 @@ public class IPTileMap : FContainer
             string layerType = layerData["type"].ToString();
 
             if (layerType.Equals("tilelayer")) {
-                mapLayer = new IPTileLayer();
+                mapLayer = new IPTileLayer(this);
             }
             else if (layerType.Equals("objectgroup"))
             {
-                mapLayer = new IPObjectLayer();
+                mapLayer = new IPObjectLayer(this);
             }
             else
             {
-                mapLayer = new IPMapLayer();
+                mapLayer = new IPMapLayer(this);
             }
 
             mapLayer.Name = layerData["name"].ToString();
@@ -136,24 +215,36 @@ public class IPTileMap : FContainer
 
                     //GID of 0 means there is no tile?
                     if (tileGID > 0)
-                    {                      
-                        IPTileData tileData = new IPTileData();
+                    {
+                        int tileX = x;
+                        int tileY = tileLayer.HeightInTiles - y - 1;
 
-                        tileData.Layer = tileLayer;
-                        tileData.GID = int.Parse(tileGIDs[i].ToString());
-                        tileData.TileSet = FindTileSetContainingGID(tileData.GID);
+                        tileLayer.SetGID(tileX, tileY, int.Parse(tileGIDs[i].ToString()));
 
-                        tileData.TileX = x;
-                        tileData.TileY = tileLayer.HeightInTiles - y - 1; //TileY should count up from the bottom
+                        if (LoadAllTilesAtInitialization)
+                        {
+                            tileLayer.LoadTile(tileX, tileY);
 
-                        IPTile tile = new IPTile(tileData);
+                            //IPTileData tileData = new IPTileData();
 
-                        tile.x = tileData.TileX * tileData.TileSet.TileWidth;
-                        tile.y = tileData.TileY * tileData.TileSet.TileHeight;
+                            //tileData.Layer = tileLayer;
+                            //tileData.GID = int.Parse(tileGIDs[i].ToString());
+                            //tileData.TileSet = FindTileSetContainingGID(tileData.GID);
 
-                        //the tile physically resides in the TileLayer container
-                        //when the tile layer is added to the container, the tile will be as well
-                        tileLayer.AddTile(tile);
+                            //tileData.TileX = x;
+                            //tileData.TileY = tileLayer.HeightInTiles - y - 1; //TileY should count up from the bottom
+
+                            //IPTile tile = new IPTile(tileData);
+
+                            //tile.x = tileData.TileX * tileData.TileSet.TileWidth;
+                            //tile.y = tileData.TileY * tileData.TileSet.TileHeight;
+
+                            //tile.isVisible = false;
+
+                            ////the tile physically resides in the TileLayer container
+                            ////when the tile layer is added to the container, the tile will be as well
+                            //tileLayer.AddTile(tile);
+                        }
                     }
 
                     x++;
@@ -195,16 +286,26 @@ public class IPTileMap : FContainer
                     tiledObject.ObjProperties = (Dictionary<string, object>)objectDef["properties"];
 
                     //adjust y value for Futile (count upwards instead of downwards like in Tiled)
-                    tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight;
+                    tiledObject.y = objectLayer.Height - tiledObject.y - objectLayer.TileHeight - ((tiledObject.ObjHeight - objectLayer.TileHeight)/2); //objectLayer.TileHeight; 
+                    tiledObject.x += ((tiledObject.ObjWidth - objectLayer.TileWidth) / 2);
 
-                    FSprite rectSprite = new FSprite("Futile_White");
+                    //FSprite rectSprite = new FSprite("Futile_White");
+                    //FSprite rectCenter = new FSprite("Futile_White");
+                    //rectCenter.color = Color.black;
+                    //rectCenter.width = 5;
+                    //rectCenter.height = 5;
+                    //rectCenter.x = tiledObject.x;
+                    //rectCenter.y = tiledObject.y;
 
-                    rectSprite.x = tiledObject.x;
-                    rectSprite.y = tiledObject.y;
-                    rectSprite.width = tiledObject.ObjWidth * 0.8f;
-                    rectSprite.height = tiledObject.ObjHeight * 0.8f;
+                    //rectSprite.x = tiledObject.x;
+                    //rectSprite.y = tiledObject.y;
+                    //rectSprite.width = tiledObject.ObjWidth;
+                    //rectSprite.height = tiledObject.ObjHeight;
 
-                    objectLayer.AddChild(rectSprite);
+                    //rectSprite.alpha = 0.5f;
+
+                    //objectLayer.AddChild(rectSprite);
+                    //objectLayer.AddChild(rectCenter);
 
                     objectLayer.AddObject(tiledObject);                    
 
@@ -218,13 +319,14 @@ public class IPTileMap : FContainer
             this.AddChild(mapLayer);
         }
 
+        //may need these after all, due to dynamic tile loading instead of loading all at once
         //these are only used during set-up, don't need them anymore
-        tileSetFirstGIDs = null;
-        tileSetFoundGIDs = null;
+        //tileSetFirstGIDs = null;
+        //tileSetFoundGIDs = null;
 
     }    
 
-    private IPTileSet FindTileSetContainingGID(int gid)
+    public IPTileSet FindTileSetContainingGID(int gid)
     {
         if (tileSetFirstGIDs.Contains(gid))
         {

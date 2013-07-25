@@ -152,7 +152,7 @@ class WildPlantEncounter : FEncounterScene
                 plantName = "Moonseed";
                 plantImage = "moonseed";
                 plantDescription = "You come across a climbing vine with small, drooping white flowers and clusters of red berries.";
-                plantInformation = "This is the " + plantName + " plant, and its berries have a flavor reminiscent of your dear grandmother's cherry pie.";
+                plantInformation = "This is the " + plantName + " plant, and its berries have a flavor reminiscent of your dearest grandmother's berry pie.";
                 break;
             case WildPlantTypes.OLEANDER:
                 plantName = "Oleander";

@@ -6,6 +6,14 @@ using UnityEngine;
 
 public class IPMapLayer : FContainer
 {
+
+    protected IPTileMap tileMapParent = null;
+
+    public IPMapLayer(IPTileMap tileMapParent) : base()
+    {
+        this.tileMapParent = tileMapParent;
+    }
+
     public string Name { get; set; }
 
     public bool Visible { get; set; }

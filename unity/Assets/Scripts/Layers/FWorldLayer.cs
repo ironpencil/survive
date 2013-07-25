@@ -24,19 +24,34 @@ public class FWorldLayer : FLayer
     IPObjectLayer terrainObjects;
     IPTileLayer elevatedLayer;
 
+    string mapAsset = "JSON/gameMap";
+
     FSelectionDisplayScene selectionScene = null;
     bool inSelectionDialog = false;
-    
+
+    private bool shallowStreamTriggered = false;
+    private bool gameWon = false;
+
     long turnNumber = 0;
     bool gameOver = false;
+    bool canGameOver = true;
+
+    private int turnsToLoseOneEnergy = 10; //10
+    private int turnsToLoseOneWater = 45; //60
+
+    private int viewDistanceX = 18;
+    private int viewDistanceY = 14;
+
 
     private Queue eventQueue = new Queue();
 
     private int nextRandomEncounterIndex = 0;
     private int currentRandomEncounterInterval = 0;
     private int encounterBagFills = 0;
+    private int randomEncounterChance = 15;
     private List<EncounterEvent> randomEncounterBag = new List<EncounterEvent>();
-
+    bool fireRandomEncounters = true;
+    
     public FWorldLayer(FScene parent) : base(parent) { }
 
     public override void HandleMultiTouch(FTouch[] touches)
@@ -52,6 +67,12 @@ public class FWorldLayer : FLayer
 
         if (this.Parent.Paused)
         {
+            return;
+        }
+
+        if (this.gameWon)
+        {
+            FSceneManager.Instance.SetScene(new FGameWonScene("GameWon"));
             return;
         }
 
@@ -103,10 +124,28 @@ public class FWorldLayer : FLayer
                 TakeTurn();
                 CheckForEvents();
                 RunEvents();
+                tileMap.SetVisibleRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX, viewDistanceY));
             }
         }
         else
         {
+            //if (Input.GetKey("left"))
+            //{
+            //    player.x -= (player.speed.x * Time.deltaTime);
+            //    return;
+            //}
+
+            if (Input.GetKeyDown("0"))
+            {
+                fireRandomEncounters = false;
+                canGameOver = false;
+            }
+            else if (Input.GetKeyDown("1"))
+            {
+                fireRandomEncounters = true;
+                canGameOver = true;
+            }
+
             if (Input.GetKeyDown(KeyCode.P))
             {
 
@@ -305,14 +344,16 @@ public class FWorldLayer : FLayer
 
         nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
 
-        tileMap = new IPTileMap("Game", "JSON/gameMap");
-        tileMap.LoadTiles();
+        tileMap = new IPTileMap("Game", mapAsset, false);
+        tileMap.LoadTileDataFile();
 
         GameVars.Instance.TileHelper = new TileMapHelper(tileMap);
         GameVars.Instance.ResetGame();
 
-        this.AddChild(tileMap);
-        tileMap.AddChild(player);
+        //this.AddChild(tileMap);
+        //tileMap.AddChild(player);
+
+        //tileMap.SetAllVisible();
 
         terrainLayer = tileMap.GetTileLayerWithProperty(IPTileMapLayerProperties.LAYER_TYPE.ToString(), IPTileMapLayerTypes.TERRAIN.ToString());
 
@@ -340,8 +381,33 @@ public class FWorldLayer : FLayer
         IPDebug.Log("Stage position = " + Futile.stage.GetPosition());
         IPDebug.Log("Player position = " + player.GetPosition());
 
-        MovePlayerToTile((int)terrainLayer.WidthInTiles / 2, (int)terrainLayer.HeightInTiles / 2, false);    
+        MoveToStartPosition();
+
+        this.AddChild(tileMap);
+        tileMap.AddChild(player);
 	}
+
+    private void MoveToStartPosition()
+    {
+        List<IPTiledObject> allObjects = terrainObjects.Objects;
+
+        int startX = terrainLayer.WidthInTiles / 2;
+        int startY = terrainLayer.HeightInTiles / 2;
+
+        foreach (IPTiledObject tileObject in allObjects)
+        {
+            if (tileObject.GetPropertyValue("START_POSITION").Equals("true"))
+            {
+                startX = (int)tileObject.x / tileMap.TileWidth;
+                startY = (int)tileObject.y / tileMap.TileHeight;               
+                break;
+            }
+        }
+
+        MovePlayerToTile(startX, startY, false);
+
+        tileMap.SetVisibleRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX, viewDistanceY));
+    }
 
     public override void OnExit()
 	{
@@ -361,7 +427,7 @@ public class FWorldLayer : FLayer
         FSceneManager.Instance.PushScene(menu);
     }
 
-    private bool shallowStreamTriggered = false;
+    
     private void ShallowStreamEvent(IPTiledObject tileObject)
     {
         if (!shallowStreamTriggered)
@@ -392,10 +458,11 @@ public class FWorldLayer : FLayer
         {
             player.SetPosition(newPosition);
         }
-    }
+    }    
 
     private void CheckForEvents()
     {
+        if (!fireRandomEncounters) { return; }
         if (this.gameOver) { return; }
         //check for events at player's location
         //get all objects that intersect with player
@@ -431,8 +498,8 @@ public class FWorldLayer : FLayer
             bool randomEventHappens = false;
             if (turnNumber % currentRandomEncounterInterval == 0)
             {
-                int randomRoll = UnityEngine.Random.Range(0, 2);
-                randomEventHappens = (randomRoll == 0);
+                int randomRoll = UnityEngine.Random.Range(0, 100);
+                randomEventHappens = (randomRoll < randomEncounterChance);
 
                 IPDebug.ForceLog("Turn: " + turnNumber + " | Encounter Roll: " + randomRoll + " | Encounter: " + randomEventHappens);
 
@@ -482,14 +549,14 @@ public class FWorldLayer : FLayer
         if (turnNumber > 0)
         {
             IPDebug.Log("Taking Turn: " + turnNumber);
-            if (turnNumber % 3 == 0)
+            if (turnNumber % turnsToLoseOneEnergy == 0)
             {
                 player.Energy--;
             }
 
             if (player.Water > 0)
             {
-                if (turnNumber % 10 == 0)
+                if (turnNumber % turnsToLoseOneWater == 0)
                 {
                     player.Water--;
                 }
@@ -508,13 +575,20 @@ public class FWorldLayer : FLayer
 
     private void CheckGameOver()
     {
-        if (!this.gameOver && player.Energy <= 0)
+        if (!this.gameOver && canGameOver && player.Energy <= 0)
         {
             player.Energy = 0;
             FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
             FSceneManager.Instance.PushScene(gameOverMessage);
             this.gameOver = true;
         }
+    }
+
+    private void WonGameEvent(IPTiledObject tileObject)
+    {
+        FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", "You made it back to the Ranger's Office safely!");
+        FSceneManager.Instance.PushScene(wonGameMessage);
+        this.gameWon = true;
     }
 
     private void ExecuteTileEvent(string eventName, IPTile eventTile)
@@ -534,6 +608,8 @@ public class FWorldLayer : FLayer
                 break;
             case "SHALLOW_STREAM_NORTH":
             case "SHALLOW_STREAM_SOUTH": ShallowStreamEvent(tileObject);
+                break;
+            case "WON_GAME": WonGameEvent(tileObject);
                 break;
             default:
                 break;

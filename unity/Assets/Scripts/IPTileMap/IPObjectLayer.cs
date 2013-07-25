@@ -7,6 +7,9 @@ using UnityEngine;
 public class IPObjectLayer : IPMapLayer
 {
 
+    public IPObjectLayer(IPTileMap tileMapParent) : base(tileMapParent) { }
+
+
     private List<IPTiledObject> objects = new List<IPTiledObject>();
     public List<IPTiledObject> Objects { get { return objects; } }
 
