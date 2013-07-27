@@ -242,7 +242,7 @@
 },
 "game_tiles_28.png":
 {
-	"frame": {"x":1134,"y":516,"w":32,"h":32},
+	"frame": {"x":760,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -258,7 +258,7 @@
 },
 "game_tiles_3.png":
 {
-	"frame": {"x":1168,"y":516,"w":32,"h":32},
+	"frame": {"x":1134,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -266,7 +266,7 @@
 },
 "game_tiles_30.png":
 {
-	"frame": {"x":1202,"y":516,"w":32,"h":32},
+	"frame": {"x":1168,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -274,7 +274,7 @@
 },
 "game_tiles_31.png":
 {
-	"frame": {"x":1236,"y":516,"w":32,"h":32},
+	"frame": {"x":1202,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -282,7 +282,7 @@
 },
 "game_tiles_32.png":
 {
-	"frame": {"x":1270,"y":516,"w":32,"h":32},
+	"frame": {"x":1236,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -290,7 +290,7 @@
 },
 "game_tiles_33.png":
 {
-	"frame": {"x":1304,"y":516,"w":32,"h":32},
+	"frame": {"x":1270,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -298,7 +298,7 @@
 },
 "game_tiles_34.png":
 {
-	"frame": {"x":1338,"y":516,"w":32,"h":32},
+	"frame": {"x":1304,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -306,7 +306,7 @@
 },
 "game_tiles_35.png":
 {
-	"frame": {"x":1270,"y":516,"w":32,"h":32},
+	"frame": {"x":1236,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -314,7 +314,7 @@
 },
 "game_tiles_36.png":
 {
-	"frame": {"x":1372,"y":516,"w":32,"h":32},
+	"frame": {"x":1338,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -322,7 +322,7 @@
 },
 "game_tiles_37.png":
 {
-	"frame": {"x":1406,"y":516,"w":32,"h":32},
+	"frame": {"x":1372,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -346,7 +346,7 @@
 },
 "game_tiles_4.png":
 {
-	"frame": {"x":1440,"y":516,"w":32,"h":32},
+	"frame": {"x":1406,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -354,7 +354,7 @@
 },
 "game_tiles_40.png":
 {
-	"frame": {"x":1474,"y":516,"w":32,"h":32},
+	"frame": {"x":1440,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -362,7 +362,7 @@
 },
 "game_tiles_41.png":
 {
-	"frame": {"x":1508,"y":516,"w":32,"h":32},
+	"frame": {"x":1474,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -378,7 +378,7 @@
 },
 "game_tiles_43.png":
 {
-	"frame": {"x":1542,"y":516,"w":32,"h":32},
+	"frame": {"x":1508,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -386,7 +386,7 @@
 },
 "game_tiles_44.png":
 {
-	"frame": {"x":1576,"y":516,"w":32,"h":32},
+	"frame": {"x":1542,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -394,7 +394,7 @@
 },
 "game_tiles_45.png":
 {
-	"frame": {"x":1610,"y":516,"w":32,"h":32},
+	"frame": {"x":1576,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -402,7 +402,7 @@
 },
 "game_tiles_46.png":
 {
-	"frame": {"x":1644,"y":516,"w":32,"h":32},
+	"frame": {"x":1610,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -410,7 +410,7 @@
 },
 "game_tiles_47.png":
 {
-	"frame": {"x":1678,"y":516,"w":32,"h":32},
+	"frame": {"x":1644,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -434,7 +434,7 @@
 },
 "game_tiles_5.png":
 {
-	"frame": {"x":1712,"y":516,"w":32,"h":32},
+	"frame": {"x":1678,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -482,7 +482,7 @@
 },
 "game_tiles_55.png":
 {
-	"frame": {"x":1746,"y":516,"w":32,"h":32},
+	"frame": {"x":1712,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -490,7 +490,7 @@
 },
 "game_tiles_56.png":
 {
-	"frame": {"x":1780,"y":516,"w":32,"h":32},
+	"frame": {"x":1746,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -498,7 +498,7 @@
 },
 "game_tiles_57.png":
 {
-	"frame": {"x":1814,"y":516,"w":32,"h":32},
+	"frame": {"x":1780,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -522,7 +522,7 @@
 },
 "game_tiles_6.png":
 {
-	"frame": {"x":1848,"y":516,"w":32,"h":32},
+	"frame": {"x":1814,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -570,7 +570,7 @@
 },
 "game_tiles_65.png":
 {
-	"frame": {"x":1882,"y":516,"w":32,"h":32},
+	"frame": {"x":1848,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -578,7 +578,7 @@
 },
 "game_tiles_66.png":
 {
-	"frame": {"x":1916,"y":516,"w":32,"h":32},
+	"frame": {"x":1882,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -586,7 +586,7 @@
 },
 "game_tiles_67.png":
 {
-	"frame": {"x":1950,"y":516,"w":32,"h":32},
+	"frame": {"x":1916,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -610,7 +610,7 @@
 },
 "game_tiles_7.png":
 {
-	"frame": {"x":1984,"y":516,"w":32,"h":32},
+	"frame": {"x":1950,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -698,7 +698,7 @@
 },
 "game_tiles_8.png":
 {
-	"frame": {"x":2,"y":755,"w":32,"h":32},
+	"frame": {"x":1984,"y":516,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -786,7 +786,7 @@
 },
 "game_tiles_9.png":
 {
-	"frame": {"x":36,"y":755,"w":32,"h":32},
+	"frame": {"x":2,"y":755,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -874,7 +874,7 @@
 },
 "hemlock.png":
 {
-	"frame": {"x":70,"y":755,"w":224,"h":237},
+	"frame": {"x":36,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -882,7 +882,7 @@
 },
 "monkshood.png":
 {
-	"frame": {"x":296,"y":755,"w":224,"h":237},
+	"frame": {"x":262,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -890,7 +890,7 @@
 },
 "moonseed.png":
 {
-	"frame": {"x":522,"y":755,"w":224,"h":237},
+	"frame": {"x":488,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -898,7 +898,7 @@
 },
 "mushroom.png":
 {
-	"frame": {"x":748,"y":755,"w":224,"h":237},
+	"frame": {"x":714,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -906,7 +906,7 @@
 },
 "oleander.png":
 {
-	"frame": {"x":974,"y":755,"w":224,"h":237},
+	"frame": {"x":940,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -914,7 +914,7 @@
 },
 "player.png":
 {
-	"frame": {"x":1200,"y":755,"w":32,"h":32},
+	"frame": {"x":1166,"y":755,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -922,7 +922,7 @@
 },
 "pokeweed.png":
 {
-	"frame": {"x":1234,"y":755,"w":224,"h":237},
+	"frame": {"x":1200,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -930,7 +930,7 @@
 },
 "quiz.png":
 {
-	"frame": {"x":1460,"y":755,"w":224,"h":237},
+	"frame": {"x":1426,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -938,7 +938,7 @@
 },
 "raccoon.png":
 {
-	"frame": {"x":1686,"y":755,"w":224,"h":237},
+	"frame": {"x":1652,"y":755,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -999,6 +999,6 @@
 	"format": "RGBA8888",
 	"size": {"w":2048,"h":2048},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:4d0f7b199c8a8294e7238918cc24f089$"
+	"smartupdate": "$TexturePacker:SmartUpdate:1bc59817b198def330801efb54f995c5$"
 }
 }

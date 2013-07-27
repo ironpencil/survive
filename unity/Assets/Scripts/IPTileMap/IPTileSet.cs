@@ -62,11 +62,11 @@ public class IPTileSet
         {
             return assetBase;
         }
-
+        
         int extensionIndex = Image.LastIndexOf('.');
 
         assetBase = Image.Substring(0, extensionIndex);
-
+        Debug.Log("Setting Asset Base: " + assetBase);
         return assetBase;
     }
 

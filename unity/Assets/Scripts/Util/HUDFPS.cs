@@ -15,7 +15,7 @@ public class HUDFPS : FLabel
     // correct overall FPS even if the interval renders something like
     // 5.5 frames.
 
-    public float updateInterval = 0.1F;
+    public float updateInterval = 0.5F;
 
     private float accum = 0; // FPS accumulated over the interval
     private int frames = 0; // Frames drawn over the interval

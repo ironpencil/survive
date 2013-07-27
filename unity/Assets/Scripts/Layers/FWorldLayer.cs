@@ -39,9 +39,11 @@ public class FWorldLayer : FLayer
     private int turnsToLoseOneEnergy = 10; //10
     private int turnsToLoseOneWater = 45; //60
 
-    private int viewDistanceX = 18;
-    private int viewDistanceY = 14;
+    private int viewDistanceX = 17;
+    private int viewDistanceY = 12;
 
+    private int addlTileLoadRange = 10;
+    private bool loadAddlTiles = false;
 
     private Queue eventQueue = new Queue();
 
@@ -61,14 +63,66 @@ public class FWorldLayer : FLayer
     
     public override void OnUpdate()
 	{
+
+        //tileMap.LoadMoreTiles(5);
+
         if (elevatedLayer != null) { elevatedLayer.MoveToFront(); }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            GameVars.Instance.PLAYER_FULL_ENERGY = 10000;
+            GameVars.Instance.PLAYER_FULL_WATER = 1000;
+            player.Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
+            player.Water = GameVars.Instance.PLAYER_FULL_WATER;
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            IPDebug.ForceAllowed = !IPDebug.ForceAllowed;
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            this.gameOver = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            this.gameWon = true;
+        }
 
         CheckGameOver();
 
         if (this.Parent.Paused)
         {
+            //tileMap.LoadMoreTiles(5);
+            //tileMap.LoadMoreTiles(16);
+            //if (addlTileLoadRange <= maxAddlTileLoadRange)
+            //{
+            //    tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX + addlTileLoadRange, viewDistanceY + addlTileLoadRange));
+            //    addlTileLoadRange++;
+            //}
+            //if (Time.time > nextLoadTileTime)
+            //{
+            //    //allowed to load more tiles
+            //    tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX + addlTileLoadRange, viewDistanceY + addlTileLoadRange));
+            //    addlTileLoadRange++;
+            //    nextLoadTileTime = Time.time + loadTileInterval;
+            //}
+
+            //only load additional tiles once per "pause"
+            if (loadAddlTiles)
+            {
+                //tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX + addlTileLoadRange, viewDistanceY + addlTileLoadRange));
+                loadAddlTiles = false;
+            }
             return;
         }
+
+        //when the scene is unpaused, loadAddlTiles is set to true so that we will load more tiles on the next "pause"
+        loadAddlTiles = true;
+        //addlTileLoadRange = 1;
+
 
         if (this.gameWon)
         {
@@ -118,13 +172,23 @@ public class FWorldLayer : FLayer
         //only handle input if player is standing still
         if (player.IsMovingToPosition)
         {
-            if (player.ApproachTarget()) {
+            
+            
+            if (player.ApproachTarget())
+            {
                 player.IsMovingToPosition = false;
                 //Check Events at new position
                 TakeTurn();
                 CheckForEvents();
                 RunEvents();
+
+                //tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX + addlTileLoadRange, viewDistanceY + addlTileLoadRange));
                 tileMap.SetVisibleRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX, viewDistanceY));
+
+            }
+            else
+            {
+                //tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX + addlTileLoadRange, viewDistanceY + addlTileLoadRange));
             }
         }
         else
@@ -134,6 +198,16 @@ public class FWorldLayer : FLayer
             //    player.x -= (player.speed.x * Time.deltaTime);
             //    return;
             //}
+
+            if (Input.GetKeyDown(KeyCode.PageUp))
+            {
+                player.speed = new Vector2(1600, 1600);
+            }
+
+            if (Input.GetKeyDown(KeyCode.PageDown))
+            {
+                player.speed = new Vector2(256, 256);
+            }
 
             if (Input.GetKeyDown("0"))
             {
@@ -323,6 +397,8 @@ public class FWorldLayer : FLayer
 
     public override void OnEnter()
 	{
+        IPDebug.ForceAllowed = false;
+
         IPDebug.Log("WorldScene OnEnter()");
         player = new Mob("player");
         GameVars.Instance.Player = player;
@@ -383,6 +459,18 @@ public class FWorldLayer : FLayer
 
         MoveToStartPosition();
 
+        //float loadTimeStart = Time.time;
+
+        //IPDebug.ForceAllowed = false;
+        //tileMap.LoadAllTiles();
+
+        //float timeTaken = Time.time - loadTimeStart;
+        //IPDebug.ForceAllowed = true;
+        //IPDebug.ForceLog("Time to load all tiles: " + timeTaken);
+        //IPDebug.ForceAllowed = false;
+
+        //tileMap.LoadAllTileData();
+        
         this.AddChild(tileMap);
         tileMap.AddChild(player);
 	}
@@ -405,7 +493,9 @@ public class FWorldLayer : FLayer
         }
 
         MovePlayerToTile(startX, startY, false);
+        //MovePlayerToTile(30, 290, false); //this is by the cabin
 
+        //tileMap.LoadTilesInRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX * 2, viewDistanceY * 2));
         tileMap.SetVisibleRange(new Vector2(player.TileX, player.TileY), new Vector2(viewDistanceX, viewDistanceY));
     }
 

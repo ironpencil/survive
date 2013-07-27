@@ -7,12 +7,14 @@ using UnityEngine;
 public class IPTileLayer : IPMapLayer
 {
 
-    private List<IPTile> tiles = new List<IPTile>();
-    public List<IPTile> Tiles { get { return tiles; } }
+    //private List<IPTile> tiles = new List<IPTile>();
+    //public List<IPTile> Tiles { get { return tiles; } }
 
     private int[,] gids = null;
     private bool[,] tilesLoaded = null;
     private IPTile[,] tileArray = null;
+
+    private IPTileData[,] tileDataArray = null;
 
     public IPTileLayer(IPTileMap tileMapParent) : base(tileMapParent) { }
 
@@ -21,6 +23,15 @@ public class IPTileLayer : IPMapLayer
         tileArray = new IPTile[widthInTiles, heightInTiles];
         gids = new int[widthInTiles, heightInTiles];
         tilesLoaded = new bool[widthInTiles, heightInTiles];
+        tileDataArray = new IPTileData[widthInTiles, heightInTiles];
+
+        for (int i = 0; i < widthInTiles; i++)
+        {
+            for (int j = 0; j < heightInTiles; j++)
+            {
+                tilesLoaded[i, j] = false;
+            }
+        }
 
     }
 
@@ -32,11 +43,11 @@ public class IPTileLayer : IPMapLayer
     public bool IsTileLoaded(int tileX, int tileY)
     {
         bool tileLoaded = false;
-        try
-        {
+        //try
+        //{
             tileLoaded = tilesLoaded[tileX, tileY];
-        }
-        catch { }
+        //}
+        //catch { }
         
         return tileLoaded;
     }
@@ -45,7 +56,7 @@ public class IPTileLayer : IPMapLayer
 
     public void AddTile(IPTile tile)
     {
-        tiles.Add(tile);
+        //tiles.Add(tile);
         int tileX = tile.TileData.TileX;
         int tileY = tile.TileData.TileY;
 
@@ -58,7 +69,7 @@ public class IPTileLayer : IPMapLayer
 
     public void RemoveTile(IPTile tile)
     {
-        tiles.Remove(tile);
+        //tiles.Remove(tile);
         int tileX = tile.TileData.TileX;
         int tileY = tile.TileData.TileY;
 
@@ -96,11 +107,6 @@ public class IPTileLayer : IPMapLayer
     public IPTile LoadTile(int tileX, int tileY)
     {
 
-        if (IsTileLoaded(tileX, tileY))
-        {
-            return tileArray[tileX, tileY];
-        }
-
         int tileGID = gids[tileX, tileY];
 
         if (tileGID == 0)
@@ -109,29 +115,120 @@ public class IPTileLayer : IPMapLayer
             return null;
         }
 
+        //if (IsTileLoaded(tileX, tileY))
+        //{
+
+        IPTile tile = tileArray[tileX, tileY];
+
+        if (tile != null)
+        {
+            return tile;
+        }
+        //}
+
+        IPDebug.ForceLog("Tile not loaded, have to load it: " + tileX + "," + tileY);
+        ////IPDebug.ForceAllowed = true;
+
+        //float startTime = Time.realtimeSinceStartup * 1000;        
+
         //Load the tile
-        IPTileData tileData = new IPTileData();
+        IPTileData tileData = LoadTileData(tileX, tileY, tileGID, false);
 
-        tileData.Layer = this;
-        tileData.GID = tileGID;
-        tileData.TileSet = tileMapParent.FindTileSetContainingGID(tileData.GID);
+        //endTime = Time.realtimeSinceStartup * 1000;
+        //timeDiff = endTime - startTime;
 
-        tileData.TileX = tileX;
-        //tileData.TileY = this.HeightInTiles - tileY - 1; //TileY should count up from the bottom
-        tileData.TileY = tileY;
+        ////IPDebug.ForceLog("2:" + timeDiff);
 
-        IPTile tile = new IPTile(tileData);
+        //startTime = Time.realtimeSinceStartup * 1000;
 
-        tile.x = tileData.TileX * tileData.TileSet.TileWidth;
-        tile.y = tileData.TileY * tileData.TileSet.TileHeight;
+        tile = new IPTile(tileData);
+
+        // endTime = Time.realtimeSinceStartup * 1000;
+        // timeDiff = endTime - startTime;
+
+        //// IPDebug.ForceLog("3:" + timeDiff);
+        // startTime = Time.realtimeSinceStartup * 1000;
+
+        tile.x = tileX * tileData.TileSet.TileWidth;
+        tile.y = tileY * tileData.TileSet.TileHeight;
+
 
         //the tile physically resides in the TileLayer container
         //when the tile layer is added to the container, the tile will be as well
         this.AddTile(tile);
 
+        //endTime = Time.realtimeSinceStartup * 1000;
+        //timeDiff = endTime - startTime;
+
+        //IPDebug.ForceLog("4:" + timeDiff);        
+
+
+
+        //IPDebug.ForceLog("Loading tile[x,y] : " + tileX + "," + tileY);
+
+        //IPDebug.ForceAllowed = false;
+
         return tile;
     }
 
+    public IPTileData LoadTileData(int tileX, int tileY, bool updateOnly)
+    {
+        int tileGID = gids[tileX, tileY];
+
+        if (tileGID == 0)
+        {
+            //tilesLoaded[tileX, tileY] = true;
+            return null;
+        }
+
+        return LoadTileData(tileX, tileY, tileGID, updateOnly);
+    }
+
+    //setting update only won't attempt to load existing data, it will only generate and store a new tile based on the data provided
+    public IPTileData LoadTileData(int tileX, int tileY, int tileGID, bool updateOnly)
+    {
+        //gid is being provided, so we assume it is valid/not 0
+
+        IPTileData tileData;
+
+        if (!updateOnly)
+        {
+
+            tileData = tileDataArray[tileX, tileY];
+
+            if (tileData != null)
+            {
+                return tileData;
+            }
+        }
+
+        IPDebug.ForceLog("Loading tile data for tile [x,y]: " + tileX + "," + tileY);
+
+        tileData = new IPTileData();
+
+        //float endTime = Time.realtimeSinceStartup * 1000;
+        //float timeDiff = endTime - startTime;
+
+        ////IPDebug.ForceLog("1:" + timeDiff);
+
+        //startTime = Time.realtimeSinceStartup * 1000;
+
+        tileData.Layer = this;
+        tileData.GID = tileGID;
+        tileData.TileSet = tileMapParent.FindTileSetContainingGID(tileData.GID);
+
+
+        tileData.TileX = tileX;
+        //tileData.TileY = this.HeightInTiles - tileY - 1; //TileY should count up from the bottom
+        tileData.TileY = tileY;
+
+        //puts the asset name together
+        tileData.GenerateAssetName();
+
+        tileDataArray[tileX, tileY] = tileData;
+
+        return tileData;
+    }
 
     public void ShowLoadedTile(IPTile tile)
     {

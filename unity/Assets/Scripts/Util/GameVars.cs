@@ -48,7 +48,7 @@ public sealed class GameVars
 
     #region GameVariables
 
-    public int PLAYER_FULL_ENERGY = 100;
+    public int PLAYER_FULL_ENERGY = 10;
     public int PLAYER_FULL_WATER = 10;
 
     public int RANDOM_ENCOUNTER_INTERVAL = 6;
@@ -112,4 +112,6 @@ public sealed class GameVars
         }
     }
     #endregion
+
+
 }

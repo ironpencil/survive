@@ -16,20 +16,25 @@ public class IPTileData
 
     public int TileY { get; set; }
 
-    private string assetName = "";
+    private string assetName = null;
 
     public string GetAssetName()
     {
-        if (assetName.Length > 0)
+        if (assetName != null)
         {
             return assetName;
         }
 
+        GenerateAssetName();
+
+        return assetName;
+    }
+
+    public void GenerateAssetName()
+    {
         int assetID = GID - TileSet.FirstGID;
 
         assetName = TileSet.GetAssetBase() + "_" + assetID; // + ".png";
-
-        return assetName;
     }
 
     public string GetPropertyValue(string propertyName)

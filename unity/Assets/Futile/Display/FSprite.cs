@@ -27,14 +27,15 @@ public class FSprite : FFacetElementNode
 	
 	public FSprite (string elementName) : this(Futile.atlasManager.GetElementWithName(elementName))
 	{
+
 	}
 	
 	public FSprite (FAtlasElement element) : base()
 	{
 		_localVertices = new Vector2[4];
-		
+       
 		Init(FFacetType.Quad, element,1);
-		
+
 		_isAlphaDirty = true;
 		
 		UpdateLocalVertices();
@@ -82,6 +83,8 @@ public class FSprite : FFacetElementNode
 	
 	virtual public void UpdateLocalVertices()
 	{
+        //float startTime = Time.realtimeSinceStartup * 1000;
+       
 		_areLocalVerticesDirty = false;
 		
 		_textureRect.width = _element.sourceSize.x;
@@ -105,6 +108,11 @@ public class FSprite : FFacetElementNode
 		_localVertices[3].Set(left,bottom);
 		
 		_isMeshDirty = true;
+
+        //float endTime = Time.realtimeSinceStartup * 1000;
+        //float timeDiff = endTime - startTime;
+
+        //IPDebug.ForceLog("UpdateLocalVertices:" + timeDiff);
 	} 
 	
 	override public void PopulateRenderLayer()

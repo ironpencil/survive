@@ -9,6 +9,10 @@ public class IPTileMap : FContainer
 
     //private MapTile[,] tiles;
 
+    private int tileLoaderXIndex = 0;
+    private int tileLoaderYIndex = 0;
+    private bool allTilesLoaded = false;
+
     private List<IPTileLayer> tileLayers;
     public List<IPTileLayer> TileLayers { get { return tileLayers; } set { tileLayers = value; } }
 
@@ -42,6 +46,7 @@ public class IPTileMap : FContainer
         Name = name;
         this.mapFile = mapFile;
         this.LoadAllTilesAtInitialization = loadAllTilesAtInitialization;
+        allTilesLoaded = loadAllTilesAtInitialization;
     }
 
     public void SetAllVisible()
@@ -59,21 +64,116 @@ public class IPTileMap : FContainer
     }
 
 
-    public void SetVisibleRange(Vector2 centerTile, Vector2 tileRange)
+    public void LoadMoreTiles(int tilesToLoad)
     {
 
-        int minX = (int) (centerTile.x - tileRange.x);
-        int maxX = (int) (centerTile.x + tileRange.x);
+        if (allTilesLoaded) { return; }
 
-        int minY = (int) (centerTile.y - tileRange.y);
-        int maxY = (int) (centerTile.y + tileRange.y);
+        int newLoadingRow = 0;
+        int newLoadingCol = 0;
+
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+            newLoadingRow = tileLoaderYIndex;
+            newLoadingCol = tileLoaderXIndex;
+            int tilesLoaded = 0;
+
+            for (int col = newLoadingCol; col < WidthInTiles; col++)            
+            {
+                for (int row = newLoadingRow; row < HeightInTiles; row++)
+                {
+                    tileLayer.LoadTile(col, row);
+                    IPDebug.ForceLog("Loading more tiles[x,y] : " + col + "," + row);
+                    tilesLoaded++;
+
+                    newLoadingRow = row;
+                    if (tilesLoaded > tilesToLoad) { break; }
+                }
+
+                if (newLoadingRow == (HeightInTiles - 1))
+                {
+                    //end of column, reset row index back to 0
+                    newLoadingRow = 0;
+                }
+
+                newLoadingCol = col;
+                if (tilesLoaded > tilesToLoad) { break; }
+            }
+        }
+
+        tileLoaderYIndex = newLoadingRow;
+        tileLoaderXIndex = newLoadingCol;
+
+        if (tileLoaderXIndex == (WidthInTiles - 1) && tileLoaderYIndex == (HeightInTiles - 1))
+        {
+            allTilesLoaded = true;
+            bool forceAllowed = IPDebug.ForceAllowed;
+            IPDebug.ForceAllowed = true;
+            IPDebug.ForceLog("All tiles loaded. Took " + Time.time);
+            IPDebug.ForceAllowed = forceAllowed;
+        }
+    }
+
+    public void LoadTilesInRange(Vector2 centerTile, Vector2 tileRange)
+    {
+
+        int minX = (int)(centerTile.x - tileRange.x);
+        int maxX = (int)(centerTile.x + tileRange.x);
+
+        int minY = (int)(centerTile.y - tileRange.y);
+        int maxY = (int)(centerTile.y + tileRange.y);
+
+        if (minX < 0) { minX = 0; }
+        if (maxX > WidthInTiles) { maxX = WidthInTiles; }
+
+        if (minY < 0) { minY = 0; }
+        if (maxY > HeightInTiles) { maxY = HeightInTiles; }
 
         //if (minX < 0) { minX = 0; }
         //if (maxX >= WidthInTiles) { maxX = WidthInTiles - 1; }
 
         //if (minY < 0) { minY = 0; }
-        //if (maxY >= HeightInTiles) { maxY = HeightInTiles - 1; }
+        //if (maxY >= HeightInTiles) { maxY = HeightInTiles - 1; }        
 
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+
+            //don't have to iterate through all rows because we're just loading nearby tiles
+            for (int row = minY; row < maxY; row++)
+            {
+                for (int col = minX; col < maxX; col++)
+                {
+                    tileLayer.LoadTile(col, row);
+                    IPDebug.ForceLog("Loading Tile (Range) : " + col + "," + row);
+                }
+            }
+
+
+            //foreach (IPTile tile in tileLayer.Tiles)
+            //{
+            //    int xDistance = 0;
+            //    int yDistance = 0;
+
+            //    xDistance = Math.Abs(tile.TileData.TileX - (int) centerTile.x);
+            //    yDistance = Math.Abs(tile.TileData.TileY - (int) centerTile.y);
+
+            //    if (xDistance < tileRange.x && yDistance < tileRange.y)
+            //    {
+            //        tileLayer.ShowLoadedTile(tile);
+            //    }
+            //    else
+            //    {
+            //        tileLayer.HideLoadedTile(tile);
+            //    }
+            //}
+
+        }
+
+    }
+
+    public void LoadAllTiles()
+    {
+        float startTime = Time.realtimeSinceStartup;
         foreach (IPTileLayer tileLayer in tileLayers)
         {
 
@@ -81,9 +181,68 @@ public class IPTileMap : FContainer
             {
                 for (int col = 0; col < WidthInTiles; col++)
                 {
+                        tileLayer.LoadTile(col, row);
+                }
+            }
+        }
+        float endTime = Time.realtimeSinceStartup;
 
-                    if (col < maxX && col > minX &&
-                        row < maxY && row > minY)
+        Debug.Log("All tile sprites loaded, took " + (endTime - startTime) + " seconds.");
+    }
+
+    public void LoadAllTileData()
+    {
+        float startTime = Time.realtimeSinceStartup;
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+
+            for (int row = 0; row < HeightInTiles; row++)
+            {
+                for (int col = 0; col < WidthInTiles; col++)
+                {
+                    tileLayer.LoadTileData(col, row, true);
+                }
+            }
+        }
+        float endTime = Time.realtimeSinceStartup;
+
+        Debug.Log("All tile data loaded, took " + (endTime - startTime) + " seconds.");
+    }
+
+
+    public void SetVisibleRange(Vector2 centerTile, Vector2 tileRange)
+    {
+
+        int minVisX = (int) (centerTile.x - tileRange.x);
+        int maxVisX = (int) (centerTile.x + tileRange.x);
+
+        int minVisY = (int) (centerTile.y - tileRange.y);
+        int maxVisY = (int) (centerTile.y + tileRange.y);
+
+        int minSearchX = minVisX - 2;
+        int maxSearchX = maxVisX + 2;
+
+        int minSearchY = minVisY - 2;
+        int maxSearchY = maxVisY + 2;
+
+        //update the minimum/maximum range based on map indexes
+        if (minSearchX < 0) { minSearchX = 0; }
+        if (maxSearchX > WidthInTiles) { maxSearchX = WidthInTiles; }
+
+        if (minSearchY < 0) { minSearchY = 0; }
+        if (maxSearchY > HeightInTiles) { maxSearchY = HeightInTiles; }
+        
+        foreach (IPTileLayer tileLayer in tileLayers)
+        {
+
+            //have to iterate through ALL tiles because we may have to hide some out-of-range tiles
+            for (int row = minSearchY; row < maxSearchY; row++)
+            {
+                for (int col = minSearchX; col < maxSearchX; col++)
+                {
+
+                    if (col < maxVisX && col > minVisX &&
+                        row < maxVisY && row > minVisY)
                     {
 
                         tileLayer.ShowTile(col, row);
@@ -219,7 +378,8 @@ public class IPTileMap : FContainer
                         int tileX = x;
                         int tileY = tileLayer.HeightInTiles - y - 1;
 
-                        tileLayer.SetGID(tileX, tileY, int.Parse(tileGIDs[i].ToString()));
+                        tileLayer.SetGID(tileX, tileY, tileGID);
+                        //tileLayer.LoadTileData(tileX, tileY, tileGID, true);
 
                         if (LoadAllTilesAtInitialization)
                         {
@@ -338,6 +498,7 @@ public class IPTileMap : FContainer
             return tileSetFoundGIDs[gid];
         }
 
+        IPDebug.Log("Searching for gid: " + gid);
         //do not know what tileset contains this gid, so figure it out
         //add our gid to the list of firstGIDs, sort it, then take the previous value
 

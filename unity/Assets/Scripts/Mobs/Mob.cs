@@ -17,7 +17,7 @@ public class Mob : FSprite
 
     public int TileY { get { return (int) tileCoordinates.y; } set { tileCoordinates.y = value; } }
 
-    public float MoveDelayTime = 0.2f;
+    public float MoveDelayTime = 0.125f;
     public float NextMoveTime = 0.0f;
 
     public bool IsMovingToPosition = false;

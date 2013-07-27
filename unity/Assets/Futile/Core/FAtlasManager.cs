@@ -192,6 +192,7 @@ public class FAtlasManager
         } 
         else
         {
+            
             //Try to make an educated guess about what they were trying to load
             //First we get the last part of the path (the file name) and then we remove the extension
             //Then we check to see if that string is in any of our element names 

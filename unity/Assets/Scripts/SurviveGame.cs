@@ -26,6 +26,7 @@ public class SurviveGame : MonoBehaviour {
         fparams.origin = new Vector2(0.5f, 0.5f);
         fparams.backgroundColor = Color.black;
         Futile.instance.Init(fparams);
+        Futile.instance.shouldTrackNodesInRXProfiler = false;
 
         // load image atlas (within Resources/Atlases folder)
         Futile.atlasManager.LoadAtlas("Atlases/survive");
@@ -48,21 +49,24 @@ public class SurviveGame : MonoBehaviour {
         //guiStage = new FStage("GUI");
 
 
-        //fpsStage = new FStage("FPSHud");
-        //fps = new HUDFPS(GameVars.Instance.FONT_NAME);
-        //fps.scale = 0.5f;
-        //fps.anchorX = 0;
-        //fps.anchorY = 1;
-        //fps.x = -Futile.screen.halfWidth;
-        //fps.y = Futile.screen.halfHeight;
-        //fpsStage.AddChild(fps);
-        //showFPS = true;
+        fpsStage = new FStage("FPSHud");
+        fps = new HUDFPS(GameVars.Instance.FONT_NAME);
+        fps.scale = 0.5f;
+        fps.anchorX = 0;
+        fps.anchorY = 1;
+        fps.x = -Futile.screen.halfWidth;
+        fps.y = Futile.screen.halfHeight;
+        fpsStage.AddChild(fps);
+        showFPS = false;
 
         IPDebug.DoLog = true;
         IPDebug.DoLog = false;
         IPDebug.ForceAllowed = true;
 
-        //Futile.AddStage(fpsStage);
+        if (showFPS)
+        {
+            Futile.AddStage(fpsStage);
+        }
 	}
 	
 	// Update is called once per frame
@@ -70,10 +74,10 @@ public class SurviveGame : MonoBehaviour {
     {        
         Futile.AddStage(GameVars.Instance.GUIStage);
 
-        //if (showFPS)
-        //{
-        //    Futile.AddStage(fpsStage);
-        //}
+        if (showFPS)
+        {
+            Futile.AddStage(fpsStage);
+        }
     }   
 
 }
