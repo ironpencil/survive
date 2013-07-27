@@ -48,10 +48,26 @@ public sealed class GameVars
 
     #region GameVariables
 
-    public int PLAYER_FULL_ENERGY = 10;
+    public int PLAYER_FULL_ENERGY = 100;
     public int PLAYER_FULL_WATER = 10;
 
     public int RANDOM_ENCOUNTER_INTERVAL = 6;
+
+    public float MUSIC_VOLUME_CHANGE_INTERVAL = 0.1f;
+
+    private float musicVolume = 0.5f;
+    public float MUSIC_VOLUME
+    {
+        get { return musicVolume; }
+        set
+        {
+            if (value < 0) { value = 0; }
+            if (value > 1.0f) { value = 1.0f; }
+
+            musicVolume = value;
+            FSoundManager.volume = value;
+        }
+    }
 
     #endregion
 
@@ -112,6 +128,5 @@ public sealed class GameVars
         }
     }
     #endregion
-
 
 }

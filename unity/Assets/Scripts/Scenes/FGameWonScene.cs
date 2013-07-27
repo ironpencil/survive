@@ -49,7 +49,7 @@ public class FGameWonScene : FScene
 
     public override void OnExit()
 	{
-        
+        FSoundManager.StopMusic();
 	}
 
     

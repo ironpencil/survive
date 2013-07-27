@@ -70,7 +70,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>../unity/Assets/Resources/Atlases/survive.txt</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -136,7 +138,7 @@
             <key>innerPadding</key>
             <uint>0</uint>
             <key>extrude</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
@@ -270,6 +272,8 @@
             <filename>tiles/game_tiles_25.png</filename>
             <filename>tiles/game_tiles_26.png</filename>
             <filename>tiles/game_tiles_27.png</filename>
+            <filename>titleScreen.png</filename>
+            <filename>howToPlayScreen.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

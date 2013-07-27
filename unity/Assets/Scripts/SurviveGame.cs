@@ -11,7 +11,7 @@ public class SurviveGame : MonoBehaviour {
     bool showFPS = false;
     //FStage guiStage;
 
-
+    public static bool ALLOW_DEBUG = true;
     
 
 
@@ -77,6 +77,20 @@ public class SurviveGame : MonoBehaviour {
         if (showFPS)
         {
             Futile.AddStage(fpsStage);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            GameVars.Instance.MUSIC_VOLUME = GameVars.Instance.MUSIC_VOLUME - GameVars.Instance.MUSIC_VOLUME_CHANGE_INTERVAL;
+            Debug.Log("Lowering volume to : " + GameVars.Instance.MUSIC_VOLUME);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus) ||
+            (Input.GetKeyDown(KeyCode.Equals) && 
+            (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))))
+        {
+            GameVars.Instance.MUSIC_VOLUME = GameVars.Instance.MUSIC_VOLUME + GameVars.Instance.MUSIC_VOLUME_CHANGE_INTERVAL;
+            Debug.Log("Raising volume to : " + GameVars.Instance.MUSIC_VOLUME);
         }
     }   
 

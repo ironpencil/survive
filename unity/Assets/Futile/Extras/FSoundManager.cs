@@ -141,6 +141,14 @@ public class FSoundManager
 		}
 	}
 
+    static public void CurrentMusicShouldLoop(bool shouldLoop)
+    {
+        if (_musicSource != null)
+        {
+            _musicSource.loop = shouldLoop;
+        }
+    }
+
 	static public void PlayMusic (string resourceName)
 	{
 		PlayMusic(resourceName,1.0f);
@@ -210,6 +218,26 @@ public class FSoundManager
 		}
 		get { return AudioListener.volume; }
 	}
+
+    static public float musicVolume
+    {
+        set
+        {
+            if (_musicSource != null)
+            {
+                _musicSource.volume = value;
+            }
+
+        }
+        get
+        {
+            if (_musicSource != null)
+            {
+                return _musicSource.volume;
+            }
+            return 0.0f;
+        }
+    }
 	
 	static public bool isMuted
 	{

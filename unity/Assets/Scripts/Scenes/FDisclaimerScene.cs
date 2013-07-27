@@ -43,8 +43,11 @@ public class FDisclaimerScene : FScene
         {
             if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
-                //immediately skip to next scene
-                FSceneManager.Instance.SetScene(nextScene);
+                if (SurviveGame.ALLOW_DEBUG)
+                {
+                    //immediately skip to next scene
+                    FSceneManager.Instance.SetScene(new FTitleScene("NewGame"));
+                }
             }
 
         }
@@ -131,7 +134,7 @@ public class FDisclaimerScene : FScene
         disclaimerLabel.alpha = 0.0f;
         this.AddChild(disclaimerLabel);
 
-        continueText = new FLabel(GameVars.Instance.FONT_NAME, "Press [Space] to Continue");
+        continueText = new FLabel(GameVars.Instance.FONT_NAME, "Press Space to Continue");
         continueText.y = (-Futile.screen.halfHeight) * 0.8f;
         continueText.alpha = 0.0f;
 

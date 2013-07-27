@@ -68,27 +68,64 @@ public class FWorldLayer : FLayer
 
         if (elevatedLayer != null) { elevatedLayer.MoveToFront(); }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (SurviveGame.ALLOW_DEBUG)
         {
-            GameVars.Instance.PLAYER_FULL_ENERGY = 10000;
-            GameVars.Instance.PLAYER_FULL_WATER = 1000;
-            player.Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
-            player.Water = GameVars.Instance.PLAYER_FULL_WATER;
-        }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                GameVars.Instance.PLAYER_FULL_ENERGY = 10000;
+                GameVars.Instance.PLAYER_FULL_WATER = 1000;
+                player.Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
+                player.Water = GameVars.Instance.PLAYER_FULL_WATER;
+            }
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            IPDebug.ForceAllowed = !IPDebug.ForceAllowed;
-        }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                IPDebug.ForceAllowed = !IPDebug.ForceAllowed;
+            }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            this.gameOver = true;
-        }
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                DoGameWon();
+            }
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            this.gameWon = true;
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                DoGameOver();
+            }
+
+            if (Input.GetKeyDown(KeyCode.PageUp))
+            {
+                player.speed = new Vector2(1600, 1600);
+            }
+
+            if (Input.GetKeyDown(KeyCode.PageDown))
+            {
+                player.speed = new Vector2(256, 256);
+            }
+
+            if (Input.GetKeyDown("0"))
+            {
+                fireRandomEncounters = false;
+                canGameOver = false;
+            }
+            else if (Input.GetKeyDown("1"))
+            {
+                fireRandomEncounters = true;
+                canGameOver = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+
+                string eventName = "WILD_PLANT"; //generate random event from available events and tile type
+                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
+                eventQueue.Enqueue(randomEvent);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                eventQueue.Enqueue(PullRandomEncounter());
+            }
         }
 
         CheckGameOver();
@@ -141,39 +178,12 @@ public class FWorldLayer : FLayer
             //if there are any events queued, keep running them until they are gone
             return;
         }
-
-        //check to see if we just came out of our inventory
-        if (inSelectionDialog)
-        {
-            if (selectionScene != null && selectionScene.ItemWasSelected)
-            {
-                TreeNode<MenuNode> selectedNode = selectionScene.ResultPath;
-                List<MenuNode> selectedItems = selectionScene.ResultPath.Flatten().ToList();
-
-                //List<MenuNode> selectedItems = new List<MenuNode>();
-                //selectedItems.Add(selectedNode.Value);
-                //while (selectedNode.Children.Count > 0)
-                //{
-                //    selectedNode = selectedNode.Children[0];
-                //    selectedItems.Add(selectedNode.Value);
-                //}
-                
-                string msgText = "You selected \"" + string.Join(" -> ", selectedItems.Select(node => node.NodeText).ToArray()) + "\"!";
-                //MenuNode itemSelected = selectionScene.SelectedItem.Value;
-                //string msgText = "You selected '" + itemSelected.NodeText + "'!";
-                FTextDisplayScene message = new FTextDisplayScene("menu", msgText);
-                FSceneManager.Instance.PushScene(message);
-            }
-
-            inSelectionDialog = false;
-        }
-        //Futile.stage.Follow(player, false, false);
                
         //only handle input if player is standing still
         if (player.IsMovingToPosition)
         {
-            
-            
+
+
             if (player.ApproachTarget())
             {
                 player.IsMovingToPosition = false;
@@ -193,203 +203,65 @@ public class FWorldLayer : FLayer
         }
         else
         {
-            //if (Input.GetKey("left"))
-            //{
-            //    player.x -= (player.speed.x * Time.deltaTime);
-            //    return;
-            //}
+            bool playerMoved = false;
 
-            if (Input.GetKeyDown(KeyCode.PageUp))
+            int tileYDelta = 0;
+            int tileXDelta = 0;
+
+            if (Input.GetKey("up"))
             {
-                player.speed = new Vector2(1600, 1600);
-            }
-
-            if (Input.GetKeyDown(KeyCode.PageDown))
-            {
-                player.speed = new Vector2(256, 256);
-            }
-
-            if (Input.GetKeyDown("0"))
-            {
-                fireRandomEncounters = false;
-                canGameOver = false;
-            }
-            else if (Input.GetKeyDown("1"))
-            {
-                fireRandomEncounters = true;
-                canGameOver = true;
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-
-                string eventName = "WILD_PLANT"; //generate random event from available events and tile type
-                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
-                eventQueue.Enqueue(randomEvent);
-            }
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                eventQueue.Enqueue(PullRandomEncounter());
-            }
-            //if (Input.GetKeyDown("m"))
-            //{
-            //    MushroomsEncounter encounter = new MushroomsEncounter("Mushrooms");
-
-            //    FSceneManager.Instance.PushScene(encounter);
-            //    return;
-
-            //}
-            //if (Input.GetKeyDown("h"))
-            //{
-            //    //ModifyMobEvent modifyMob = new ModifyMobEvent(player, MobStats.ENERGY, -5);
-            //    //modifyMob.Execute();
-            //    string msgText = "Player Energy = " + player.GetStat(MobStats.ENERGY);
-            //    FTextDisplayScene menu = new FTextDisplayScene("energy", msgText);
-            //    FSceneManager.Instance.PushScene(menu);
-            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
-            //}
-            ////if (Input.GetKey("r"))
-            ////{                       
-            ////    tileMap.rotation += 5 * Time.deltaTime;
-            ////}
-
-            //if (Input.GetKeyDown("space"))
-            //{
-            //    string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. " +
-            //                     "Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? " +
-            //                     "I sure can't. But maybe you can. Can you think of anything? I'm sorry, I should have let you finish your thought." + 
-            //                     "\n\nThat was very rude of me to interrupt.\n\nSorry.\n\n.....\n\n\n\n\n\n\n\nTruly sorry.";
-            //    FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
-            //    FSceneManager.Instance.PushScene(menu);
-            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
-            //}
-
-            //if (Input.GetKeyDown("i"))
-            //{
-
-
-
-            //    //ModifyMobEvent reduceEnergy = new ModifyMobEvent(player, MobStats.ENERGY, -5);
-            //    //ModifyMobEvent increaseEnergy = new ModifyMobEvent(player, MobStats.ENERGY, 5);
-
-            //    //TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, "Menu", "Menu"));
-
-            //    //MenuNode[] menuSubNodes = new MenuNode[] {
-            //    //    MenuNode.CreateChoiceNode("Status", "Status", "View character status.", ""),
-            //    //    MenuNode.CreateChoiceNode("Skills", "Skills", "View character skills.", "")
-            //    //};
-
-            //    //TreeNode<MenuNode> inventoryNode = new TreeNode<MenuNode>(new MenuNode(MenuNodeType.INVENTORY, "Inventory", "Inventory", "Opening Inventory... "));                
-
-            //    //MenuNode[] invItems = new MenuNode[] {
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "ATM Card", "", "This is an ATM Card. Your dad gave it to you."),
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "First Aid Kit", "", "Some leaves, a needle, and a dirty Band-Aid."),
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "Honey", "", "I hope it was worth it."),
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "Compass", "", "It's pointing that way."),
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "Hearteater", "", "Kiss it."),
-            //    //    MenuNode.CreateConfirmationNode("Use Item", "Brad Pitt's Wife's Head in a Box", "", "What's in the box?\n\n\nOh.")};
-                
-
-            //    //TreeNode<MenuNode>[] invItemNodes = inventoryNode.AddChildren(invItems);
-
-            //    //foreach (TreeNode<MenuNode> invItemNode in invItemNodes)
-            //    //{
-            //    //    TreeNode<MenuNode> useNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Use Item", "Use", "Use item?", ""));
-            //    //    TreeNode<MenuNode> infoNode = invItemNode.AddChild(MenuNode.CreateChoiceNode("Item Info", "Info", invItemNode.Value.NodeDescription, ""));
-
-            //    //    MenuNode okNode = MenuNode.CreateOKNode("Confirm Use", "Yes", "You used the " + invItemNode.Value.NodeText, "");
-            //    //    if (invItemNode.Value.NodeText.Equals("Hearteater"))
-            //    //    {
-            //    //        okNode.OnSelectionEvents.Add(reduceEnergy);
-            //    //    }
-            //    //    else if (invItemNode.Value.NodeText.Equals("First Aid Kit"))
-            //    //    {
-            //    //        okNode.OnSelectionEvents.Add(increaseEnergy);
-            //    //    }
-
-            //    //    useNode.AddChild(okNode);
-            //    //    useNode.AddChild(MenuNode.CreateChoiceNode("Cancel Use", "No", "", ""));
-            //    //}
-
-            //    //rootNode.AddChildren(menuSubNodes);
-            //    //rootNode.AddChild(inventoryNode);
-
-            //    TreeNode<MenuNode> rootNode = GameData.Instance.MainMenu;
-
-
-                        
-            //    //List<string> invItems = new List<string>(){"ATM Card", "First Aid Kit", "Honey", "Compass", "Hearteater", "Brad Pitt's Wife's Head in a Box"};
-            //    //string msgText = "ATM Card\nFirst Aid Kit\nHoney\nCompass\nHearteater";
-            //    selectionScene = new FSelectionDisplayScene("Menu", rootNode);
-            //    FSceneManager.Instance.PushScene(selectionScene);
-            //    inSelectionDialog = true;
-            //    return; // don't run any other update code if they are opening the menu because this scene will be paused
-            //}
-
-            //handle player movement input
-            //if (Time.time > player.NextMoveTime)
-            {
-                bool playerMoved = false;
-
-                int tileYDelta = 0;
-                int tileXDelta = 0;
-
-                if (Input.GetKey("up"))
+                if (player.TileY < tileMap.HeightInTiles - 1)
                 {
-                    if (player.TileY < tileMap.HeightInTiles - 1)
-                    {
-                        tileYDelta += 1;
-                        playerMoved = true;
-                    }
+                    tileYDelta += 1;
+                    playerMoved = true;
                 }
-                else if (Input.GetKey("down"))
+            }
+            else if (Input.GetKey("down"))
+            {
+                if (player.TileY > 0)
                 {
-                    if (player.TileY > 0)
-                    {
-                        tileYDelta -= 1;
-                        playerMoved = true;
-                    }
+                    tileYDelta -= 1;
+                    playerMoved = true;
                 }
-                else if (Input.GetKey("left"))
+            }
+            else if (Input.GetKey("left"))
+            {
+                if (player.TileX > 0)
                 {
-                    if (player.TileX > 0)
-                    {
-                        tileXDelta -= 1;
-                        playerMoved = true;
-                    }
+                    tileXDelta -= 1;
+                    playerMoved = true;
                 }
-                else if (Input.GetKey("right"))
+            }
+            else if (Input.GetKey("right"))
+            {
+                if (player.TileX < tileMap.WidthInTiles - 1)
                 {
-                    if (player.TileX < tileMap.WidthInTiles - 1)
-                    {
-                        tileXDelta += 1;
-                        playerMoved = true;
-                    }
+                    tileXDelta += 1;
+                    playerMoved = true;
                 }
+            }
 
-                if (playerMoved)
+            if (playerMoved)
+            {
+
+                int targetTileX = player.TileX + tileXDelta;
+                int targetTileY = player.TileY + tileYDelta;
+
+                //bool canMoveToTile = 
+
+                bool canWalk = CanMoveToTile(targetTileX, targetTileY);
+
+                if (canWalk)
                 {
-
-                    int targetTileX = player.TileX + tileXDelta;
-                    int targetTileY = player.TileY + tileYDelta;
-
-                    //bool canMoveToTile = 
-
-                    bool canWalk = CanMoveToTile(targetTileX, targetTileY);
-
-                    if (canWalk)
-                    {
-                        player.NextMoveTime = Time.time + player.MoveDelayTime;
-                        //player.MoveToFront();
-                        //player.SetPosition(GetTilePosition(playerTile));
-                        MovePlayerToTile(targetTileX, targetTileY, true);
-                        //ChangePlayerTile(tileXDelta, tileYDelta);
-                        //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
-                        IPDebug.Log("Player position = " + player.GetPosition());
-                        IPDebug.Log("Player tile = " + player.TileCoordinates);
-                        //IPDebug.Log("Background position = " + background.GetPosition());
-                    }
+                    player.NextMoveTime = Time.time + player.MoveDelayTime;
+                    //player.MoveToFront();
+                    //player.SetPosition(GetTilePosition(playerTile));
+                    MovePlayerToTile(targetTileX, targetTileY, true);
+                    //ChangePlayerTile(tileXDelta, tileYDelta);
+                    //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
+                    IPDebug.Log("Player position = " + player.GetPosition());
+                    IPDebug.Log("Player tile = " + player.TileCoordinates);
+                    //IPDebug.Log("Background position = " + background.GetPosition());
                 }
             }
         }
@@ -668,18 +540,34 @@ public class FWorldLayer : FLayer
         if (!this.gameOver && canGameOver && player.Energy <= 0)
         {
             player.Energy = 0;
-            FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
-            FSceneManager.Instance.PushScene(gameOverMessage);
-            this.gameOver = true;
+            DoGameOver();
         }
+    }
+
+    private void DoGameOver()
+    {
+        FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
+        FSceneManager.Instance.PushScene(gameOverMessage);
+        this.gameOver = true;
+        FSoundManager.PlayMusic("game_over1", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.CurrentMusicShouldLoop(false);
     }
 
     private void WonGameEvent(IPTiledObject tileObject)
     {
+        DoGameWon();
+    }
+
+    private void DoGameWon()
+    {
         FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", "You made it back to the Ranger's Office safely!");
         FSceneManager.Instance.PushScene(wonGameMessage);
         this.gameWon = true;
+        FSoundManager.PlayMusic("game_won1", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.CurrentMusicShouldLoop(false);
     }
+
+
 
     private void ExecuteTileEvent(string eventName, IPTile eventTile)
     {
