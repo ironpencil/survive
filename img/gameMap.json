@@ -289,8 +289,8 @@
                  "name":"Mysterious Force",
                  "properties":
                     {
-                     "EVENT_TYPE":"MESSAGE",
-                     "TEXT":"Some kind of mysterious force is preventing you from moving farther into the grove."
+                     "EVENT_TYPE":"GROVE_ENTRANCE",
+                     "TEXT":"Some kind of mysterious force is preventing you from entering the grove."
                     },
                  "type":"EVENT",
                  "visible":true,
@@ -303,7 +303,8 @@
                  "name":"BlockingForce",
                  "properties":
                     {
-                     "CAN_WALK":"false"
+                     "CAN_WALK":"false",
+                     "CRYSTAL_BREAK":"true"
                     },
                  "type":"TILE",
                  "visible":true,
@@ -547,6 +548,10 @@
                  "CAN_WALK":"true"
                 },
              "7":
+                {
+                 "CAN_WALK":"false"
+                },
+             "8":
                 {
                  "CAN_WALK":"false"
                 },

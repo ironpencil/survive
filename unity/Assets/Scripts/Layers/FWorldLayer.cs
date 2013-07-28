@@ -47,12 +47,14 @@ public class FWorldLayer : FLayer
 
     private Queue eventQueue = new Queue();
 
-    private int nextRandomEncounterIndex = 0;
-    private int currentRandomEncounterInterval = 0;
+    private int randomEncounterSteps = 0;
+    private int baseRandomEncounterInterval = 14;
+    private int maxRandomEncounterVariance = 16;
+    private int nextRandomEncounter = 0;
+
     private int encounterBagFills = 0;
-    private int randomEncounterChance = 15;
     private List<EncounterEvent> randomEncounterBag = new List<EncounterEvent>();
-    bool fireRandomEncounters = true;
+    bool fireRandomEncounters = true;    
     
     public FWorldLayer(FScene parent) : base(parent) { }
 
@@ -132,6 +134,7 @@ public class FWorldLayer : FLayer
 
         if (this.Parent.Paused)
         {
+            player.pause(true);
             //tileMap.LoadMoreTiles(5);
             //tileMap.LoadMoreTiles(16);
             //if (addlTileLoadRange <= maxAddlTileLoadRange)
@@ -155,6 +158,8 @@ public class FWorldLayer : FLayer
             }
             return;
         }
+        //unpause player animation
+        if (player.isPaused) { player.pause(); }
 
         //when the scene is unpaused, loadAddlTiles is set to true so that we will load more tiles on the next "pause"
         loadAddlTiles = true;
@@ -163,13 +168,13 @@ public class FWorldLayer : FLayer
 
         if (this.gameWon)
         {
-            FSceneManager.Instance.SetScene(new FGameWonScene("GameWon"));
+            ((FWorldScene)this.Parent).DoGameWon();            
             return;
         }
 
         if (this.gameOver)
         {
-            FSceneManager.Instance.SetScene(new FGameOverScene("GameOver"));
+            ((FWorldScene)this.Parent).DoGameOver();
             return;
         }
 
@@ -208,7 +213,8 @@ public class FWorldLayer : FLayer
             int tileYDelta = 0;
             int tileXDelta = 0;
 
-            if (Input.GetKey("up"))
+            if (Input.GetKey(KeyCode.UpArrow) ||
+                Input.GetKey(KeyCode.W))
             {
                 if (player.TileY < tileMap.HeightInTiles - 1)
                 {
@@ -216,7 +222,8 @@ public class FWorldLayer : FLayer
                     playerMoved = true;
                 }
             }
-            else if (Input.GetKey("down"))
+            else if (Input.GetKey(KeyCode.DownArrow) ||
+                Input.GetKey(KeyCode.S))
             {
                 if (player.TileY > 0)
                 {
@@ -224,7 +231,8 @@ public class FWorldLayer : FLayer
                     playerMoved = true;
                 }
             }
-            else if (Input.GetKey("left"))
+            else if (Input.GetKey(KeyCode.LeftArrow) ||
+                Input.GetKey(KeyCode.A))
             {
                 if (player.TileX > 0)
                 {
@@ -232,7 +240,8 @@ public class FWorldLayer : FLayer
                     playerMoved = true;
                 }
             }
-            else if (Input.GetKey("right"))
+            else if (Input.GetKey(KeyCode.RightArrow) ||
+                Input.GetKey(KeyCode.D))
             {
                 if (player.TileX < tileMap.WidthInTiles - 1)
                 {
@@ -261,9 +270,13 @@ public class FWorldLayer : FLayer
                     //player.SetPosition(tileMap.GetTilePosition(player.TileX, player.TileY));
                     IPDebug.Log("Player position = " + player.GetPosition());
                     IPDebug.Log("Player tile = " + player.TileCoordinates);
+
+                    player.play("walking");
                     //IPDebug.Log("Background position = " + background.GetPosition());
                 }
+                else { player.play("standing"); }
             }
+            else { player.play("standing"); }
         }
 	}
 
@@ -271,11 +284,13 @@ public class FWorldLayer : FLayer
 	{
         IPDebug.ForceAllowed = false;
 
+        GameVars.Instance.ResetGame();
+
         IPDebug.Log("WorldScene OnEnter()");
         player = new Mob("player");
         GameVars.Instance.Player = player;
-        player.SetStat(MobStats.ENERGY, 100);
-        player.SetStat(MobStats.HP, 10);
+        //player.SetStat(MobStats.ENERGY, 100);
+        //player.SetStat(MobStats.HP, 10);
 
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.ATM_CARD));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.BUG_SPRAY));
@@ -287,16 +302,15 @@ public class FWorldLayer : FLayer
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.RAW_MEAT));
         player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.SALT));
 
-        currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL;
+        //currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL;
         FillEncounterBag();
 
-        nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
+        GenerateNextEncounterInterval();
 
         tileMap = new IPTileMap("Game", mapAsset, false);
         tileMap.LoadTileDataFile();
 
-        GameVars.Instance.TileHelper = new TileMapHelper(tileMap);
-        GameVars.Instance.ResetGame();
+        GameVars.Instance.TileHelper = new TileMapHelper(tileMap);        
 
         //this.AddChild(tileMap);
         //tileMap.AddChild(player);
@@ -345,7 +359,17 @@ public class FWorldLayer : FLayer
         
         this.AddChild(tileMap);
         tileMap.AddChild(player);
+
+        player.play("standing", true);
+
+        eventQueue.Enqueue(EncounterEvent.CreateTextEvent("Start", "You believe the Visitor Center should be somewhere to the northwest."));
 	}
+
+    private void GenerateNextEncounterInterval()
+    {
+        randomEncounterSteps = 0;
+        nextRandomEncounter = baseRandomEncounterInterval + UnityEngine.Random.Range(0, maxRandomEncounterVariance);
+    }
 
     private void MoveToStartPosition()
     {
@@ -386,6 +410,13 @@ public class FWorldLayer : FLayer
         IPDebug.Log("Message Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString()));
         string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
         FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
+        FSceneManager.Instance.PushScene(menu);
+    }
+
+
+    private void DisplayMessage(string messageText)
+    {
+        FTextDisplayScene menu = new FTextDisplayScene("Message", messageText);
         FSceneManager.Instance.PushScene(menu);
     }
 
@@ -456,20 +487,11 @@ public class FWorldLayer : FLayer
         //only do a random event if there's not already an event on this tile
         if (eventQueue.Count == 0)
         {
-            //check for random event
-            bool randomEventHappens = false;
-            if (turnNumber % currentRandomEncounterInterval == 0)
-            {
-                int randomRoll = UnityEngine.Random.Range(0, 100);
-                randomEventHappens = (randomRoll < randomEncounterChance);
+            randomEncounterSteps++;
+            if (randomEncounterSteps >= nextRandomEncounter) {
 
-                IPDebug.ForceLog("Turn: " + turnNumber + " | Encounter Roll: " + randomRoll + " | Encounter: " + randomEventHappens);
-
-            }
-
-            if (randomEventHappens)
-            {
                 eventQueue.Enqueue(PullRandomEncounter());
+                GenerateNextEncounterInterval();
             }
         }
     }    
@@ -493,6 +515,9 @@ public class FWorldLayer : FLayer
                     break;
                 case EncounterSource.RANDOM:
                     ExecuteRandomEvent(gameEvent.Name);
+                    break;
+                case EncounterSource.TEXT:
+                    DisplayMessage(gameEvent.Text);
                     break;
                 default:
                     break;
@@ -546,11 +571,12 @@ public class FWorldLayer : FLayer
 
     private void DoGameOver()
     {
-        FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "You ran out of energy!");
+        FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "Oh no, you ran out of energy!\n\n\n\nThat's okay, luckily your friendly North Texarado State Park Rangers will always be there to make sure you're never in any real danger. They were quickly able to find and rescue you. Being outside is both fun AND safe!");
         FSceneManager.Instance.PushScene(gameOverMessage);
         this.gameOver = true;
-        FSoundManager.PlayMusic("game_over1", GameVars.Instance.MUSIC_VOLUME, false);
-        FSoundManager.CurrentMusicShouldLoop(false);
+        FSoundManager.PlayMusic("04-You Make Really Poor Choices", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.CurrentMusicShouldLoop(true);
+        ((FWorldScene)this.Parent).musicShouldFadeOnNextScene = false;
     }
 
     private void WonGameEvent(IPTiledObject tileObject)
@@ -560,11 +586,12 @@ public class FWorldLayer : FLayer
 
     private void DoGameWon()
     {
-        FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", "You made it back to the Ranger's Office safely!");
+        FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", "You made it back to the Visitor Center safely!");
         FSceneManager.Instance.PushScene(wonGameMessage);
         this.gameWon = true;
-        FSoundManager.PlayMusic("game_won1", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.PlayMusic("06-Way to Not Die", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(false);
+        ((FWorldScene)this.Parent).musicShouldFadeOnNextScene = false;
     }
 
 
@@ -657,21 +684,21 @@ public class FWorldLayer : FLayer
         }
 
         encounterBagFills++;
-        currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL * encounterBagFills;
+        //currentRandomEncounterInterval = GameVars.Instance.RANDOM_ENCOUNTER_INTERVAL * encounterBagFills;
     }
 
     private EncounterEvent PullRandomEncounter()
     {
-        EncounterEvent pulledEncounter = randomEncounterBag[nextRandomEncounterIndex];
-        randomEncounterBag.RemoveAt(nextRandomEncounterIndex);
+        int randomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
+
+        EncounterEvent pulledEncounter = randomEncounterBag[randomEncounterIndex];
+        randomEncounterBag.RemoveAt(randomEncounterIndex);
 
         if (randomEncounterBag.Count == 0)
         {
             FillEncounterBag();
         }
-
-        nextRandomEncounterIndex = UnityEngine.Random.Range(0, randomEncounterBag.Count);
-
+        
         return pulledEncounter;
     }
 

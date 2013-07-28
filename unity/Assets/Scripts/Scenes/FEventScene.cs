@@ -169,6 +169,7 @@ class FEventHandlerLayer : FLayer
         {
             if (((MushroomsEncounter)encounter).MushroomsEaten)
             {
+                eventTile.element = Futile.atlasManager.GetElementWithName("game_tiles_32");
                 GameVars.Instance.TileHelper.SetTilePropertyValue(tileLocation, "MUSHROOMS_EATEN", true);
             }
         }

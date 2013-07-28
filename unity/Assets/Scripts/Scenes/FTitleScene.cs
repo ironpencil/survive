@@ -70,8 +70,11 @@ public class FTitleScene : FScene
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //set new game scene
-            this.fadingOut = true;
-            this.fadeStartTime = Time.time;
+            if (!this.fadingOut)
+            {
+                this.fadingOut = true;
+                this.fadeStartTime = Time.time;
+            }
             
         }
 		
@@ -87,15 +90,15 @@ public class FTitleScene : FScene
         newGameImage.height = Futile.screen.height;
         this.AddChild(newGameImage);
 
-        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Press Space to Begin");
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Press [Space] to Begin");
         //label.anchorX = 1.0f;
         label.anchorY = 0.0f;
         //label.x = (Futile.screen.halfWidth) - 20;
         label.y = (-Futile.screen.halfHeight) + 20;
         this.AddChild(label);
 
-        FSoundManager.PlayMusic("intro1", GameVars.Instance.MUSIC_VOLUME, true);
-        FSoundManager.CurrentMusicShouldLoop(true);
+        FSoundManager.PlayMusic("05-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, true);
+        FSoundManager.CurrentMusicShouldLoop(false);
 
         this.fadeStartTime = Time.time;
         this.fadingIn = true;

@@ -68,7 +68,8 @@ public enum EncounterSource
 {
     TILE,
     OBJECT,
-    RANDOM
+    RANDOM,
+    TEXT
 }
 
 public enum WildPlantTypes

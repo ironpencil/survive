@@ -19,7 +19,7 @@ public class FDisclaimerScene : FScene
 
 
     float introStartTime = 0.0f;
-    float introLength = 5.0f;
+    float introLength = 3.0f;
     bool introFinished = false;
     bool sceneFading = false;
 
@@ -134,7 +134,7 @@ public class FDisclaimerScene : FScene
         disclaimerLabel.alpha = 0.0f;
         this.AddChild(disclaimerLabel);
 
-        continueText = new FLabel(GameVars.Instance.FONT_NAME, "Press Space to Continue");
+        continueText = new FLabel(GameVars.Instance.FONT_NAME, "Press [Space] to Continue");
         continueText.y = (-Futile.screen.halfHeight) * 0.8f;
         continueText.alpha = 0.0f;
 

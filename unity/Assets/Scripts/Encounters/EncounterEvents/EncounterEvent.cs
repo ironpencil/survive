@@ -8,6 +8,7 @@ public class EncounterEvent
     public EncounterSource Source { get; private set; }
 
     public string Name { get; private set; }
+    public string Text { get; private set; }
 
     public IPTiledObject EventObject { get; private set; }
     public IPTile EventTile { get; private set; }
@@ -20,6 +21,8 @@ public class EncounterEvent
         objectEvent.Name = eventName;
         objectEvent.EventObject = eventObject;
         objectEvent.EventTile = null;
+        objectEvent.Text = "";
+
         return objectEvent;
     }
 
@@ -30,6 +33,7 @@ public class EncounterEvent
         tileEvent.Name = eventName;
         tileEvent.EventTile = eventTile;
         tileEvent.EventObject = null;
+        tileEvent.Text = "";
 
         return tileEvent;
     }
@@ -41,6 +45,19 @@ public class EncounterEvent
         randomEvent.Name = eventName;
         randomEvent.EventTile = null;
         randomEvent.EventObject = null;
+        randomEvent.Text = "";
+
+        return randomEvent;
+    }
+
+    public static EncounterEvent CreateTextEvent(string eventName, string eventText)
+    {
+        EncounterEvent randomEvent = new EncounterEvent();
+        randomEvent.Source = EncounterSource.TEXT;
+        randomEvent.Name = eventName;
+        randomEvent.EventTile = null;
+        randomEvent.EventObject = null;
+        randomEvent.Text = eventText;
 
         return randomEvent;
     }

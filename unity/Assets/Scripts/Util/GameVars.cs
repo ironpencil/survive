@@ -22,13 +22,17 @@ public sealed class GameVars
     public string FONT_NAME = "ComicSans";
     public Color MENU_BORDER_COLOR = new Color(0.0f, 0.5f, 0.0f);
     public Color MENU_INNER_COLOR = new Color(0.0f, 1.0f, 0.8f);
-    public Color MENU_HIGHLIGHT_COLOR = new Color(1.0f, 1.0f, 1.0f, 0.75f);
-    public string MENU_BORDER_ASSET = "Futile_White";
-    public string MENU_INNER_ASSET = "Futile_White";
-    public Rect MESSAGE_RECT = new Rect(0, (Futile.screen.halfHeight * 0.7f), Futile.screen.width * 0.95f, Futile.screen.height * 0.25f);
-    public Rect SELECTION_RECT = new Rect((-Futile.screen.halfWidth * 0.25f), (-Futile.screen.halfHeight * 0.585f), Futile.screen.width * 0.7f, Futile.screen.height * 0.25f);
-    public Rect INVENTORY_RECT = new Rect((Futile.screen.halfWidth * 0.7f), (-Futile.screen.halfHeight * 0.19f), Futile.screen.width * 0.25f, Futile.screen.height * 0.64f);
-    public Rect IMAGE_RECT = new Rect((-Futile.screen.halfWidth * 0.7f), (Futile.screen.halfHeight * 0.055f), Futile.screen.width * 0.25f, Futile.screen.height * 0.395f);
+    public Color MENU_HIGHLIGHT_COLOR = new Color(0.0f, 0.0f, 0.0f, 0.15f);
+    public string MESSAGE_RECT_ASSET = "message_rect";
+    public string SELECTION_RECT_ASSET = "selection_rect";
+    public string INVENTORY_RECT_ASSET = "inventory_rect";
+    public string IMAGE_RECT_ASSET = "image_rect";
+    public string STATUS_UI_RECT_ASSET = "status_rect";
+    public string SELECTION_DESC_RECT_ASSET = "selection_desc_rect";
+    public Rect MESSAGE_RECT = new Rect(0, (Futile.screen.halfHeight * 0.7f) + 2, Futile.screen.width * 0.95f, Futile.screen.height * 0.25f);
+    public Rect SELECTION_RECT = new Rect((-Futile.screen.halfWidth * 0.25f), (-Futile.screen.halfHeight * 0.585f) + 1, Futile.screen.width * 0.7f, Futile.screen.height * 0.25f);
+    public Rect INVENTORY_RECT = new Rect((Futile.screen.halfWidth * 0.7f), (-Futile.screen.halfHeight * 0.19f) + 1, Futile.screen.width * 0.25f, Futile.screen.height * 0.64f);
+    public Rect IMAGE_RECT = new Rect((-Futile.screen.halfWidth * 0.7f), (Futile.screen.halfHeight * 0.055f) + 2, Futile.screen.width * 0.25f, Futile.screen.height * 0.395f);
     public Rect STATUS_UI_RECT = new Rect(0, (-Futile.screen.halfHeight * 0.915f), Futile.screen.width * 0.95f, Futile.screen.height * 0.085f);
     public Rect SELECTION_DESC_RECT = new Rect((-Futile.screen.halfWidth * 0.25f), 0, Futile.screen.width * 0.7f, Futile.screen.height * 0.25f);
     public float MESSAGE_TEXT_OFFSET = 20.0f;
@@ -42,20 +46,24 @@ public sealed class GameVars
 
     public FStage GUIStage;
 
+    public FStage FadeStage;
+
     public Mob Player;
 
     public TileMapHelper TileHelper;
 
     #region GameVariables
 
-    public int PLAYER_FULL_ENERGY = 100;
-    public int PLAYER_FULL_WATER = 10;
+    public int PLAYER_STARTING_ENERGY = 100;
+    public int PLAYER_STARTING_WATER = 10;
+    public int PLAYER_FULL_ENERGY;
+    public int PLAYER_FULL_WATER;
 
     public int RANDOM_ENCOUNTER_INTERVAL = 6;
 
     public float MUSIC_VOLUME_CHANGE_INTERVAL = 0.1f;
 
-    private float musicVolume = 0.5f;
+    private float musicVolume = 1.0f;
     public float MUSIC_VOLUME
     {
         get { return musicVolume; }
@@ -77,6 +85,8 @@ public sealed class GameVars
     public void ResetGame()
     {
         gameParams = new Dictionary<string, object>();
+        PLAYER_FULL_ENERGY = PLAYER_STARTING_ENERGY;
+        PLAYER_FULL_WATER = PLAYER_STARTING_WATER;
     }
 
     public object GetParamValue(string paramName)

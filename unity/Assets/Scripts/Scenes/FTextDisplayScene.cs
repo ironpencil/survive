@@ -46,7 +46,7 @@ public class FTextDisplayScene : FScene
 
         //this.SetPosition(Futile.stage.GetPosition() * -1);
 
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (!msgBox.Next())
             {
@@ -76,7 +76,7 @@ public class FTextDisplayScene : FScene
         //Futile.stage.AddChild(textLabel);
 
         //string msgText = "This is my text that I would like to be displayed on multiple lines and on multiple labels. Hopefully this shouldn't be a problem. Can you think of any reason that it would be a problem? I sure can't.";
-        msgBox = new MessageBox(this, messageText, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+        msgBox = new MessageBox(this, messageText, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.MESSAGE_RECT_ASSET);
         
         //msgBox.x = Bounds.x;
         //msgBox.y = Bounds.y;

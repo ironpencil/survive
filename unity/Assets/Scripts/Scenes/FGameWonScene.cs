@@ -15,21 +15,113 @@ using System.Collections.Generic;
 
 public class FGameWonScene : FScene
 {
-   
+
+    private float fadeOutTime = 2.5f;
+    private float fadeInTime = 1.0f;
+    private float fadeStartTime = 0.0f;
+
+    //private float sceneLength = 5.0f;
+    //private float sceneStartTime = 0.0f;
+
+    private bool fadingIn = false;
+    private bool fadingOut = false;
+    private bool walkingOff = false;
+    //private bool timingScene = false;
+
+    FAnimatedSprite player;
+
+    FLabel gameWonLabel;
 
     //Vector2 maxBounds;
     public FGameWonScene(string _name = "GameWon")
         : base(_name)
 	{
 		mName = _name;
+        this.alpha = 0.0f;
 	}
 	
 	public override void OnUpdate ()
 	{
+        player.MoveToBack();
+        if (this.fadingIn)
+        {
+            if (fadeInTime > 0)
+            {
+                this.alpha += (Time.deltaTime / fadeInTime);
+            }
+
+            if (Time.time - fadeStartTime >= fadeInTime)
+            {
+
+                this.alpha = 1.0f;
+                fadingIn = false;
+                //this.timingScene = true;
+                //sceneStartTime = Time.time;
+            }
+
+        }
+
+        //if (this.timingScene)
+        //{
+        //    if (Time.time - sceneStartTime >= sceneLength)
+        //    {
+        //        this.timingScene = false;
+        //        this.fadingOut = true;
+        //        this.fadeStartTime = Time.time;
+        //        return;
+        //    }
+        //} 
+
+        if (this.walkingOff)
+        {
+            player.y -= 160 * Time.deltaTime;
+            gameWonLabel.y += 160 * Time.deltaTime;
+
+            if (player.y < -Futile.screen.halfHeight)
+            {
+                if (!this.fadingOut)
+                {
+                    this.fadingIn = false;
+                    //this.timingScene = false;
+                    this.fadingOut = true;
+                    this.fadeStartTime = Time.time;
+                }
+            }
+        }
+
+        if (this.fadingOut)
+        {
+            if (fadeOutTime > 0)
+            {
+                float alphaDiff = Time.deltaTime / fadeOutTime;
+                this.alpha -= alphaDiff;
+                //FSoundManager.musicVolume -= alphaDiff;
+            }
+
+            if (Time.time - fadeStartTime >= fadeOutTime)
+            {
+                this.alpha = 0.0f;
+                fadingOut = false;
+                FSceneManager.Instance.SetScene(new FCreditsScene("Credits"));
+            }
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //set new game scene
-            FSceneManager.Instance.SetScene(new FNewGameScene("NewGame"));
+            //pressed [Space], make the scene transition faster
+            //this.fadeOutTime = 0.5f;
+            player.play("walking");
+            this.walkingOff = true;
+
+            //if (!this.fadingOut)
+            //{
+            //    this.fadingIn = false;
+            //    //this.timingScene = false;
+            //    this.fadingOut = true;
+            //    this.fadeStartTime = Time.time;
+            //}
+            return;
         }
 		
 	}
@@ -42,14 +134,34 @@ public class FGameWonScene : FScene
         gameWonImage.color = Color.black;
         gameWonImage.width = Futile.screen.width;
         gameWonImage.height = Futile.screen.height;
-        this.AddChild(gameWonImage);
-        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Congratulations! You won! Press Space to Play Again!");
-        this.AddChild(label);
+        //this.AddChild(gameWonImage);
+
+        gameWonLabel = new FLabel(GameVars.Instance.FONT_NAME, 
+            "Congratulations, you made it back to the Visitor Center!\n\n" +
+            "Wilderness Survival Points: " + GameVars.Instance.Player.WildernessPoints + "\n\n" + 
+            "Secrets Found: 0/0\n\n" + 
+            "Press [Space] to Continue.");
+        this.AddChild(gameWonLabel);
+
+        player = new FAnimatedSprite("player");
+        player.addAnimation(new FAnimation("standing", new int[1] { 0 }, 500, true));
+        player.addAnimation(new FAnimation("walking", new int[2] { 1, 2 }, 200, true));
+
+        //player.y = (gameWonLabel.textRect.height / 2) + 64;
+        player.y = -(gameWonLabel.textRect.height / 2) - 64;
+        player.play("standing", true);
+        this.AddChild(player);
+
+        this.fadeStartTime = Time.time;
+        this.fadingIn = true;
+
+        FSoundManager.PlayMusic("08-Credits", GameVars.Instance.MUSIC_VOLUME, true);
+        FSoundManager.CurrentMusicShouldLoop(false);
 	}
 
     public override void OnExit()
 	{
-        FSoundManager.StopMusic();
+        //FSoundManager.StopMusic();
 	}
 
     

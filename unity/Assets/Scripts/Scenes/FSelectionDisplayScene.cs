@@ -65,7 +65,7 @@ public class FSelectionDisplayScene : FScene
         {
             if (messageBox.HasNext())
             {
-                if (Input.GetKeyDown("space"))
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     //if (!messageBox.Next())
                     //{
@@ -80,7 +80,7 @@ public class FSelectionDisplayScene : FScene
                 //if there is no select box to display, await input to close the dialog
                 if (!ShowSelectBox())
                 {
-                    if (Input.GetKeyDown("space"))
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
                         this.Close();
                     }
@@ -218,7 +218,7 @@ public class FSelectionDisplayScene : FScene
         messageBoxInFocus = false;
         if (HasDisplayMessage())
         {
-            messageBox = new MessageBox(this, rootNode.Value.DisplayMessage, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            messageBox = new MessageBox(this, rootNode.Value.DisplayMessage, GameVars.Instance.MESSAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.MESSAGE_RECT_ASSET);
             GameVars.Instance.GUIStage.AddChild(messageBox);
             messageBoxInFocus = true;
         }
@@ -240,14 +240,17 @@ public class FSelectionDisplayScene : FScene
                 selectBox.stage.RemoveChild(selectBox);
             }
             Rect boundsRect = GameVars.Instance.SELECTION_RECT;
+            string backgroundAsset = GameVars.Instance.SELECTION_RECT_ASSET;
             bool showSelectionDescriptions = false;
             switch (rootNode.Value.NodeType)
             {
                 case MenuNodeType.TEXT:
                     boundsRect = GameVars.Instance.SELECTION_RECT;
+                    backgroundAsset = GameVars.Instance.SELECTION_RECT_ASSET;
                     break;
                 case MenuNodeType.INVENTORY:
                     boundsRect = GameVars.Instance.INVENTORY_RECT;
+                    backgroundAsset = GameVars.Instance.INVENTORY_RECT_ASSET;
                     showSelectionDescriptions = true;
                     //rootNode = new TreeNode<MenuNode>(rootNode.Value); //add inventory items to a copy of the root node
                     //rootNode.AddChildren(GameData.Instance.GenerateInventoryNodes());
@@ -255,7 +258,7 @@ public class FSelectionDisplayScene : FScene
                 default:
                     break;
             }            
-            selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET, showSelectionDescriptions);
+            selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET, backgroundAsset, showSelectionDescriptions);
             GameVars.Instance.GUIStage.AddChild(selectBox);
             selectBoxInFocus = true;
             messageBoxInFocus = false;
@@ -273,8 +276,10 @@ public class FSelectionDisplayScene : FScene
         if (HasImage())
         {
             FSprite image = new FSprite(rootNode.Value.DisplayImageAsset);
-            imageBox = new MessageBox(this, "", GameVars.Instance.IMAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            imageBox = new MessageBox(this, "", GameVars.Instance.IMAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.IMAGE_RECT_ASSET);
             imageBox.AddChild(image);
+            image.y += 1;
+            image.MoveToBack();
             GameVars.Instance.GUIStage.AddChild(imageBox);
         }
     }

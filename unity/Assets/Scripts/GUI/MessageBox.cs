@@ -57,7 +57,7 @@ class MessageBox : FLayer
         
     //}
 
-    public MessageBox(FScene parent, string messageText, Rect bounds, float textOffset)
+    public MessageBox(FScene parent, string messageText, Rect bounds, float textOffset, string backgroundAsset)
         : base(parent)
     {
         this.Width = bounds.width;
@@ -70,20 +70,21 @@ class MessageBox : FLayer
 
         //if (backgroundAsset.Length > 0)
         //{
-        background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
+        background = new FSprite(backgroundAsset);
         background.width = this.Width;
         background.height = this.Height;
-        background.color = GameVars.Instance.MENU_BORDER_COLOR;
+        //background.color = GameVars.Instance.MENU_BORDER_COLOR;
         this.AddChild(background);
         //}
 
         //if (foregroundAsset.Length > 0)
         //{
-        foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
-        foreground.width = TextAreaWidth + textPadding;
-        foreground.height = TextAreaHeight + textPadding;
-        foreground.color = GameVars.Instance.MENU_INNER_COLOR;
-        this.AddChild(foreground);
+        //foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
+        //foreground.width = TextAreaWidth + textPadding;
+        //foreground.height = TextAreaHeight + textPadding;
+        //foreground.color = GameVars.Instance.MENU_INNER_COLOR;
+        //foreground.alpha = 0.0f;
+        //this.AddChild(foreground);
         //}
         this.messageText = messageText;
         displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");

@@ -46,6 +46,11 @@
     <property name="CAN_WALK" value="false"/>
    </properties>
   </tile>
+  <tile id="8">
+   <properties>
+    <property name="CAN_WALK" value="false"/>
+   </properties>
+  </tile>
   <tile id="9">
    <properties>
     <property name="CAN_WALK" value="true"/>
@@ -1002,13 +1007,14 @@
   </object>
   <object name="Mysterious Force" type="EVENT" x="5984" y="3296" width="32" height="32">
    <properties>
-    <property name="EVENT_TYPE" value="MESSAGE"/>
-    <property name="TEXT" value="Some kind of mysterious force is preventing you from moving farther into the grove."/>
+    <property name="EVENT_TYPE" value="GROVE_ENTRANCE"/>
+    <property name="TEXT" value="Some kind of mysterious force is preventing you from entering the grove."/>
    </properties>
   </object>
   <object name="BlockingForce" type="TILE" x="5984" y="3264" width="32" height="32">
    <properties>
     <property name="CAN_WALK" value="false"/>
+    <property name="CRYSTAL_BREAK" value="true"/>
    </properties>
   </object>
  </objectgroup>

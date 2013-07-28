@@ -43,7 +43,7 @@ public class FWorldUILayer : FLayer
 	{
         player = GameVars.Instance.Player;
 
-        playerStatus = new MessageBox(this.Parent, "", GameVars.Instance.STATUS_UI_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+        playerStatus = new MessageBox(this.Parent, "", GameVars.Instance.STATUS_UI_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.STATUS_UI_RECT_ASSET);
         GameVars.Instance.GUIStage.AddChild(playerStatus);
 
         //MessageBox image = new MessageBox(this.Parent, "", GameVars.Instance.IMAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);

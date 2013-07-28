@@ -72,8 +72,11 @@ public class FNewGameScene : FScene
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //set new game scene
-            this.fadingOut = true; 
-            this.fadeStartTime = Time.time;
+            if (!this.fadingOut)
+            {
+                this.fadingOut = true;
+                this.fadeStartTime = Time.time;
+            }
         }
 		
 	}
@@ -91,40 +94,42 @@ public class FNewGameScene : FScene
         FLabel headerLabel = new FLabel(GameVars.Instance.FONT_NAME, "How to Play:");
 
         headerLabel.anchorY = 1.0f;
-        headerLabel.y = (Futile.screen.halfHeight) * 0.85f;
+        headerLabel.y = (Futile.screen.halfHeight) * 0.9f;
         this.AddChild(headerLabel);
 
         FLabel howToPlayLabel1 = new FLabel(GameVars.Instance.FONT_NAME,
             "You have become lost in the wilderness, and must make\n" +
-            "your way back to the safety of the Visitor Center!\n\n" +
+            "your way back to the safety of the Visitor Center.\n" +
             "Along the way you will find yourself in many dangerous\n" +
             "situations, and it's up to you to decide what to do!");
 
         FLabel howToPlayLabel2 = new FLabel(GameVars.Instance.FONT_NAME,
+            "Make sure to keep your energy and hydration levels up by\n" +
+            "eating and drinking, but only when it is safe to do so!\n\n" + 
             "You will also be quizzed on general survival safety.\n" +
             "Answer correctly to earn Wilderness Survival Points!\n\n" +
-            "Use the Arrow Keys to move, and\n" +
-            "use Space to make selections and interact.\n\n" +
+            "Use the Arrow Keys or [WASD] to move, and\n" +
+            "use [Space] to make selections and interact.\n\n" +
             "Good luck!");
 
         //howToPlayLabel1.anchorY = 1.0f;
-        howToPlayLabel1.y = Futile.screen.halfHeight * 0.35f;
+        howToPlayLabel1.y = Futile.screen.halfHeight * 0.5f;
         //howToPlayLabel2.anchorY = 1.0f;
-        howToPlayLabel2.y = -Futile.screen.halfHeight * 0.35f;
+        howToPlayLabel2.y = -Futile.screen.halfHeight * 0.25f;
         this.AddChild(howToPlayLabel1);
         this.AddChild(howToPlayLabel2);
 
         //howToPlay.anchorY = 1.0f;
 
-        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Press Space to Continue");
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "Press [Space] to Continue");
         //label.anchorX = 1.0f;
         label.anchorY = 0.0f;
         //label.x = (Futile.screen.halfWidth) - 20;
         label.y = (-Futile.screen.halfHeight) + 20;
         this.AddChild(label);
 
-        FSoundManager.PlayMusic("intro1", GameVars.Instance.MUSIC_VOLUME, false);
-        FSoundManager.CurrentMusicShouldLoop(true);
+        FSoundManager.PlayMusic("05-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.CurrentMusicShouldLoop(false);
 
         this.fadeStartTime = Time.time;
         this.fadingIn = true;

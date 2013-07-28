@@ -33,9 +33,11 @@ class SelectionBox : FLayer
     public bool ItemIsSelected { get; private set; }
 
     public float textPadding = 4;
-    public float textAreaOffset;    
+    public float textAreaOffset;
 
-    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset)
+    public bool mouseSupportEnabled = false;
+
+    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset, string backgroundAsset)
         : base(parent)
     {
         this.Width = bounds.width;
@@ -47,22 +49,22 @@ class SelectionBox : FLayer
         this.y = bounds.y;
         //if (backgroundAsset.Length > 0)
         //{
-        background = new FSprite(GameVars.Instance.MENU_BORDER_ASSET);
+        background = new FSprite(backgroundAsset);
         background.width = this.Width;
         background.height = this.Height;
-        background.color = GameVars.Instance.MENU_BORDER_COLOR;
+        //background.color = GameVars.Instance.MENU_BORDER_COLOR;
         this.AddChild(background);
         //}
 
         //if (foregroundAsset.Length > 0)
         //{
-        foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
-        foreground.width = TextAreaWidth + textPadding;
-        foreground.height = TextAreaHeight + textPadding;
-        foreground.color = GameVars.Instance.MENU_INNER_COLOR;
-        this.AddChild(foreground);
+        //foreground = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
+        //foreground.width = TextAreaWidth + textPadding;
+        //foreground.height = TextAreaHeight + textPadding;
+        //foreground.color = GameVars.Instance.MENU_INNER_COLOR;
+        //this.AddChild(foreground);
 
-        highlight = new FSprite(GameVars.Instance.MENU_INNER_ASSET);
+        highlight = new FSprite("Futile_White");
         highlight.color = GameVars.Instance.MENU_HIGHLIGHT_COLOR;
         //}        
 
@@ -75,14 +77,14 @@ class SelectionBox : FLayer
         }
     }
 
-    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset, bool showDescriptions)
-        : this(parent, rootNode, bounds, textOffset)
+    public SelectionBox(FScene parent, TreeNode<MenuNode> rootNode, Rect bounds, float textOffset, string backgroundAsset, bool showDescriptions)
+        : this(parent, rootNode, bounds, textOffset, backgroundAsset)
     {
         showNodeDescriptions = showDescriptions;
 
         if (showNodeDescriptions)
         {
-            this.itemDescBox = new MessageBox(parent, "", GameVars.Instance.SELECTION_DESC_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
+            this.itemDescBox = new MessageBox(parent, "", GameVars.Instance.SELECTION_DESC_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.SELECTION_DESC_RECT_ASSET);
         }
     }
 
@@ -209,12 +211,12 @@ class SelectionBox : FLayer
             currentlySelectedLabel = labels[currentlySelectedIndex];
 
             highlight.width = TextAreaWidth;
-            highlight.height = currentlySelectedLabel.textRect.height;
+            highlight.height = currentlySelectedLabel.textRect.height - 10;
 
             highlight.anchorX = 0.0f;
             highlight.anchorY = 1.0f;
             highlight.x = currentlySelectedLabel.x;
-            highlight.y = currentlySelectedLabel.y;
+            highlight.y = currentlySelectedLabel.y - 10;
             this.AddChild(highlight);
             currentlySelectedLabel.MoveToFront();
         }
@@ -239,18 +241,21 @@ class SelectionBox : FLayer
 
         if (labels.Count() > 0)
         {
-            for (int i = 0; i < labels.Count(); i++)
+            if (mouseSupportEnabled)
             {
-
-                FLabel currentLabel = labels[i];
-                Vector2 mousePos = currentLabel.GetLocalMousePosition();
-                Rect checkRect = new Rect(currentLabel.textRect.x, currentLabel.textRect.y, TextAreaWidth, currentLabel.textRect.height);
-                if (checkRect.Contains(mousePos))
+                for (int i = 0; i < labels.Count(); i++)
                 {
-                    highlighted = true;
-                    currentlySelectedLabel = currentLabel;
-                    currentlySelectedIndex = i;
-                    break;
+
+                    FLabel currentLabel = labels[i];
+                    Vector2 mousePos = currentLabel.GetLocalMousePosition();
+                    Rect checkRect = new Rect(currentLabel.textRect.x, currentLabel.textRect.y, TextAreaWidth, currentLabel.textRect.height);
+                    if (checkRect.Contains(mousePos))
+                    {
+                        highlighted = true;
+                        currentlySelectedLabel = currentLabel;
+                        currentlySelectedIndex = i;
+                        break;
+                    }
                 }
             }
 
@@ -259,7 +264,8 @@ class SelectionBox : FLayer
             {
                 bool indexWasChanged = false;
 
-                if (Input.GetKeyDown("down"))
+                if (Input.GetKeyDown(KeyCode.DownArrow) ||
+                    Input.GetKeyDown(KeyCode.S))
                 {
                     currentlySelectedIndex++;
                     if (currentlySelectedIndex >= labels.Count())
@@ -269,7 +275,8 @@ class SelectionBox : FLayer
                     indexWasChanged = true;
                 }
 
-                if (Input.GetKeyDown("up"))
+                if (Input.GetKeyDown(KeyCode.UpArrow) ||
+                    Input.GetKeyDown(KeyCode.W))
                 {
                     currentlySelectedIndex--;
                     if (currentlySelectedIndex < 0)
@@ -291,7 +298,7 @@ class SelectionBox : FLayer
                 previouslySelectedLabel = currentlySelectedLabel;
 
                 highlight.x = currentlySelectedLabel.x;
-                highlight.y = currentlySelectedLabel.y;
+                highlight.y = currentlySelectedLabel.y - 2;
                 highlight.height = currentlySelectedLabel.textRect.height;
                 currentlySelectedLabel.MoveToFront();
 
@@ -307,7 +314,7 @@ class SelectionBox : FLayer
 
         }
 
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             //select currently highlighted item
             SelectedItem = (TreeNode<MenuNode>)currentlySelectedLabel.data;
@@ -317,27 +324,30 @@ class SelectionBox : FLayer
 
     public override void HandleMultiTouch(FTouch[] touches)
     {
-        base.HandleMultiTouch(touches);
-               
-        foreach (FTouch touch in touches)
+        if (mouseSupportEnabled)
         {
-            if (ItemIsSelected) { return; }
+            base.HandleMultiTouch(touches);
 
-            if (touch.phase == TouchPhase.Began)
+            foreach (FTouch touch in touches)
             {
-                foreach (FLabel label in labels)
+                if (ItemIsSelected) { return; }
+
+                if (touch.phase == TouchPhase.Began)
                 {
-                    Vector2 touchPos = label.GlobalToLocal(touch.position);
-                    Rect checkRect = new Rect(label.textRect.x, label.textRect.y, TextAreaWidth, label.textRect.height);
-                    if (checkRect.Contains(touchPos))
+                    foreach (FLabel label in labels)
                     {
-                        //label.data is used to store the un-altered choice text. label.text may include additional linebreaks
-                        SelectedItem = (TreeNode<MenuNode>)label.data;
-                        ItemIsSelected = true;
+                        Vector2 touchPos = label.GlobalToLocal(touch.position);
+                        Rect checkRect = new Rect(label.textRect.x, label.textRect.y, TextAreaWidth, label.textRect.height);
+                        if (checkRect.Contains(touchPos))
+                        {
+                            //label.data is used to store the un-altered choice text. label.text may include additional linebreaks
+                            SelectedItem = (TreeNode<MenuNode>)label.data;
+                            ItemIsSelected = true;
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 

@@ -34,6 +34,15 @@ public class SurviveGame : MonoBehaviour {
         Futile.atlasManager.LoadFont(GameVars.Instance.FONT_NAME, "comic-sans", "Atlases/comic-sans", 0.0f, 0.0f);
 
         GameVars.Instance.GUIStage = new FStage("GUI");
+        GameVars.Instance.FadeStage = new FStage("Fader");
+
+        //used to fade between scenes
+        FSprite fadeSprite = new FSprite("Futile_White");
+        fadeSprite.width = Futile.screen.width;
+        fadeSprite.height = Futile.screen.height;
+        fadeSprite.color = Color.black;
+        GameVars.Instance.FadeStage.AddChild(fadeSprite);
+        GameVars.Instance.FadeStage.alpha = 0.0f;
 
         GameData.Instance.LoadData();
 
@@ -73,6 +82,7 @@ public class SurviveGame : MonoBehaviour {
     void Update()
     {        
         Futile.AddStage(GameVars.Instance.GUIStage);
+        Futile.AddStage(GameVars.Instance.FadeStage);
 
         if (showFPS)
         {

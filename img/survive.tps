@@ -142,13 +142,12 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">None</enum>
+            <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>
         <key>fileList</key>
         <array>
-            <filename>player.png</filename>
             <filename>comic-sans.png</filename>
             <filename>encounterImages/mushroom.png</filename>
             <filename>encounterImages/moonseed.png</filename>
@@ -274,6 +273,17 @@
             <filename>tiles/game_tiles_27.png</filename>
             <filename>titleScreen.png</filename>
             <filename>howToPlayScreen.png</filename>
+            <filename>player_1.png</filename>
+            <filename>player_2.png</filename>
+            <filename>player_0.png</filename>
+            <filename>player_sad_0.png</filename>
+            <filename>player_sad_1.png</filename>
+            <filename>message_rect.png</filename>
+            <filename>status_rect.png</filename>
+            <filename>image_rect.png</filename>
+            <filename>inventory_rect.png</filename>
+            <filename>selection_desc_rect.png</filename>
+            <filename>selection_rect.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

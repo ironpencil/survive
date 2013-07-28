@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Mob : FSprite
+public class Mob : FAnimatedSprite
 {
 
     protected Dictionary<MobStats, float> mobStats = new Dictionary<MobStats, float>();
@@ -17,7 +17,7 @@ public class Mob : FSprite
 
     public int TileY { get { return (int) tileCoordinates.y; } set { tileCoordinates.y = value; } }
 
-    public float MoveDelayTime = 0.125f;
+    public float MoveDelayTime = 0.2f;
     public float NextMoveTime = 0.0f;
 
     public bool IsMovingToPosition = false;
@@ -25,6 +25,9 @@ public class Mob : FSprite
     public Vector2 speed = Vector2.zero;
 
     public List<Item> Inventory { get; set; }
+
+    FAnimation standingAnim = new FAnimation("standing", new int[1] { 0 }, 500, false);
+    FAnimation walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, 200, true);
 
     private int energy;
     public int Energy
@@ -59,8 +62,11 @@ public class Mob : FSprite
         speed.x = this.width / MoveDelayTime;
         speed.y = this.height / MoveDelayTime;
         Inventory = new List<Item>();
-        Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
-        Water = GameVars.Instance.PLAYER_FULL_WATER;
+        Energy = GameVars.Instance.PLAYER_STARTING_ENERGY;
+        Water = GameVars.Instance.PLAYER_STARTING_WATER;
+
+        this.addAnimation(standingAnim);
+        this.addAnimation(walkingAnim);               
     }
 
 
@@ -70,7 +76,10 @@ public class Mob : FSprite
     public bool ApproachTarget()
     {
         //return true if we're already at our target
-        if (this.TargetPosition == this.GetPosition()) { return true; }
+        if (this.TargetPosition == this.GetPosition())
+        {
+            return true;
+        }
 
         Vector2 dtSpeed = new Vector2(speed.x * Time.deltaTime, speed.y * Time.deltaTime);
 
@@ -103,7 +112,6 @@ public class Mob : FSprite
         }
 
         return (this.TargetPosition == this.GetPosition());
-
     }
 
     public Rect GetStandingRect()
