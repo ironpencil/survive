@@ -19,6 +19,7 @@ public class FWorldScene : FScene
     FWorldLayer worldLayer;
     FWorldUILayer guiLayer;
 
+    FSprite grayLayer = new FSprite("Futile_White");
 
     private float fadeOutTime = 1.0f;
     private float fadeInTime = 1.0f;
@@ -42,6 +43,7 @@ public class FWorldScene : FScene
 	
 	public override void OnUpdate ()
 	{
+        //grayLayer.MoveToBack();
         if (this.fadingIn)
         {
             //pause this so the sub-layers can't do anything
@@ -104,6 +106,14 @@ public class FWorldScene : FScene
         worldLayer = new FWorldLayer(this);
         this.AddChild(worldLayer);
 
+        //grayLayer.width = Futile.screen.width;
+        //grayLayer.height = Futile.screen.height;
+
+        //grayLayer.color = Color.red;
+        //grayLayer.alpha = 0.5f;
+
+        //GameVars.Instance.GUIStage.AddChild(grayLayer);
+
         guiLayer = new FWorldUILayer(this);
         this.AddChild(guiLayer);
 
@@ -122,9 +132,36 @@ public class FWorldScene : FScene
 	}
 
     public override void OnExit()
-	{
+    {
         GameVars.Instance.FadeStage.alpha = 0.0f;
-	}
+
+
+        string points = GameVars.Instance.GetParamValueString(GameVarParams.POINTS.ToString());
+
+        if (points.Length == 0)
+        {
+            points = GameVars.Instance.Player.WildernessPoints.ToString();
+        }
+        else
+        {
+            //there is already a stored value, try to see if it's a valid number
+            //if so, replace it with the current player points
+            //otherwise it's a special value that we should leave alone and just pass along
+            int pointsValue;
+
+            if (int.TryParse(points, out pointsValue))
+            {
+                //the current stored points value
+                points = GameVars.Instance.Player.WildernessPoints.ToString();
+            }
+            else
+            {
+                //it's a non-number value, leave it alone
+            }
+        }
+
+        GameVars.Instance.SetParamValue(GameVarParams.POINTS.ToString(), points);
+    }
 
     public void DoGameOver()
     {
@@ -140,6 +177,7 @@ public class FWorldScene : FScene
         this.fadingOut = true;
         this.fadeOutTime = 2.0f;
         fadeStartTime = Time.time;
+        GameVars.Instance.SHOW_ALTERNATE_TITLE = true;
     }
 
     

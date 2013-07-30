@@ -41,11 +41,23 @@ class AntsEncounter : FEncounterScene
                     DisplayTextMessage(selectedNode.NodeTitle, "Applying the bug spray to the ants causes them to disappear in a puff of smoke. Their entire existence is erased from the timestream, as if it never happened.");
                     GameVars.Instance.Player.WildernessPoints += 5;
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The ants rebuke your capitalist ideals. Why do they hate freedom? The insult hurts almost as much as their vicious stings and bites. Almost.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.HONEY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Covering yourself and the ants with honey causes them to become stuck to you. Your entire body is now covered with biting, stinging ants. If this were a video game you would probably gain some kind of damage barrier counter-attack.");                    
+                    GameVars.Instance.Player.WildernessPoints += 3;
+                    GameVars.Instance.Player.HasAntArmor = true;
+                }
                 else
                 {
                     //default failure
                     DisplayTextMessage(selectedNode.NodeTitle, "I know you thought that was a good idea, but it does nothing! The ants only sting more viciously! You start jumping around frantically and are eventually able to get away.");
-                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7); 
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
                     GameVars.Instance.Player.WildernessPoints -= 5;
                 }
                 break;
@@ -63,7 +75,14 @@ class AntsEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "You feel a burning sensation around your ankles. Looking down, you see that you have disturbed a nest of fire ants and they are angrily stinging your legs! What do you do?");
 
-        rootMenu.DisplayImageAsset = "ants";
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            rootMenu.DisplayImageAsset = "ants_blurred";
+        }
+        else
+        {
+            rootMenu.DisplayImageAsset = "ants";
+        }
 
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 

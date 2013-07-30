@@ -54,9 +54,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>4096</int>
             <key>height</key>
-            <int>2048</int>
+            <int>4096</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -284,6 +284,13 @@
             <filename>inventory_rect.png</filename>
             <filename>selection_desc_rect.png</filename>
             <filename>selection_rect.png</filename>
+            <filename>blurBugsButton_down.png</filename>
+            <filename>blurBugsButton_up.png</filename>
+            <filename>encounterImages/bees_blurred.png</filename>
+            <filename>encounterImages/spider_blurred.png</filename>
+            <filename>encounterImages/tick_blurred.png</filename>
+            <filename>encounterImages/ants_blurred.png</filename>
+            <filename>titleScreen_alt.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

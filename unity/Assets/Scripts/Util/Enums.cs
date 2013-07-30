@@ -1,6 +1,8 @@
 ﻿public enum IPTileMapTileProperties
 {
-    CAN_WALK
+    CAN_WALK,
+    CAN_FLOAT,
+    CRYSTAL_BREAK
 }
 
 public enum IPTileMapTileObjectTypes
@@ -51,8 +53,6 @@ public enum ItemIDs
     BUG_SPRAY,
     MARSHMALLOWS,
     SALT,
-    SWORD,
-    DIRTY_MAGAZINE
 }
 
 public enum Targets
@@ -84,4 +84,13 @@ public enum WildPlantTypes
     MOONSEED,
     OLEANDER,
     POKEWEED
+}
+
+public enum GameVarParams
+{
+    WIN_MESSAGE,
+    POINTS,
+    SECRET_WORLD,
+    DAWN_CRYSTAL,
+    GROVE_ENTERED
 }

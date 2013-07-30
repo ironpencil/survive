@@ -52,18 +52,36 @@ public sealed class GameVars
 
     public TileMapHelper TileHelper;
 
+    #region Secrets
+
+    public int SECRETS_FOUND = 0;
+    public int TOTAL_SECRETS = 1;
+
+    public bool FAERIE_RING_FOUND = false;
+    public bool SECRET_WORLD_FOUND = false;
+    public bool EATEN_BY_BEARS = false;
+    public bool DAWN_CRYSTAL_FOUND = false;
+    public bool GROVE_ENTERED = false;
+    public bool ROCKY_BEATEN = false;
+    public bool UNKNOWN_SEEN = false;
+    public bool UNKNOWN_BEATEN = false;
+
+    #endregion
     #region GameVariables
+
+    public bool BLUR_BUGS = false;
 
     public int PLAYER_STARTING_ENERGY = 100;
     public int PLAYER_STARTING_WATER = 10;
-    public int PLAYER_FULL_ENERGY;
     public int PLAYER_FULL_WATER;
+
+    public bool SHOW_ALTERNATE_TITLE = false;
 
     public int RANDOM_ENCOUNTER_INTERVAL = 6;
 
     public float MUSIC_VOLUME_CHANGE_INTERVAL = 0.1f;
 
-    private float musicVolume = 1.0f;
+    private float musicVolume = 0.5f;
     public float MUSIC_VOLUME
     {
         get { return musicVolume; }
@@ -85,8 +103,8 @@ public sealed class GameVars
     public void ResetGame()
     {
         gameParams = new Dictionary<string, object>();
-        PLAYER_FULL_ENERGY = PLAYER_STARTING_ENERGY;
         PLAYER_FULL_WATER = PLAYER_STARTING_WATER;
+        SECRETS_FOUND = 0;
     }
 
     public object GetParamValue(string paramName)
@@ -137,6 +155,51 @@ public sealed class GameVars
             gameParams.Add(paramName, paramValue);
         }
     }
+    #endregion
+
+
+    #region battles
+
+    public bool RollToHit(int attackerHitChance, int defenderEvadeChance)
+    {
+        int attackRoll = UnityEngine.Random.Range(0, 100);
+
+        if (attackRoll >= attackerHitChance) { return false; }
+
+        int evadeRoll = UnityEngine.Random.Range(0, 100);
+
+        if (evadeRoll < defenderEvadeChance) { return false; }
+
+        return true;
+
+    }
+
+    public bool RollCritChance(int attackerCritChance, int defenderCritEvadeChance)
+    {
+        int attackRoll = UnityEngine.Random.Range(0, 100);
+
+        if (attackRoll >= attackerCritChance) { return false; }
+
+        int evadeRoll = UnityEngine.Random.Range(0, 100);
+
+        if (evadeRoll < defenderCritEvadeChance) { return false; }
+
+        return true;
+
+    }
+
+    public int RollAttackDamage(int attackerPower, int attackerMultiplier, int defenderDefense)
+    {
+
+        int damageRoll = UnityEngine.Random.Range(0, (attackerPower / 5) + 1);
+        int damage = (attackerPower + damageRoll - defenderDefense) * attackerMultiplier;
+
+        if (damage < 0) { damage = 0; }
+
+        return damage;
+
+    }
+
     #endregion
 
 }

@@ -50,7 +50,14 @@ class SpiderEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "While taking a brief rest, you are startled to realize that a tarantula is crawling on your thigh! What do you do?");
 
-        rootMenu.DisplayImageAsset = "spider";
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            rootMenu.DisplayImageAsset = "spider_blurred";
+        }
+        else
+        {
+            rootMenu.DisplayImageAsset = "spider";
+        }
 
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 

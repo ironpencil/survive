@@ -55,14 +55,27 @@ public class FWorldUILayer : FLayer
 		
 	}
 
-    private const string UIFormat = "Energy : {0}     Hydration : {1}     Points : {2}";
-
     private void UpdateUIText()
     {
         int energy = GameVars.Instance.Player.Energy;
         int water = GameVars.Instance.Player.Water;
-        int points = GameVars.Instance.Player.WildernessPoints;
-        string newText = string.Format(UIFormat, energy, water, points);
+        int points = GameVars.Instance.Player.WildernessPoints;       
+
+        string uiFormat = "";
+        string newText = "";
+
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            int level = GameVars.Instance.Player.Level;
+            uiFormat = "HP : {0}     Level : {1}     XP : {2}";
+            newText = string.Format(uiFormat, energy, level, points);
+        }
+        else
+        {
+            uiFormat = "Energy : {0}     Hydration : {1}     Points : {2}";
+            newText = string.Format(uiFormat, energy, water, points);
+        }
+
         if (!playerStatus.GetAllText().Equals(newText))
         {
             playerStatus.SetText(newText);

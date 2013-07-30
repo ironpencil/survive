@@ -314,7 +314,7 @@ class SelectionBox : FLayer
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             //select currently highlighted item
             SelectedItem = (TreeNode<MenuNode>)currentlySelectedLabel.data;

@@ -41,7 +41,7 @@
          "type" : "item"
       },
       "SALT" : {
-         "description" : "Well I mean there's salt inside, it's not just an empty shaker, that would be stupid.",
+         "description" : "Well I mean there's salt inside, it's not just an empty shaker, what use would that be?",
          "name" : "Salt Shaker",
          "type" : "item"
       }

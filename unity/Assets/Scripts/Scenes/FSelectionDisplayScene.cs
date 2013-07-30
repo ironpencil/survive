@@ -65,7 +65,7 @@ public class FSelectionDisplayScene : FScene
         {
             if (messageBox.HasNext())
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
                 {
                     //if (!messageBox.Next())
                     //{
@@ -80,7 +80,7 @@ public class FSelectionDisplayScene : FScene
                 //if there is no select box to display, await input to close the dialog
                 if (!ShowSelectBox())
                 {
-                    if (Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
                     {
                         this.Close();
                     }
@@ -89,8 +89,8 @@ public class FSelectionDisplayScene : FScene
         }
         else if (selectBoxInFocus)
         {
-            //can only currently cancel Inventory nodes
-            //if (Input.GetKeyDown(KeyCode.Escape) &&
+            ////can only currently cancel Inventory nodes
+            //if (Input.GetKeyDown(KeyCode.Backspace) &&
             //    this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
             //{
             //    this.ItemWasSelected = false;

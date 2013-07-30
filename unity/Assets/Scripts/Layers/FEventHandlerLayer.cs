@@ -7,7 +7,9 @@ using UnityEngine;
 class FEventHandlerLayer : FLayer
 {
     protected Vector2 tileLocation;
+
     protected IPTile eventTile;
+    protected IPTiledObject tiledObject;
 
     protected FEncounterScene encounter;
 
@@ -15,16 +17,29 @@ class FEventHandlerLayer : FLayer
 
     public string Name { get; private set; }
 
-    public FEventHandlerLayer(FScene parent, string name) : base(parent)
+    public FEventHandlerLayer(FScene parent, string eventName) : base(parent)
 	{
-		this.Name = name;
+        this.Name = eventName;
+        this.tileLocation = Vector2.zero;
+        this.eventTile = null;
+        this.tiledObject = null;
 	}
 
     public FEventHandlerLayer(FScene parent, string eventName, IPTile eventTile, Vector2 tileLocation) : base(parent)
     {
         this.Name = eventName;
         this.tileLocation = tileLocation;
-        this.eventTile = eventTile;        
+        this.eventTile = eventTile;
+        this.tiledObject = null;
+    }
+
+    public FEventHandlerLayer(FScene parent, string eventName, IPTiledObject tiledObject)
+        : base(parent)
+    {
+        this.Name = eventName;
+        this.tileLocation = Vector2.zero;
+        this.eventTile = null;
+        this.tiledObject = tiledObject;
     }
 	
 	public override void OnUpdate ()
@@ -89,6 +104,18 @@ class FEventHandlerLayer : FLayer
                 break;
             case "WILD_PLANT": WildPlantEncounterEnter();
                 break;
+            case "FERAL_ANUM": FeralAnumEncounterEnter();
+                break;
+            case "BUTTER_BUG": ButterBugEncounterEnter();
+                break;
+            case "OPTORCHID": OptorchidEncounterEnter();
+                break;
+            case "UNKNOWN": UnknownEncounterEnter();
+                break;
+            case "SECRET_WORLD": SecretWorldEncounterEnter();
+                break;
+            case "DAWN_CRYSTAL": DawnCrystalEncounterEnter();
+                break;
             default:
                 break;
         }
@@ -142,6 +169,18 @@ class FEventHandlerLayer : FLayer
             case "SPIDER": SpiderEncounterExit();
                 break;
             case "WILD_PLANT": WildPlantEncounterExit();
+                break;
+            case "FERAL_ANUM": FeralAnumEncounterExit();
+                break;
+            case "BUTTER_BUG": ButterBugEncounterExit();
+                break;
+            case "OPTORCHID": OptorchidEncounterExit();
+                break;
+            case "UNKNOWN": UnknownEncounterExit();
+                break;
+            case "SECRET_WORLD": SecretWorldEncounterExit();
+                break;
+            case "DAWN_CRYSTAL": DawnCrystalEncounterExit();
                 break;
             default:
                 break;
@@ -197,7 +236,17 @@ class FEventHandlerLayer : FLayer
         encounter = new BearEncounter();
         FSceneManager.Instance.PushScene(encounter);
     }
-    private void BearEncounterExit() { }
+    private void BearEncounterExit()
+    {
+        if (((BearEncounter)encounter).eatenByBears)
+        {
+            GameVars.Instance.SetParamValue(GameVarParams.POINTS.ToString(), "\"BEAR'ED\" END");
+            GameVars.Instance.SECRETS_FOUND++;
+            GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You were eaten by bears, yay!\n" + 
+                "That doesn't happen every day, you must be... \"BEARY\" LUCKY!");
+            ((FWorldScene)this.Parent).DoGameWon();
+        }
+    }
 
     private void WolfEncounterEnter()
     {
@@ -331,4 +380,62 @@ class FEventHandlerLayer : FLayer
         FSceneManager.Instance.PushScene(encounter);
     }
     private void WildPlantEncounterExit() { }
+
+    private void FeralAnumEncounterEnter()
+    {
+        encounter = new FeralAnumEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void FeralAnumEncounterExit() { }
+
+    private void ButterBugEncounterEnter()
+    {
+        encounter = new ButterBugEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void ButterBugEncounterExit() { }
+
+    private void OptorchidEncounterEnter()
+    {
+        encounter = new OptorchidEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void OptorchidEncounterExit() { }
+
+    private void UnknownEncounterEnter()
+    {
+        encounter = new UnknownEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void UnknownEncounterExit() { }
+
+    private void SecretWorldEncounterEnter()
+    {
+        encounter = new SecretWorldEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void SecretWorldEncounterExit()
+    {
+        GameVars.Instance.Player.Level += 5;
+        GameVars.Instance.Player.speed *= 2;
+        GameVars.Instance.Player.AttackPower += 20;
+        GameVars.Instance.Player.Defense += 5;
+        GameVars.Instance.Player.IsFloating = true;
+
+        GameVars.Instance.Player.FullHeal();
+    }
+
+    private void DawnCrystalEncounterEnter()
+    {
+        encounter = new DawnCrystalEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void DawnCrystalEncounterExit()
+    {
+        GameVars.Instance.Player.Level += 10;
+        GameVars.Instance.Player.AttackPower *= 100;
+        GameVars.Instance.Player.Defense *= 100;
+
+        GameVars.Instance.Player.FullHeal();
+    }
 }

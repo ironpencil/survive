@@ -92,7 +92,7 @@ public class FDisclaimerScene : FScene
                 continueText.alpha += 4.0f * Time.deltaTime;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
 
                 //fade this scene out

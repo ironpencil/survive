@@ -63,7 +63,14 @@ class BeesEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "Suddenly you feel a sharp prick on your arm. Looking down you see a large bee has stung you. You look around and realize you have disturbed a hive of killer bees, and several of them are buzzing about you angrily. What do you do?");
 
-        rootMenu.DisplayImageAsset = "bees";
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            rootMenu.DisplayImageAsset = "bees_blurred";
+        }
+        else
+        {
+            rootMenu.DisplayImageAsset = "bees";
+        }
 
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 

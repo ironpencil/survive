@@ -50,7 +50,14 @@ class TickEncounter : FEncounterScene
     {
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "While walking along you look down at your arm and notice a black speck. Looking closer you realize a tick must have fallen on you and is now feasting happily. How should you remove it safely?");
 
-        rootMenu.DisplayImageAsset = "tick";
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            rootMenu.DisplayImageAsset = "tick_blurred";
+        }
+        else
+        {
+            rootMenu.DisplayImageAsset = "tick";
+        }
 
         TreeNode<MenuNode> rootNode = new TreeNode<MenuNode>(rootMenu);
 

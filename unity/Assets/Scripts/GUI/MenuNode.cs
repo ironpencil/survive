@@ -11,11 +11,11 @@ public class MenuNode
 
     public string NodeTitle { get; set; }
 
-    public string NodeText { get; private set; }
+    public string NodeText { get; set; }
 
-    public string DisplayMessage { get; private set; }
+    public string DisplayMessage { get; set; }
 
-    public string NodeDescription { get; private set; }
+    public string NodeDescription { get; set; }
 
     public string DisplayImageAsset { get; set; }
 

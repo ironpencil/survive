@@ -52,6 +52,10 @@ public class FWorldLayer : FLayer
     private int maxRandomEncounterVariance = 16;
     private int nextRandomEncounter = 0;
 
+    private bool fadeMusicToSecretWorld = false;
+
+    private bool startSecretWorldMusic = false;
+
     private int encounterBagFills = 0;
     private List<EncounterEvent> randomEncounterBag = new List<EncounterEvent>();
     bool fireRandomEncounters = true;    
@@ -65,19 +69,37 @@ public class FWorldLayer : FLayer
     
     public override void OnUpdate()
 	{
+        if (fadeMusicToSecretWorld)
+        {
+            if (FSoundManager.musicVolume > 0.0f)
+            {
+                FSoundManager.musicVolume -= (GameVars.Instance.MUSIC_VOLUME_CHANGE_INTERVAL * Time.deltaTime);                
+            }
+            else
+            {
+                fadeMusicToSecretWorld = false;                
+            }
+            startSecretWorldMusic = true;
+        }
 
         //tileMap.LoadMoreTiles(5);
 
         if (elevatedLayer != null) { elevatedLayer.MoveToFront(); }
 
+        CheckGameOver();
+
         if (SurviveGame.ALLOW_DEBUG)
         {
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                ExecuteRandomEvent("BEAR");
+            }
+
             if (Input.GetKeyDown(KeyCode.N))
             {
-                GameVars.Instance.PLAYER_FULL_ENERGY = 10000;
+                player.MaxEnergy = 10000;
                 GameVars.Instance.PLAYER_FULL_WATER = 1000;
-                player.Energy = GameVars.Instance.PLAYER_FULL_ENERGY;
-                player.Water = GameVars.Instance.PLAYER_FULL_WATER;
+                player.FullHeal();
             }
 
             if (Input.GetKeyDown(KeyCode.L))
@@ -87,7 +109,7 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown(KeyCode.V))
             {
-                DoGameWon();
+                DoGameWon("Cheaters never lose.");
             }
 
             if (Input.GetKeyDown(KeyCode.G))
@@ -116,10 +138,35 @@ public class FWorldLayer : FLayer
                 canGameOver = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.M))
             {
+                SecretWorldEvent(null);                
+            }
 
-                string eventName = "WILD_PLANT"; //generate random event from available events and tile type
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                string eventName = "BUTTER_BUG"; //generate random event from available events and tile type
+                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
+                eventQueue.Enqueue(randomEvent);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                string eventName = "OPTORCHID"; //generate random event from available events and tile type
+                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
+                eventQueue.Enqueue(randomEvent);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+            {
+                string eventName = "FERAL_ANUM"; //generate random event from available events and tile type
+                EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
+                eventQueue.Enqueue(randomEvent);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad4))
+            {
+                string eventName = "UNKNOWN"; //generate random event from available events and tile type
                 EncounterEvent randomEvent = EncounterEvent.CreateRandomEvent(eventName);
                 eventQueue.Enqueue(randomEvent);
             }
@@ -128,9 +175,7 @@ public class FWorldLayer : FLayer
             {
                 eventQueue.Enqueue(PullRandomEncounter());
             }
-        }
-
-        CheckGameOver();
+        }        
 
         if (this.Parent.Paused)
         {
@@ -161,10 +206,18 @@ public class FWorldLayer : FLayer
         //unpause player animation
         if (player.isPaused) { player.pause(); }
 
+        if (startSecretWorldMusic)
+        {
+            Debug.Log("starting secret world music");
+            FSoundManager.PlayMusic("03-Another World (short)", GameVars.Instance.MUSIC_VOLUME, false);
+            FSoundManager.CurrentMusicShouldLoop(true);
+            startSecretWorldMusic = false;
+            fadeMusicToSecretWorld = false;
+        }
+
         //when the scene is unpaused, loadAddlTiles is set to true so that we will load more tiles on the next "pause"
         loadAddlTiles = true;
-        //addlTileLoadRange = 1;
-
+        //addlTileLoadRange = 1;        
 
         if (this.gameWon)
         {
@@ -262,7 +315,6 @@ public class FWorldLayer : FLayer
 
                 if (canWalk)
                 {
-                    player.NextMoveTime = Time.time + player.MoveDelayTime;
                     //player.MoveToFront();
                     //player.SetPosition(GetTilePosition(playerTile));
                     MovePlayerToTile(targetTileX, targetTileY, true);
@@ -362,7 +414,7 @@ public class FWorldLayer : FLayer
 
         player.play("standing", true);
 
-        eventQueue.Enqueue(EncounterEvent.CreateTextEvent("Start", "You believe the Visitor Center should be somewhere to the northwest."));
+        eventQueue.Enqueue(EncounterEvent.CreateTextEvent("Start", "You believe the Visitor Center should be somewhere to the northwest... maybe one of these paths will lead you back?"));
 	}
 
     private void GenerateNextEncounterInterval()
@@ -418,20 +470,7 @@ public class FWorldLayer : FLayer
     {
         FTextDisplayScene menu = new FTextDisplayScene("Message", messageText);
         FSceneManager.Instance.PushScene(menu);
-    }
-
-    
-    private void ShallowStreamEvent(IPTiledObject tileObject)
-    {
-        if (!shallowStreamTriggered)
-        {
-            string msgText = tileObject.GetPropertyValue(IPTileMapTileObjectProperties.TEXT.ToString());
-            FTextDisplayScene menu = new FTextDisplayScene("menu", msgText);
-            FSceneManager.Instance.PushScene(menu);
-            shallowStreamTriggered = true;
-        }
-        IPDebug.Log("Running Event: " + tileObject.GetPropertyValue(IPTileMapTileObjectProperties.EVENT_TYPE.ToString()));
-    }
+    }  
 
     public void MovePlayerToTile(int tileX, int tileY, bool doApproach)
     {
@@ -535,23 +574,26 @@ public class FWorldLayer : FLayer
    
         if (turnNumber > 0)
         {
-            IPDebug.Log("Taking Turn: " + turnNumber);
-            if (turnNumber % turnsToLoseOneEnergy == 0)
+            if (!GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
             {
-                player.Energy--;
-            }
-
-            if (player.Water > 0)
-            {
-                if (turnNumber % turnsToLoseOneWater == 0)
+                IPDebug.Log("Taking Turn: " + turnNumber);
+                if (turnNumber % turnsToLoseOneEnergy == 0)
                 {
-                    player.Water--;
+                    player.Energy--;
                 }
-            }
-            else
-            {
-                //lose 1 energy a turn when you don't have water in addition to the normal energy loss
-                player.Energy--;
+
+                if (player.Water > 0)
+                {
+                    if (turnNumber % turnsToLoseOneWater == 0)
+                    {
+                        player.Water--;
+                    }
+                }
+                else
+                {
+                    //lose 1 energy a turn when you don't have water in addition to the normal energy loss
+                    player.Energy--;
+                }
             }
         }
 
@@ -562,17 +604,30 @@ public class FWorldLayer : FLayer
 
     private void CheckGameOver()
     {
-        if (!this.gameOver && canGameOver && player.Energy <= 0)
+        if (!this.Parent.Paused)
         {
-            player.Energy = 0;
-            DoGameOver();
+            if (!this.gameOver && canGameOver && player.Energy <= 0)
+            {
+                player.Energy = 0;
+                DoGameOver();
+            }
         }
     }
 
     private void DoGameOver()
     {
-        FTextDisplayScene gameOverMessage = new FTextDisplayScene("GameOver", "Oh no, you ran out of energy!\n\n\n\nThat's okay, luckily your friendly North Texarado State Park Rangers will always be there to make sure you're never in any real danger. They were quickly able to find and rescue you. Being outside is both fun AND safe!");
-        FSceneManager.Instance.PushScene(gameOverMessage);
+        string gameOverMessage = "";
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            gameOverMessage = "You were defeated... ";
+        }
+        else
+        {
+            gameOverMessage = "Oh no, you ran out of energy!\n\n\n\nThat's okay, luckily your friendly North Texarado State Park Rangers will always be there to make sure you're never in any real danger. They were quickly able to find and rescue you. Being outside is both fun AND safe!";
+        }
+
+        FTextDisplayScene gameOverScene = new FTextDisplayScene("GameOver", gameOverMessage);
+        FSceneManager.Instance.PushScene(gameOverScene);
         this.gameOver = true;
         FSoundManager.PlayMusic("04-You Make Really Poor Choices", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(true);
@@ -586,14 +641,102 @@ public class FWorldLayer : FLayer
 
     private void DoGameWon()
     {
-        FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", "You made it back to the Visitor Center safely!");
+        DoGameWon("You made it back to the Visitor Center safely!");
+    }
+
+
+    private void DoGameWon(string customMessage)
+    {
+        FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", customMessage);
         FSceneManager.Instance.PushScene(wonGameMessage);
         this.gameWon = true;
         FSoundManager.PlayMusic("06-Way to Not Die", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(false);
-        ((FWorldScene)this.Parent).musicShouldFadeOnNextScene = false;
+        ((FWorldScene)this.Parent).musicShouldFadeOnNextScene = true;
     }
 
+
+
+    private void FaerieRingEvent(IPTiledObject tileObject)
+    {
+        string displayMessage = "";
+
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            return;
+        }
+        else
+        {
+            displayMessage = "You feel a strange presence... as if you are being watched.\n\n\n" +
+                "A voice seems to whisper inside your head...\n" +
+                "\"Chosen one...\n" +
+                "                      ...go back...\n" +
+                "                                             ...follow...\n" +
+                "                                                                   ...the mushrooms...\"";
+        }
+
+        FTextDisplayScene faerieRingMessage = new FTextDisplayScene("Faerie Ring", displayMessage);
+        FSceneManager.Instance.PushScene(faerieRingMessage);
+
+        GameVars.Instance.FAERIE_RING_FOUND = true;        
+    }
+
+
+    private void SecretWorldEvent(IPTiledObject tileObject)
+    {
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            return;
+        }
+
+        ExecuteRandomEvent("SECRET_WORLD");
+
+        GameVars.Instance.SECRET_WORLD_FOUND = true;
+        GameVars.Instance.SetParamValue(GameVarParams.SECRET_WORLD.ToString(), true);
+
+        baseRandomEncounterInterval *= 2;
+        GenerateNextEncounterInterval();
+
+        FillEncounterBag();
+        fadeMusicToSecretWorld = true;
+    }
+
+
+    private void DawnCrystalEvent(IPTiledObject tileObject)
+    {
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.DAWN_CRYSTAL.ToString()))
+        {
+            return;
+        }
+
+        ExecuteRandomEvent("DAWN_CRYSTAL");
+
+        GameVars.Instance.DAWN_CRYSTAL_FOUND = true;
+        GameVars.Instance.SetParamValue(GameVarParams.DAWN_CRYSTAL.ToString(), true);
+    }
+
+    private void GroveEntranceEvent(IPTiledObject tileObject)
+    {
+
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.GROVE_ENTERED.ToString()))
+        {
+            return;
+        }
+
+        string msgText = "Some kind of mysterious force is preventing you from entering the grove.";
+
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.DAWN_CRYSTAL.ToString()))
+        {
+            msgText = "The light from the Dawn Crystal flows out to the barrier at the entrance of the grove. " +
+                "A bright light flashes, and the barrier is gone.";
+
+            GameVars.Instance.SetParamValue(GameVarParams.GROVE_ENTERED.ToString(), true);
+            GameVars.Instance.GROVE_ENTERED = true;
+        }
+
+        FTextDisplayScene menu = new FTextDisplayScene("Grove Entrance", msgText);
+        FSceneManager.Instance.PushScene(menu);
+    }
 
 
     private void ExecuteTileEvent(string eventName, IPTile eventTile)
@@ -611,11 +754,17 @@ public class FWorldLayer : FLayer
         {
             case "MESSAGE": MessageEvent(tileObject);
                 break;
-            case "SHALLOW_STREAM_NORTH":
-            case "SHALLOW_STREAM_SOUTH": ShallowStreamEvent(tileObject);
-                break;
             case "WON_GAME": WonGameEvent(tileObject);
                 break;
+            case "FAERIE_RING": FaerieRingEvent(tileObject);
+                break;
+            case "SECRET_WORLD": SecretWorldEvent(tileObject);
+                break;
+            case "DAWN_CRYSTAL": DawnCrystalEvent(tileObject);
+                break;
+            case "GROVE_ENTRANCE": GroveEntranceEvent(tileObject);
+                break;
+            case "NO_ENCOUNTERS": break; //used to not generate random encounters when moving
             default:
                 break;
         }
@@ -630,57 +779,94 @@ public class FWorldLayer : FLayer
     private void FillEncounterBag()
     {
         randomEncounterBag.Clear();
-        if (encounterBagFills == 0)
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
         {
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FIND_FOOD_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BATHROOM_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FISHING_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("QUICKSAND_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_FIRE_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_CAMP_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MUDSLIDE_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR_TRAP_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("NAVIGATION_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("LIGHTNING_QUIZ"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
+            int bittyBugs = UnityEngine.Random.Range(4, 8);
+            int feralAnums = UnityEngine.Random.Range(2, 5);
+            int optorchids = UnityEngine.Random.Range(3, 7);            
 
-            int listSize = randomEncounterBag.Count;
-            //add a wild plant encounter for each other encounter - wild plants are common
-            for (int i = 0; i < listSize; i++)
+            for (int i = 0; i < bittyBugs; i++)
             {
-                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BUTTER_BUG"));
             }
-            //do initial fill
 
+            for (int i = 0; i < feralAnums; i++)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FERAL_ANUM"));
+            }
+
+            for (int i = 0; i < optorchids; i++)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("OPTORCHID"));
+            }
+
+            for (int i = 0; i < optorchids; i++)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("OPTORCHID"));
+            }
+
+            //5% chance to spawn a single unknown
+            int unknowns = UnityEngine.Random.Range(0, 100);
+            if (unknowns < 5)
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("UNKNOWN"));
+            }
+            IPDebug.ForceLog("BittyBugs = " + bittyBugs + "\nFeralAnums = " + feralAnums + "\nOptorchids = " + optorchids + "\nUnknown = " + (unknowns < 5).ToString());
         }
         else
         {
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
-            randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
-
-            int listSize = randomEncounterBag.Count;
-            //add a wild plant encounter for each other encounter - wild plants are common
-            for (int i = 0; i < listSize; i++)
+            if (encounterBagFills == 0)
             {
-                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
-            }
-            //do refill
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FIND_FOOD_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BATHROOM_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("FISHING_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("QUICKSAND_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_FIRE_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MAKE_CAMP_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("MUDSLIDE_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR_TRAP_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("NAVIGATION_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("LIGHTNING_QUIZ"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
 
+                int listSize = randomEncounterBag.Count / 2;
+                //add a wild plant encounter for each other encounter - wild plants are common
+                for (int i = 0; i < listSize; i++)
+                {
+                    randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
+                }
+                //do initial fill
+
+            }
+            else
+            {
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEAR"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WOLF"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SNAKE"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("COUGAR"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("TICK"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("BEES"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("RACCOON"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("ANTS"));
+                randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("SPIDER"));
+
+                int listSize = randomEncounterBag.Count / 2;
+                //add a wild plant encounter for each other encounter - wild plants are common
+                for (int i = 0; i < listSize; i++)
+                {
+                    randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("WILD_PLANT"));
+                }
+                //do refill
+
+            }
         }
 
         encounterBagFills++;
@@ -744,6 +930,92 @@ public class FWorldLayer : FLayer
             IPDebug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | canWalkOver = " + canWalkValue);
 
             bool.TryParse(canWalkValue, out canWalk);
+        }
+
+        if (!canWalk && GameVars.Instance.Player.IsFloating)
+        {
+            string canFloatValue = "";
+            bool canFloat = false;
+            bool canFloatFound = false;
+
+            //if we can't walk to the tile, and the player is floating,
+            //check to see if we're allowed to float to the tile
+            foreach (IPTiledObject tileObject in tileObjects)
+            {
+                //if the object says it can be floated on, set canFloat to true
+                if (tileObject.PropertyExists(IPTileMapTileProperties.CAN_FLOAT.ToString()))
+                {
+                    canFloatValue = tileObject.GetPropertyValue(IPTileMapTileProperties.CAN_FLOAT.ToString());
+
+                    IPDebug.Log("Target Tile Object = " + tileObject.Name + " | CAN_FLOAT = " + canFloatValue);
+
+                    //just use first object we find that contains a valid property value then break out
+                    if (bool.TryParse(canFloatValue, out canFloat))
+                    {
+                        canFloatFound = true;
+                        break;
+                    }
+                }
+            }
+
+            //only check the tile if we didn't find any objects with floatable definitions
+            if (!canFloatFound)
+            {
+                //check the canFloat value of the tile
+                IPTileData targetTileData = targetTile.TileData;
+
+                canFloatValue = targetTileData.GetPropertyValue(IPTileMapTileProperties.CAN_FLOAT.ToString());
+
+                IPDebug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | CAN_FLOAT = " + canFloatValue);
+
+                bool.TryParse(canFloatValue, out canFloat);
+            }
+
+            canWalk = canFloat;
+        }
+
+        //if we STILL can't walk, then check if the player has the Dawn Crystal
+        if (!canWalk && GameVars.Instance.GetParamValueBool(GameVarParams.DAWN_CRYSTAL.ToString()))
+        {
+            //if they have the dawn crystal, see if the tiles can be broken by it
+            string canBreakValue = "";
+            bool canBreak = false;
+            bool canBreakFound = false;
+
+            //if we can't walk to the tile, and the player is floating,
+            //check to see if we're allowed to float to the tile
+            foreach (IPTiledObject tileObject in tileObjects)
+            {
+                //if the object says it can be floated on, set canFloat to true
+                if (tileObject.PropertyExists(IPTileMapTileProperties.CRYSTAL_BREAK.ToString()))
+                {
+                    canBreakValue = tileObject.GetPropertyValue(IPTileMapTileProperties.CRYSTAL_BREAK.ToString());
+
+                    IPDebug.Log("Target Tile Object = " + tileObject.Name + " | CRYSTAL_BREAK = " + canBreakValue);
+
+                    //just use first object we find that contains a valid property value then break out
+                    if (bool.TryParse(canBreakValue, out canBreak))
+                    {
+                        canBreakFound = true;
+                        break;
+                    }
+                }
+            }
+
+            //only check the tile if we didn't find any objects with floatable definitions
+            if (!canBreakFound)
+            {
+                //check the canFloat value of the tile
+                IPTileData targetTileData = targetTile.TileData;
+
+                canBreakValue = targetTileData.GetPropertyValue(IPTileMapTileProperties.CAN_FLOAT.ToString());
+
+                IPDebug.Log("Target Tile Asset = " + targetTileData.GetAssetName() + " | CRYSTAL_BREAK = " + canBreakValue);
+
+                bool.TryParse(canBreakValue, out canBreak);
+            }
+
+            canWalk = canBreak;
         }
 
         return canWalk;

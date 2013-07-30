@@ -61,7 +61,7 @@ class CougarEncounter : FEncounterScene
 
     public override void OnEnter()
     {
-        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "A rustle in the nearby brush alerts you, and you look over to see a mountain lion looking at you. It is crouched and ready to pounce! What do you do?");
+        MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, "A soft rustle in some nearby brush draws your attention. Glancing over, you see a mountain lion looking right at you, crouched and ready to pounce! What do you do?");
 
         rootMenu.DisplayImageAsset = "cougar";
 

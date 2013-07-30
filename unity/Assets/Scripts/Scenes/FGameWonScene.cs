@@ -107,7 +107,7 @@ public class FGameWonScene : FScene
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             //pressed [Space], make the scene transition faster
             //this.fadeOutTime = 0.5f;
@@ -136,10 +136,23 @@ public class FGameWonScene : FScene
         gameWonImage.height = Futile.screen.height;
         //this.AddChild(gameWonImage);
 
+        string winMessage = GameVars.Instance.GetParamValueString(GameVarParams.WIN_MESSAGE.ToString());
+
+        if (winMessage.Length == 0)
+        {
+            winMessage = "You made it back to the Visitor Center!";
+        }
+
+        string points = GameVars.Instance.GetParamValueString(GameVarParams.POINTS.ToString());
+
+        string secretsFound = GameVars.Instance.SECRETS_FOUND.ToString();
+
+        string totalSecrets = GameVars.Instance.TOTAL_SECRETS.ToString();
+
         gameWonLabel = new FLabel(GameVars.Instance.FONT_NAME, 
-            "Congratulations, you made it back to the Visitor Center!\n\n" +
-            "Wilderness Survival Points: " + GameVars.Instance.Player.WildernessPoints + "\n\n" + 
-            "Secrets Found: 0/0\n\n" + 
+            "Congratulations! " + winMessage + "\n\n" +
+            "Wilderness Survival Points: " + points + "\n\n" + 
+            "Secrets Found: " + secretsFound + " / " + totalSecrets + "\n\n" + 
             "Press [Space] to Continue.");
         this.AddChild(gameWonLabel);
 

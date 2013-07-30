@@ -46,7 +46,7 @@ public class FTextDisplayScene : FScene
 
         //this.SetPosition(Futile.stage.GetPosition() * -1);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             if (!msgBox.Next())
             {

@@ -36,7 +36,7 @@ public class FIntroScene : FScene
     FSprite sagdLogo;
     FLabel ironPencilLabel;
     FLabel stateParkLabel;
-    FLabel presentsLabel;
+    FLabel presentsLabel;    
 
     CurrentLogo currentLogo = CurrentLogo.SAGD;
     
@@ -51,7 +51,7 @@ public class FIntroScene : FScene
 	public override void OnUpdate ()
 	{
         //allow you to skip intro
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             //set new game scene
             FTitleScene titleScene = new FTitleScene("Title");
@@ -212,6 +212,11 @@ public class FIntroScene : FScene
 	{
 
 	}
+
+    private void HandleBugsButtonRelease(FButton button)
+    {
+
+    }
 
     
 }

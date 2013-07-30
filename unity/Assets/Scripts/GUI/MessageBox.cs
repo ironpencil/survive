@@ -86,6 +86,8 @@ class MessageBox : FLayer
         //foreground.alpha = 0.0f;
         //this.AddChild(foreground);
         //}
+
+        messageText.TrimEnd("\n".ToCharArray());
         this.messageText = messageText;
         displayedLabel = new FLabel(GameVars.Instance.FONT_NAME, "");
         
@@ -135,6 +137,7 @@ class MessageBox : FLayer
 
     public void SetText(string messageText)
     {
+        messageText.TrimEnd("\n".ToCharArray());
         this.messageText = messageText;
         SetupLabels();
     }
@@ -212,7 +215,7 @@ class MessageBox : FLayer
 
         //add the last updated label text
         //labels.Add(currentLabel);
-        if (currentText.Length > 0)
+        if (currentText.Trim().Length > 0)
         {
             labelText.Add(currentText);
         }

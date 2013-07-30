@@ -16,7 +16,7 @@ using System.Collections.Generic;
 public class FCreditsScene : FScene
 {
 
-    private float fadeOutTime = 4.0f;
+    private float fadeOutTime = 3.0f;
     private float fadeInTime = 1.0f;
     private float fadeStartTime = 0.0f;
 
@@ -129,7 +129,7 @@ public class FCreditsScene : FScene
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             //pressed space, speed up fade out
             //this.fadeOutTime = 1.0f;
@@ -155,22 +155,21 @@ public class FCreditsScene : FScene
         //this.AddChild(gameWonImage);
 
         credits.Add("Danger Aversion Training:\nAdventures in Survival Safety\n\nwas made possible by...");
-        credits.Add("Programming\n\nJim South");
-        credits.Add("Art\n\nJim South");
-        credits.Add("Additional Art\n\nInternet Janitor\n\nMike Stiller");
+        credits.Add("Design / Programming / Writing / Art\n\nJim South\njim@ironpencil.com");
+        credits.Add("Additional Art\n\nInternet Janitor\n\nNeitherman\nmikestiller@gmail.com");
         credits.Add("Music\n\nbagina");
-        credits.Add("Best Font\n\nComic Sans");
-        credits.Add("Long Nights\n\nMonster Energy");
-        credits.Add("Motivation\n\nThe Something Awful Goons");
-        credits.Add("Iron Pencil Studios would like to thank you for playing!\n\nWe hope you enjoyed DAT:ASS!");
-
-
+        credits.Add("Narration\n\nJebediah Kerman");
+        credits.Add("Best Font Ever\n\nComic Sans");
+        credits.Add("YES IT IS DON'T ARGUE");
+        credits.Add("Special Thanks to\n\nThe Something Awful Forum Goons\n\n#SAGameDev\n\nMatt Rix and Futile");
+        credits.Add("...and players like you!\n\nWe hope you enjoyed...\n\n" +
+            "Danger Aversion Training:\n" + "Adventures in Survival Safety!");
 
         creditsLabel = new FLabel(GameVars.Instance.FONT_NAME, credits[creditsIndex]);
         this.AddChild(creditsLabel);
 
         player = new FAnimatedSprite("player");
-        player.addAnimation(new FAnimation("standing", new int[1] { 0 }, 500, true));
+        player.addAnimation(new FAnimation("standing", new int[2] { 1, 2 }, 1000, true));
         player.addAnimation(new FAnimation("walking", new int[2] { 1, 2 }, 200, true));
 
         player.y = Futile.screen.halfHeight + playerScreenWrapMargin;

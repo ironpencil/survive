@@ -18,16 +18,92 @@ public class Mob : FAnimatedSprite
     public int TileY { get { return (int) tileCoordinates.y; } set { tileCoordinates.y = value; } }
 
     public float MoveDelayTime = 0.2f;
-    public float NextMoveTime = 0.0f;
 
     public bool IsMovingToPosition = false;
     public Vector2 TargetPosition = Vector2.zero;
     public Vector2 speed = Vector2.zero;
 
+    private int level = 0;
+    public int Level
+    {
+        get
+        {
+            if (level < 0) { level = 0; }
+
+            return level;
+        }
+        set
+        {
+            level = value;
+
+            int remainder = 0;
+
+            if (this.WildernessPoints > 0)
+            {
+                remainder = this.WildernessPoints % 100;
+            }
+
+            this.wildernessPoints = (level * 100) + remainder;
+
+            this.MaxEnergy = GameVars.Instance.PLAYER_STARTING_ENERGY + (level * 5);
+        }
+    }
+
+    public int AttackPower { get; set; }
+    public int AttackMultiplier
+    {
+        get
+        {
+            return (int) ((Level / 2) + 2);
+        }
+    }
+
+    public int HitChance
+    {
+        get
+        {
+            //int hitChance = 50 + (WildernessPoints / 10);
+
+            int hitChance = 100;
+            return hitChance;            
+        }
+    }
+
+    public int CritChance
+    {
+        get
+        {
+            int critChance = Level;
+
+            if (critChance < 5) { critChance = 5; }
+
+            return critChance;
+        }
+    }
+
+    public int EvadeChance
+    {
+        get
+        {
+            //int hitChance = 50 + (WildernessPoints / 10);
+
+            int evadeChance = Level * 2;
+            return evadeChance;
+        }
+    }
+
+    public int Defense { get; set; }
+
+    public bool HasAntArmor { get; set; }
+
+    public bool IsFloating { get; set; }
+
     public List<Item> Inventory { get; set; }
 
     FAnimation standingAnim = new FAnimation("standing", new int[1] { 0 }, 500, false);
     FAnimation walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, 200, true);
+
+    public int MaxEnergy { get; set; }
 
     private int energy;
     public int Energy
@@ -36,7 +112,7 @@ public class Mob : FAnimatedSprite
         set
         {
             if (value < 0) { value = 0; }
-            if (value > GameVars.Instance.PLAYER_FULL_ENERGY) { value = GameVars.Instance.PLAYER_FULL_ENERGY; }
+            if (value > MaxEnergy) { value = MaxEnergy; }
             energy = value;
         }
     }
@@ -53,7 +129,16 @@ public class Mob : FAnimatedSprite
         }
     }
 
-    public int WildernessPoints { get; set; }
+    private int wildernessPoints = 0;
+    public int WildernessPoints
+    {
+        get { return wildernessPoints; }
+        set
+        {
+            wildernessPoints = value;
+            this.Level = (int)(wildernessPoints / 100);
+        }
+    }
 
     public Mob(string elementName)
         : base(elementName)
@@ -62,15 +147,23 @@ public class Mob : FAnimatedSprite
         speed.x = this.width / MoveDelayTime;
         speed.y = this.height / MoveDelayTime;
         Inventory = new List<Item>();
+        MaxEnergy = GameVars.Instance.PLAYER_STARTING_ENERGY;
         Energy = GameVars.Instance.PLAYER_STARTING_ENERGY;
         Water = GameVars.Instance.PLAYER_STARTING_WATER;
+        AttackPower = 1;
+        Defense = 1;
+        HasAntArmor = false;
+        IsFloating = false;
 
         this.addAnimation(standingAnim);
         this.addAnimation(walkingAnim);               
     }
 
-
-
+    public void FullHeal()
+    {
+        this.Energy = this.MaxEnergy;
+        this.Water = GameVars.Instance.PLAYER_FULL_WATER;
+    }
 
 
     public bool ApproachTarget()

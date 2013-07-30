@@ -23,6 +23,8 @@ public class FNewGameScene : FScene
     private bool fadingIn = false;
     private bool fadingOut = false;
 
+    FButton blurBugsButton;
+
     //Vector2 maxBounds;
     public FNewGameScene(string _name = "Default")
         : base(_name)
@@ -69,7 +71,7 @@ public class FNewGameScene : FScene
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             //set new game scene
             if (!this.fadingOut)
@@ -109,7 +111,7 @@ public class FNewGameScene : FScene
             "You will also be quizzed on general survival safety.\n" +
             "Answer correctly to earn Wilderness Survival Points!\n\n" +
             "Use the Arrow Keys or [WASD] to move, and\n" +
-            "use [Space] to make selections and interact.\n\n" +
+            "use [Space] or [Enter] to make selections.\n\n" +
             "Good luck!");
 
         //howToPlayLabel1.anchorY = 1.0f;
@@ -131,14 +133,68 @@ public class FNewGameScene : FScene
         FSoundManager.PlayMusic("05-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(false);
 
+
+
+        
+
+        blurBugsButton = new FButton("blurBugsButton_up", "blurBugsButton_down");
+
+        string bugsText = "";
+        Color labelColor = Color.red;
+
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            bugsText = "Blur Bugs: ON";
+            labelColor = Color.green;
+        }
+        else
+        {
+            bugsText = "Blur Bugs: OFF";
+        }
+
+        blurBugsButton.AddLabel(GameVars.Instance.FONT_NAME, bugsText, labelColor);
+
+        blurBugsButton.x = Futile.screen.halfWidth - 110.0f;
+        blurBugsButton.y = -Futile.screen.halfHeight + 35.0f;
+
+        //Debug.Log("Label size:" + blurBugsButton.label.textRect.width);
+
+        AddChild(blurBugsButton);
+
+        blurBugsButton.SignalRelease += HandleBugsButtonRelease;
+
+        FLabel bugsDescLabel = new FLabel(GameVars.Instance.FONT_NAME, "Don't like bugs?");
+
+        bugsDescLabel.x = blurBugsButton.x;
+        bugsDescLabel.y = blurBugsButton.y + (blurBugsButton.hitRect.height);
+
+        AddChild(bugsDescLabel);
+
+
         this.fadeStartTime = Time.time;
         this.fadingIn = true;
     }
 
     public override void OnExit()
-	{
+    {
 
-	}
+    }
+
+    private void HandleBugsButtonRelease(FButton button)
+    {
+        GameVars.Instance.BLUR_BUGS = !GameVars.Instance.BLUR_BUGS;
+
+        if (GameVars.Instance.BLUR_BUGS)
+        {
+            blurBugsButton.label.text = "Blur Bugs: ON";
+            blurBugsButton.label.color = Color.green;
+        }
+        else
+        {
+            blurBugsButton.label.text = "Blur Bugs: OFF";
+            blurBugsButton.label.color = Color.red;
+        }
+    }
 
     
 }

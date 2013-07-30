@@ -10,6 +10,8 @@ class BearEncounter : FEncounterScene
     private const string CHOICE1_B = "Choice1_B";
     private const string CHOICE1_C = "Choice1_C";
 
+    public bool eatenByBears = false;
+
     public BearEncounter(string _name = "BEAR")
         : base(_name)
     {
@@ -34,8 +36,17 @@ class BearEncounter : FEncounterScene
             default: // item usage
                 if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.HONEY)))
                 {
-                    DisplayTextMessage(selectedNode.NodeTitle, "You slather honey on your hand and hold it out toward the bears. They sniff at you, lick the honey clean, and scamper off into the woods. Looks like you made some new friends!");
-                    GameVars.Instance.Player.WildernessPoints += 5;
+                    int eatenChance = UnityEngine.Random.Range(0, 100);
+                    if (eatenChance < 5) // 0-4 = eaten by a bear, congratulations
+                    {
+                        DisplayTextMessage(selectedNode.NodeTitle, "You slather yourself in honey and walk toward the bears.\n\n\nThey devour you hungrily. Congratulations!");
+                        this.eatenByBears = true;
+                    }
+                    else
+                    {
+                        DisplayTextMessage(selectedNode.NodeTitle, "You slather honey on your hand and hold it out toward the bears. They sniff at you, lick the honey clean, and scamper off into the woods. Looks like you made some new friends!");
+                        GameVars.Instance.Player.WildernessPoints += 5;
+                    }
                 }
                 else
                 {
