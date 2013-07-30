@@ -156,8 +156,8 @@ public class FCreditsScene : FScene
 
         credits.Add("Danger Aversion Training:\nAdventures in Survival Safety\n\nwas made possible by...");
         credits.Add("Design / Programming / Writing / Art\n\nJim South\njim@ironpencil.com");
-        credits.Add("Additional Art\n\nInternet Janitor\n\nNeitherman\nmikestiller@gmail.com");
-        credits.Add("Music\n\nbagina");
+        credits.Add("Additional Art\n\nReal Art: Internet Janitor\n\nSome Art: Neitherman\nmikestiller@gmail.com");
+        credits.Add("Music\n\nJ.R. Trimpe\njr@tmpublishing.net\n(C)2013 Trimpe Music Publishing (ASCAP)\nAll rights reserved.\nwww.trimpe.org\n\nSoundtrack available at: www.trimpe.org/survival");
         credits.Add("Narration\n\nJebediah Kerman");
         credits.Add("Best Font Ever\n\nComic Sans");
         credits.Add("YES IT IS DON'T ARGUE");

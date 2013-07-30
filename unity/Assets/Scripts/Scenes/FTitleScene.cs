@@ -162,7 +162,7 @@ public class FTitleScene : FScene
         continueLabel.y = (-Futile.screen.halfHeight) + 20;
         this.AddChild(continueLabel);
 
-        FSoundManager.PlayMusic("05-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, true);
+        FSoundManager.PlayMusic("01-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, true);
         FSoundManager.CurrentMusicShouldLoop(false);        
 
         this.fadeStartTime = Time.time;

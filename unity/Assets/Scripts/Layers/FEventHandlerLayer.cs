@@ -44,6 +44,8 @@ class FEventHandlerLayer : FLayer
 	
 	public override void OnUpdate ()
 	{
+        //if (this.Parent.Paused) { return; }
+
         if (encounter != null && encounter.IsFinished)
         {
             ShouldPop = true;
@@ -61,6 +63,10 @@ class FEventHandlerLayer : FLayer
         switch (Name)
         {
             case "FOUND_MUSHROOMS": FoundMushroomEnter();
+                break;
+            case "FOUND_MUSIC": FoundMusicEnter();
+                break;
+            case "PORNO": FoundPornEnter();
                 break;
             case "GET_WATER": GetWaterEnter();
                 break;
@@ -128,6 +134,10 @@ class FEventHandlerLayer : FLayer
         {
             case "FOUND_MUSHROOMS": FoundMushroomExit();
                 break;
+            case "FOUND_MUSIC": FoundMusicExit();
+                break;
+            case "PORNO": FoundPornExit();
+                break;
             case "GET_WATER": GetWaterExit();
                 break;
             case "BEAR": BearEncounterExit();
@@ -189,6 +199,13 @@ class FEventHandlerLayer : FLayer
 
     private void FoundMushroomEnter()
     {
+        //if we're in the secret world, we don't care about mushrooms
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            ShouldPop = true;
+            return;
+        }
+
         bool mushroomsEaten = GameVars.Instance.TileHelper.GetTilePropertyValueBool(tileLocation, "MUSHROOMS_EATEN");
 
         if (!mushroomsEaten)
@@ -212,6 +229,48 @@ class FEventHandlerLayer : FLayer
                 GameVars.Instance.TileHelper.SetTilePropertyValue(tileLocation, "MUSHROOMS_EATEN", true);
             }
         }
+    }
+
+    private void FoundMusicEnter()
+    {
+        bool musicFound = GameVars.Instance.GetParamValueBool("MUSIC_FOUND");
+
+        if (!musicFound)
+        {
+            FTextDisplayScene musicScene = new FTextDisplayScene("Found Music", "There are papers scattered here. It appears to be some kind of sheet music. You pick them up and take them with you.");
+            FSceneManager.Instance.PushScene(musicScene);
+        }
+
+        ShouldPop = true;
+    }
+
+    private void FoundMusicExit()
+    {
+        eventTile.element = Futile.atlasManager.GetElementWithName("game_tiles_32");
+        GameVars.Instance.SetParamValue("MUSIC_FOUND", true);
+
+        GameVars.Instance.MUSIC_FOUND = true;
+    }
+
+    private void FoundPornEnter()
+    {
+        bool pornoFound = GameVars.Instance.GetParamValueBool("PORN_FOUND");
+
+        if (!pornoFound)
+        {
+            FTextDisplayScene pornScene = new FTextDisplayScene("Found Porn", "There seems to be a magazine stuffed in the bushes here... Whoa, naked ladies!");
+            FSceneManager.Instance.PushScene(pornScene);
+        }
+
+        ShouldPop = true;
+    }
+
+    private void FoundPornExit()
+    {
+        eventTile.element = Futile.atlasManager.GetElementWithName("game_tiles_18");
+        GameVars.Instance.SetParamValue("PORN_FOUND", true);
+
+        GameVars.Instance.PORN_FOUND = true;
     }
 
     private void GetWaterEnter()
@@ -433,8 +492,8 @@ class FEventHandlerLayer : FLayer
     private void DawnCrystalEncounterExit()
     {
         GameVars.Instance.Player.Level += 10;
-        GameVars.Instance.Player.AttackPower *= 100;
-        GameVars.Instance.Player.Defense *= 100;
+        GameVars.Instance.Player.AttackPower += 50;
+        GameVars.Instance.Player.Defense += 50;
 
         GameVars.Instance.Player.FullHeal();
     }

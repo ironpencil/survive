@@ -130,7 +130,7 @@ public class FNewGameScene : FScene
         label.y = (-Futile.screen.halfHeight) + 20;
         this.AddChild(label);
 
-        FSoundManager.PlayMusic("05-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.PlayMusic("01-Welcome to the Woods, Dunce", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(false);
 
 

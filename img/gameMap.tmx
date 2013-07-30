@@ -43,7 +43,8 @@
   </tile>
   <tile id="7">
    <properties>
-    <property name="CAN_WALK" value="false"/>
+    <property name="CAN_WALK" value="true"/>
+    <property name="EVENT" value="PORNO"/>
    </properties>
   </tile>
   <tile id="8">
@@ -910,13 +911,6 @@
   <properties>
    <property name="LAYER_TYPE" value="TERRAIN"/>
   </properties>
-  <object name="A Hidden Treasure" type="EVENT" x="960" y="608" width="32" height="32">
-   <properties>
-    <property name="CAN_WALK" value="true"/>
-    <property name="EVENT_TYPE" value="PORNO"/>
-    <property name="TEXT" value="You found a dirty magazine! The porn fairy must have been here!"/>
-   </properties>
-  </object>
   <object name="Park Office" type="EVENT" x="704" y="704" width="96" height="32">
    <properties>
     <property name="CAN_WALK" value="true"/>

@@ -55,7 +55,7 @@ public sealed class GameVars
     #region Secrets
 
     public int SECRETS_FOUND = 0;
-    public int TOTAL_SECRETS = 1;
+    public int TOTAL_SECRETS = 10;
 
     public bool FAERIE_RING_FOUND = false;
     public bool SECRET_WORLD_FOUND = false;
@@ -65,6 +65,9 @@ public sealed class GameVars
     public bool ROCKY_BEATEN = false;
     public bool UNKNOWN_SEEN = false;
     public bool UNKNOWN_BEATEN = false;
+    public bool MUSIC_FOUND = false;
+    public bool MUSIC_HEARD = false;
+    public bool PORN_FOUND = false;
 
     #endregion
     #region GameVariables
@@ -76,8 +79,6 @@ public sealed class GameVars
     public int PLAYER_FULL_WATER;
 
     public bool SHOW_ALTERNATE_TITLE = false;
-
-    public int RANDOM_ENCOUNTER_INTERVAL = 6;
 
     public float MUSIC_VOLUME_CHANGE_INTERVAL = 0.1f;
 

@@ -85,7 +85,16 @@ public class FGameOverScene : FScene
         gameOverImage.width = Futile.screen.width;
         gameOverImage.height = Futile.screen.height;
         this.AddChild(gameOverImage);
-        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, "You weren't able to make it back without help...\n\n\n\nPress [Space] to try again.");
+
+        string loseMessage = GameVars.Instance.GetParamValueString(GameVarParams.LOSE_MESSAGE.ToString());
+
+        if (loseMessage.Length == 0)
+        {
+            loseMessage = "You weren't able to make it back without help...";
+        }
+
+
+        FLabel label = new FLabel(GameVars.Instance.FONT_NAME, loseMessage + "\n\n\n\nPress [Space] to try again.");
         this.AddChild(label);
 
         FAnimatedSprite sadPlayer = new FAnimatedSprite("player_sad");

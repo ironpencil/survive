@@ -96,8 +96,12 @@ class OptorchidEncounter : FEncounterScene
                     }
                     else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                     {
-                        turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
-                        GameVars.Instance.Player.Energy += 50;
+                        turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
+                        GameVars.Instance.Player.Energy += 30;
+                    }
+                    else if (selectedNode.NodeTitle.Equals(ItemIDs.DAWN_CRYSTAL.ToString()))
+                    {
+                        turnDescription.AppendLine("You used the Dawn Crystal... It doesn't appear to be doing anything.");
                     }
                     else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
                     {

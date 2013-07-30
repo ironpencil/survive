@@ -209,7 +209,7 @@ public class FWorldLayer : FLayer
         if (startSecretWorldMusic)
         {
             Debug.Log("starting secret world music");
-            FSoundManager.PlayMusic("03-Another World (short)", GameVars.Instance.MUSIC_VOLUME, false);
+            FSoundManager.PlayMusic("03-Another World", GameVars.Instance.MUSIC_VOLUME, false);
             FSoundManager.CurrentMusicShouldLoop(true);
             startSecretWorldMusic = false;
             fadeMusicToSecretWorld = false;
@@ -650,7 +650,7 @@ public class FWorldLayer : FLayer
         FTextDisplayScene wonGameMessage = new FTextDisplayScene("You Win", customMessage);
         FSceneManager.Instance.PushScene(wonGameMessage);
         this.gameWon = true;
-        FSoundManager.PlayMusic("06-Way to Not Die", GameVars.Instance.MUSIC_VOLUME, false);
+        FSoundManager.PlayMusic("05-Way to Not Die", GameVars.Instance.MUSIC_VOLUME, false);
         FSoundManager.CurrentMusicShouldLoop(false);
         ((FWorldScene)this.Parent).musicShouldFadeOnNextScene = true;
     }

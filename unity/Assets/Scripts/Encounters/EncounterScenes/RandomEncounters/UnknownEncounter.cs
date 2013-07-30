@@ -87,8 +87,8 @@ class UnknownEncounter : FEncounterScene
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                 {
-                    turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
-                    GameVars.Instance.Player.Energy += 50;
+                    turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
+                    GameVars.Instance.Player.Energy += 30;
                 }
                 else
                 {

@@ -49,7 +49,7 @@ class AntsEncounter : FEncounterScene
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.HONEY.ToString()))
                 {
-                    DisplayTextMessage(selectedNode.NodeTitle, "Covering yourself and the ants with honey causes them to become stuck to you. Your entire body is now covered with biting, stinging ants. If this were a video game you would probably gain some kind of damage barrier counter-attack.");                    
+                    DisplayTextMessage(selectedNode.NodeTitle, "Covering yourself and the ants with honey causes them to become stuck to you. Your entire body is now covered with biting, stinging ants. If this were a video game you would probably gain some kind of damage barrier counterattack.");                    
                     GameVars.Instance.Player.WildernessPoints += 3;
                     GameVars.Instance.Player.HasAntArmor = true;
                 }

@@ -41,8 +41,13 @@
          "type" : "item"
       },
       "SALT" : {
-         "description" : "Well I mean there's salt inside, it's not just an empty shaker, what use would that be?",
+         "description" : "Well I mean there's salt inside, it's not just an empty shaker, that would be pointless.",
          "name" : "Salt Shaker",
+         "type" : "item"
+      },
+      "DAWN_CRYSTAL" : {
+         "description" : "It's glowing blue and feels warm. That's... good, right?",
+         "name" : "Dawn Crystal",
          "type" : "item"
       }
    },

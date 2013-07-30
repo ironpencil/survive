@@ -168,7 +168,16 @@ public class FGameWonScene : FScene
         this.fadeStartTime = Time.time;
         this.fadingIn = true;
 
-        FSoundManager.PlayMusic("08-Credits", GameVars.Instance.MUSIC_VOLUME, true);
+
+        string musicAsset = "07-Strange Papers";
+
+        if (GameVars.Instance.GetParamValueBool("MUSIC_FOUND"))
+        {
+            musicAsset = "06-The Long Walk Home";
+            GameVars.Instance.MUSIC_HEARD = true;
+        }
+
+        FSoundManager.PlayMusic(musicAsset, GameVars.Instance.MUSIC_VOLUME, true);
         FSoundManager.CurrentMusicShouldLoop(false);
 	}
 

@@ -53,6 +53,7 @@ public enum ItemIDs
     BUG_SPRAY,
     MARSHMALLOWS,
     SALT,
+    DAWN_CRYSTAL
 }
 
 public enum Targets
@@ -89,6 +90,7 @@ public enum WildPlantTypes
 public enum GameVarParams
 {
     WIN_MESSAGE,
+    LOSE_MESSAGE,
     POINTS,
     SECRET_WORLD,
     DAWN_CRYSTAL,

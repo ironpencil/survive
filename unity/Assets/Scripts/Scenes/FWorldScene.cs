@@ -124,7 +124,7 @@ public class FWorldScene : FScene
         //worldLayer.alpha = 0.0f;
         //guiLayer.alpha = 0.0f;
 
-        FSoundManager.PlayMusic("01-Overworld", GameVars.Instance.MUSIC_VOLUME, true);
+        FSoundManager.PlayMusic("02-Overworld", GameVars.Instance.MUSIC_VOLUME, true);
         FSoundManager.CurrentMusicShouldLoop(true);
 
         this.fadeStartTime = Time.time;
@@ -165,6 +165,11 @@ public class FWorldScene : FScene
 
     public void DoGameOver()
     {
+        if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
+        {
+            GameVars.Instance.SetParamValue(GameVarParams.LOSE_MESSAGE.ToString(), "You weren't able to fulfill the destiny of the Chosen One...");
+        }
+
         nextScene = new FGameOverScene("GameOver");
         this.fadingOut = true;
         this.fadeOutTime = 1.0f;

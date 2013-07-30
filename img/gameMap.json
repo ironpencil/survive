@@ -36,21 +36,6 @@
          "objects":[
                 {
                  "height":32,
-                 "name":"A Hidden Treasure",
-                 "properties":
-                    {
-                     "CAN_WALK":"true",
-                     "EVENT_TYPE":"PORNO",
-                     "TEXT":"You found a dirty magazine! The porn fairy must have been here!"
-                    },
-                 "type":"EVENT",
-                 "visible":true,
-                 "width":32,
-                 "x":960,
-                 "y":608
-                }, 
-                {
-                 "height":32,
                  "name":"Park Office",
                  "properties":
                     {
@@ -643,7 +628,8 @@
                 },
              "7":
                 {
-                 "CAN_WALK":"false"
+                 "CAN_WALK":"true",
+                 "EVENT":"PORNO"
                 },
              "8":
                 {

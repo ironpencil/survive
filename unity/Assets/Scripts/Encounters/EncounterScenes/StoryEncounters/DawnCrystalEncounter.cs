@@ -40,6 +40,8 @@ class DawnCrystalEncounter : FEncounterScene
 
         this.currentScene = new FSelectionDisplayScene(this.Name, dialogTree);
         FSceneManager.Instance.PushScene(this.currentScene);
+
+        GameVars.Instance.Player.Inventory.Add(GameData.Instance.GetNewItem(ItemIDs.DAWN_CRYSTAL));
     }
 
 }
