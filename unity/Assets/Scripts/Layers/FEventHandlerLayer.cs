@@ -62,6 +62,8 @@ class FEventHandlerLayer : FLayer
         //decide which event to enter
         switch (Name)
         {
+            case "GAME_MENU": GameMenuEnter();
+                break;
             case "FOUND_MUSHROOMS": FoundMushroomEnter();
                 break;
             case "FOUND_MUSIC": FoundMusicEnter();
@@ -134,6 +136,8 @@ class FEventHandlerLayer : FLayer
         //decide which event to exit
         switch (Name)
         {
+            case "GAME_MENU": GameMenuExit();
+                break;
             case "FOUND_MUSHROOMS": FoundMushroomExit();
                 break;
             case "FOUND_MUSIC": FoundMusicExit();
@@ -200,6 +204,20 @@ class FEventHandlerLayer : FLayer
                 break;
         }
 	}
+
+    private void GameMenuEnter()
+    {
+        if (!GameVars.Instance.GameMenuDisplayed)
+        {
+            encounter = new GameMenuEncounter();
+            FSceneManager.Instance.PushScene(encounter);
+        }
+        else
+        {
+            ShouldPop = true;
+        }
+    }
+    private void GameMenuExit() { }
 
     private void FoundMushroomEnter()
     {
@@ -304,7 +322,7 @@ class FEventHandlerLayer : FLayer
         if (((BearEncounter)encounter).eatenByBears)
         {
             GameVars.Instance.SetParamValue(GameVarParams.POINTS.ToString(), "BEAR END");
-            GameVars.Instance.SECRETS_FOUND++;
+            GameVars.Instance.EATEN_BY_BEARS = true;
             GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You were eaten by bears, yay!\n" + 
                 "That doesn't happen every day, you must be... BEARY lucky!");
             ((FWorldScene)this.Parent).DoGameWon();
@@ -509,7 +527,11 @@ class FEventHandlerLayer : FLayer
     }
     private void EsmudohrEncounterExit()
     {
-        GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You defeated Esmudohr!");
-        ((FWorldScene)this.Parent).DoGameWon();
+        if (((EsmudohrBattleEncounter)encounter).esmudohrDefeated)
+        {
+            GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You defeated Esmudohr!");
+            GameVars.Instance.SetParamValue(GameVarParams.ROCKY_BEATEN.ToString(), true);
+            GameVars.Instance.ROCKY_BEATEN = true;
+        }
     }
 }

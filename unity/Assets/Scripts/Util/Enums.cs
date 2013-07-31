@@ -94,5 +94,6 @@ public enum GameVarParams
     POINTS,
     SECRET_WORLD,
     DAWN_CRYSTAL,
-    GROVE_ENTERED
+    GROVE_ENTERED,
+    ROCKY_BEATEN
 }

@@ -54,7 +54,26 @@ public sealed class GameVars
 
     #region Secrets
 
-    public int SECRETS_FOUND = 0;
+    public int SECRETS_FOUND
+    {
+        get
+        {
+            int secretsFound = 0;
+            if (FAERIE_RING_FOUND) secretsFound++;
+            if (SECRET_WORLD_FOUND) secretsFound++;
+            if (EATEN_BY_BEARS) secretsFound++;
+            if (DAWN_CRYSTAL_FOUND) secretsFound++;
+            if (GROVE_ENTERED) secretsFound++;
+            if (ROCKY_BEATEN) secretsFound++;
+            if (UNKNOWN_SEEN) secretsFound++;
+            if (UNKNOWN_BEATEN) secretsFound++;
+            if (MUSIC_FOUND) secretsFound++;
+            if (PORN_FOUND) secretsFound++;
+
+            return secretsFound;
+        }
+    }
+
     public int TOTAL_SECRETS = 10;
 
     public bool FAERIE_RING_FOUND = false;
@@ -66,7 +85,6 @@ public sealed class GameVars
     public bool UNKNOWN_SEEN = false;
     public bool UNKNOWN_BEATEN = false;
     public bool MUSIC_FOUND = false;
-    public bool MUSIC_HEARD = false;
     public bool PORN_FOUND = false;
 
     #endregion
@@ -93,6 +111,7 @@ public sealed class GameVars
 
             musicVolume = value;
             FSoundManager.volume = value;
+            FSoundManager.musicVolume = value;
         }
     }
 
@@ -101,11 +120,15 @@ public sealed class GameVars
     #region GameParams
     private Dictionary<string, object> gameParams;
 
+    public bool ReturnToTitle = false;
+    public bool GameMenuDisplayed = false;
+
     public void ResetGame()
     {
+        ReturnToTitle = false;
+        GameMenuDisplayed = false;
         gameParams = new Dictionary<string, object>();
         PLAYER_FULL_WATER = PLAYER_STARTING_WATER;
-        SECRETS_FOUND = 0;
     }
 
     public object GetParamValue(string paramName)

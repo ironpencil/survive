@@ -12,9 +12,9 @@ class EsmudohrBattleEncounter : FEncounterScene
     private const string CHOICE_ATTACK_TENTACLES = "AttackTentacles";
     private const string CHOICE_ITEM = "Item";
 
-    private const string CHOICE_DENIAL = "Deny";
-    private const string CHOICE_ANGER = "Resent";
-    private const string CHOICE_BARGAINING = "Beseech";
+    private const string CHOICE_DENIAL = "Disbelieve";
+    private const string CHOICE_ANGER = "Rage";
+    private const string CHOICE_BARGAINING = "Plead";
     private const string CHOICE_DEPRESSION = "Despair";
     private const string CHOICE_ACCEPTANCE = "Endure";
 
@@ -25,10 +25,12 @@ class EsmudohrBattleEncounter : FEncounterScene
     TreeNode<MenuNode> battleTree;
     TreeNode<MenuNode> stunnedTree;
 
+    public string stage0Description = "Rocky Raccoon";
     public string stage1Description = "Esmudohr Quiescent";
     public string stage2Description = "Esmudohr Resplendent";
     public string stage3Description = "Esmudohr Omnipresent";
 
+    public string stage0Image = "rocky";
     public string stage1Image = "evil_rocky";
     public string stage2Image = "esmudohr";
     public string stage3Image = "eternal";
@@ -37,12 +39,13 @@ class EsmudohrBattleEncounter : FEncounterScene
     public string encounterDescription;
     public string imageAsset;
 
-    private string winText = "You defeated Esmudohr!";
+    private string winText = "Esmudohr Omnipresent is destroyed!";
 
-    public bool exmudohrDefeated = false;
+    public bool esmudohrDefeated = false;
 
     private enum Phase
 	{
+        PHASE0,
         PHASE1,
         PHASE2,
         PHASE3
@@ -55,17 +58,17 @@ class EsmudohrBattleEncounter : FEncounterScene
     public EsmudohrBattleEncounter(string _name = "ESMUDOHR")
         : base(_name)
     {
-        this.shortDescription = stage1Description;
-        this.encounterDescription = stage1Description + " is before you.";
+        this.shortDescription = stage0Description;
+        this.encounterDescription = "";
         this.imageAsset = stage1Image;
 
         hp = stage1HP;
     }
 
     private int stage1HP = 1000;
-    private int stage2HP = 5000;
-    private int stage3HP = 100000;
-    private int TentacleHP = 50;
+    private int stage2HP = 10000;
+    private int stage3HP = 1000000;
+    private int TentacleHP = 100;
 
     private int hp;
 
@@ -79,14 +82,15 @@ class EsmudohrBattleEncounter : FEncounterScene
         }
     }
 
-    private int MaxTentaclesSpawned = 100;
+    private int MaxTentaclesAtOnce = 10;
+    private int MaxTentaclesSpawned = 50;
     private int TotalTentaclesSpawned = 5;
     private int TentacleCount = 5;
-    private int TentacleDefense = 40;
-    private int TentacleHitChance = 80;
-    private int TentacleAttackPower = 20;
+    private int TentacleDefense = 50;
+    private int TentacleHitChance = 60;
+    private int TentacleAttackPower = 6;
     private int TentacleAttackMultiplier = 2;
-    private int TentacleCritChance = 1;
+    private int TentacleCritChance = 0;
 
     private int Defense;
 
@@ -97,7 +101,7 @@ class EsmudohrBattleEncounter : FEncounterScene
     private int AttackMultiplier;
     private int CritChance;
 
-    private int XP = 1000;
+    private int XP = 5000;
 
     private bool isAlive = true;
 
@@ -108,6 +112,10 @@ class EsmudohrBattleEncounter : FEncounterScene
     {
         switch (this.currentPhase)
         {
+            case Phase.PHASE0: MoveToPhase(Phase.PHASE1);
+                this.currentScene = new FSelectionDisplayScene(this.Name, battleTree);
+                FSceneManager.Instance.PushScene(this.currentScene);
+                break;
             case Phase.PHASE1: HandlePhase1Result();
                 break;
             case Phase.PHASE2: HandlePhase2Result();
@@ -127,15 +135,41 @@ class EsmudohrBattleEncounter : FEncounterScene
 
         switch (phase)
         {
-            case Phase.PHASE1:
-                this.imageAsset = stage1Image;
-                this.shortDescription = stage1Description;
-                this.encounterDescription = stage1Description + " stands before you.";
+            case Phase.PHASE0:
+                this.imageAsset = stage0Image;
+                this.shortDescription = stage0Description;
+                this.encounterDescription = "As you step into the rune, dark red mist begins to coalesce around you. All of a sudden, Rocky Raccoon, your friendly North Texarado State Park mascot, rushes in and pulls you away from it.\n\n\n" +
+                    "\"Oh no, what have you done? You shouldn't be here, little one, this is a very dangerous place!\"\n\n\nThe mist continues to gather, and in a flash it flies towards Rocky, who appears to absorb it. " +
+                    "He is quiet for a moment, then he slowly turns towards you.\n\nBut he is changed.";
 
                 this.turnCounter = 0;
 
                 this.HP = 1000;
-                this.Defense = 30;
+                this.Defense = 1000;
+
+                this.HitChance = 100;
+                this.EvadeChance = 0;
+
+                this.AttackPower = 20;
+                this.AttackMultiplier = 4;
+                this.CritChance = 5;
+
+                rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, this.encounterDescription);
+                rootMenu.DisplayImageAsset = this.imageAsset;
+
+                battleTree = new TreeNode<MenuNode>(rootMenu);
+
+                break;
+            case Phase.PHASE1:
+                this.imageAsset = stage1Image;
+                this.shortDescription = stage1Description;
+                this.encounterDescription = "\"Thank you, little one, for releasing me from that dreary prison. I am Esmudohr the All-Consuming. To show my gratitude for freeing me, I will devour you first - before moving on to the rest of your world.\"\n\n" +
+                    stage1Description + " stands before you.";
+
+                this.turnCounter = 0;
+
+                this.HP = 1000;
+                this.Defense = 1000;
 
                 this.HitChance = 100;
                 this.EvadeChance = 0;
@@ -163,7 +197,7 @@ class EsmudohrBattleEncounter : FEncounterScene
 
                 this.turnCounter = 0;
 
-                this.HP = 1000;
+                this.HP = stage2HP;
                 this.Defense = 50;
 
                 this.HitChance = 0;
@@ -188,9 +222,12 @@ class EsmudohrBattleEncounter : FEncounterScene
                 this.shortDescription = stage3Description;
                 this.encounterDescription = stage3Description + " bursts forth from " + stage2Description + " and engulfs you.";
 
+                playerIsStunned = true;
+                playerStunnedTimer = 3;
+
                 this.turnCounter = 0;
 
-                this.HP = 100000;
+                this.HP = stage3HP;
                 this.Defense = 1000;
 
                 this.HitChance = 100;
@@ -329,9 +366,9 @@ class EsmudohrBattleEncounter : FEncounterScene
         {
             case 0: turnResult.Append(DoMonsterAttackPhase1());
                 break;
-            case 1: turnResult.AppendLine(this.shortDescription + " smiles menacingly.");
+            case 1:
+            case 2: turnResult.AppendLine(this.shortDescription + " smiles pleasantly.");
                 break;
-            case 2: 
             case 3:turnResult.AppendLine(this.shortDescription + " flares with brilliant, hot, red light.");
                 break;
             default:
@@ -470,8 +507,8 @@ class EsmudohrBattleEncounter : FEncounterScene
                     }
                     else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                     {
-                        turnDescription.AppendLine("You used the First Aid Kit... You regain 500 HP!");
-                        GameVars.Instance.Player.Energy += 500;
+                        turnDescription.AppendLine("You used the First Aid Kit... You regain 100 HP!");
+                        GameVars.Instance.Player.Energy += 100;
                     }
                     else
                     {
@@ -497,7 +534,7 @@ class EsmudohrBattleEncounter : FEncounterScene
         {
             //move to next phase
             this.MoveToPhase(Phase.PHASE3);
-            endBattle = true;
+            turnDescription.AppendLine(this.encounterDescription);
 
             //turnDescription.AppendLine(this.shortDescription + " was uprooted! You earned " + this.XP + " XP!");
             //GameVars.Instance.Player.WildernessPoints += XP;
@@ -549,17 +586,22 @@ class EsmudohrBattleEncounter : FEncounterScene
         Mob defender = GameVars.Instance.Player;
         StringBuilder turnResult = new StringBuilder();
 
-        int tentaclesSpawned = UnityEngine.Random.Range(5, 10);
+        int tentaclesSpawned = UnityEngine.Random.Range(4, 9);
 
         if (this.TotalTentaclesSpawned + tentaclesSpawned > this.MaxTentaclesSpawned)
         {
             tentaclesSpawned = this.MaxTentaclesSpawned - this.TotalTentaclesSpawned;
         }
 
+        if (tentaclesSpawned + this.TentacleCount > this.MaxTentaclesAtOnce)
+        {
+            tentaclesSpawned = this.MaxTentaclesAtOnce - this.TentacleCount;
+        }
+
         this.TotalTentaclesSpawned += tentaclesSpawned;
         this.TentacleCount += tentaclesSpawned;
 
-        turnResult.AppendLine(this.shortDescription + " screeches loudly.");
+        turnResult.AppendLine(this.shortDescription + "'s screams echo loudly inside your head.");
 
         switch (tentaclesSpawned)
         {
@@ -630,9 +672,6 @@ class EsmudohrBattleEncounter : FEncounterScene
                 damageDone = GameVars.Instance.RollAttackDamage(attacker.AttackPower, attacker.AttackMultiplier, this.Defense);
             }
 
-            //takes no damage in phase 1
-            damageDone = 0;
-
             if (damageDone > 0)
             {
                 this.HP -= damageDone;
@@ -660,8 +699,14 @@ class EsmudohrBattleEncounter : FEncounterScene
             return attackResult.ToString();
         }
 
-        attackResult.Append("You attack the tentacles... ");
-
+        if (TentacleCount == 1)
+        {
+            attackResult.Append("You attack the tentacle... ");
+        }
+        else
+        {
+            attackResult.Append("You attack the tentacles... ");
+        }
         int damageDone = 0;
 
         bool criticalHit = false;
@@ -687,14 +732,36 @@ class EsmudohrBattleEncounter : FEncounterScene
             tentaclesDestroyed = TentacleCount;
         }
 
-        if (criticalHit)
+        if (tentaclesDestroyed > 0)
         {
-            attackResult.AppendLine("Critical Hit!!");
+            if (criticalHit)
+            {
+                attackResult.AppendLine("Critical Hit!!");
+            }
+            if (tentaclesDestroyed == 1)
+            {
+                attackResult.AppendLine("You severed 1 tentacle!");
+            }
+            else
+            {
+                attackResult.AppendLine("You severed " + tentaclesDestroyed + " tentacles!");
+            }
         }
-        attackResult.AppendLine("You severed " + tentaclesDestroyed + " tentacles!");
+        else
+        {
+            attackResult.AppendLine("You were unable to sever any tentacles!");
+        }
 
         TentacleCount -= tentaclesDestroyed;
 
+        if (TentacleCount > 0) {
+
+            if (TentacleCount == 1) {
+                attackResult.AppendLine("1 tentacle remains.");
+            } else {
+                attackResult.AppendLine(TentacleCount + " tentacles remain.");
+            }
+        }
         return attackResult.ToString();
     }
 
@@ -707,20 +774,20 @@ class EsmudohrBattleEncounter : FEncounterScene
         int playerEvadeChance = defender.EvadeChance;
         if (playerIsStunned) { playerEvadeChance = 0; }
 
-        if (GameVars.Instance.RollToHit(TentacleHitChance, playerEvadeChance))
+        if (GameVars.Instance.RollToHit(TentacleHitChance, playerEvadeChance/2))
         {
             int damageDone = 0;
             bool criticalHit = false;
 
-            if (GameVars.Instance.RollCritChance(TentacleCritChance, 0))
-            {
-                criticalHit = true;
+            //if (GameVars.Instance.RollCritChance(TentacleCritChance, 0))
+            //{
+            //    criticalHit = true;
                 damageDone = GameVars.Instance.RollAttackDamage(TentacleAttackPower, TentacleAttackMultiplier, 0);
-            }
-            else
-            {
-                damageDone = GameVars.Instance.RollAttackDamage(TentacleAttackPower, TentacleAttackMultiplier, defender.depth);
-            }
+            //}
+            //else
+            //{
+            //    damageDone = GameVars.Instance.RollAttackDamage(TentacleAttackPower, TentacleAttackMultiplier, defender.Defense);
+            //}
 
             if (damageDone > 0)
             {
@@ -740,6 +807,8 @@ class EsmudohrBattleEncounter : FEncounterScene
     #endregion
 
     #region Phase3
+
+    private bool playerFirstTurnPhase3 = true;
 
     private void HandlePhase3Result()
     {
@@ -762,22 +831,39 @@ class EsmudohrBattleEncounter : FEncounterScene
 
         if (!playerIsStunned)
         {
-            phase3Index++;
+            if (playerFirstTurnPhase3)
+            {
+                phase3Index = 0;
+                playerFirstTurnPhase3 = false;
+            }
+            else
+            {
+                phase3Index++;
+            }
         }
 
-        if (phase3Index > 4)
+        //if (phase3Index > 4)
+        //{
+        //    endBattle = true;
+        //}
+
+        if (!this.isAlive)
         {
             endBattle = true;
         }
 
         if (endBattle)
         {
-            turnDescription.Append(this.winText);
+            turnDescription.AppendLine(this.winText);
+            turnDescription.AppendLine("You gain " + XP + " XP.");            
+            GameVars.Instance.Player.WildernessPoints += XP;
+            GameVars.Instance.Player.FullHeal();
+
             MenuNode endBattleNode = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, turnDescription.ToString());
             endBattleNode.DisplayImageAsset = battleTree.Value.DisplayImageAsset;
             battleTree = new TreeNode<MenuNode>(endBattleNode);
             playerIsStunned = false;
-
+            this.esmudohrDefeated = true;
             this.ShouldPop = true;
         }
         else
@@ -785,7 +871,7 @@ class EsmudohrBattleEncounter : FEncounterScene
             if (playerIsStunned)
             {
                 stunnedTree.Value.DisplayMessage = turnDescription.ToString();
-                this.currentScene = new FSelectionDisplayScene(this.Name, stunnedTree);
+                //this.currentScene = new FSelectionDisplayScene(this.Name, stunnedTree);
             }
             else
             {
@@ -793,8 +879,17 @@ class EsmudohrBattleEncounter : FEncounterScene
                 battleNode.DisplayImageAsset = battleTree.Value.DisplayImageAsset;
                 battleTree = new TreeNode<MenuNode>(battleNode);
                 battleTree.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, phase3Choices[phase3Index], phase3Choices[phase3Index], "")));
-                this.currentScene = new FSelectionDisplayScene(this.Name, battleTree);
+                //this.currentScene = new FSelectionDisplayScene(this.Name, battleTree);
             }
+        }
+
+        if (playerIsStunned)
+        {
+            this.currentScene = new FSelectionDisplayScene(this.Name, stunnedTree);
+        }
+        else
+        {
+            this.currentScene = new FSelectionDisplayScene(this.Name, battleTree);
         }
 
         turnCounter++;
@@ -805,10 +900,20 @@ class EsmudohrBattleEncounter : FEncounterScene
     {
         StringBuilder turnResult = new StringBuilder();
 
+        Mob defender = GameVars.Instance.Player;
+
         if (!playerIsStunned)
         {
-            //stun player for a random number of turns
-            playerStunnedTimer = UnityEngine.Random.Range(1, 4);
+            if (phase3Index >= 4)
+            {
+                playerStunnedTimer = 100;
+            }
+            else
+            {
+                turnResult.AppendLine("It does nothing.");
+                //stun player for a random number of turns
+                playerStunnedTimer = UnityEngine.Random.Range(1, 4);
+            }
             playerIsStunned = true;
         }
         else
@@ -816,9 +921,57 @@ class EsmudohrBattleEncounter : FEncounterScene
             playerStunnedTimer--;
         }
 
-        turnResult.AppendLine(this.shortDescription + " did something weird and random.");
+        turnResult.AppendLine(this.shortDescription + " consumes...");
+
+        if (phase3Index >= 4)
+        {
+            this.AttackPower *= 2;
+            turnResult.Append(DoMonsterAttackSelfPhase3());            
+        }
+        else
+        {
+            turnResult.Append(DoMonsterAttackPhase3());
+        }
 
         return turnResult.ToString();
+    }
+
+    protected virtual string DoMonsterAttackPhase3()
+    {
+        Mob defender = GameVars.Instance.Player;
+
+        StringBuilder attackResult = new StringBuilder();
+
+            int damageDone = 0;
+
+            damageDone = GameVars.Instance.RollAttackDamage(this.AttackPower, this.AttackMultiplier, 0);
+
+            if (damageDone > 0)
+            {
+                defender.Energy -= damageDone;
+            }
+
+            attackResult.AppendLine("You take " + damageDone + " damage!");
+
+        return attackResult.ToString();
+    }
+
+    protected virtual string DoMonsterAttackSelfPhase3()
+    {
+        StringBuilder attackResult = new StringBuilder();
+
+        int damageDone = 0;
+
+        damageDone = GameVars.Instance.RollAttackDamage(this.AttackPower, this.AttackMultiplier, 0);
+
+        if (damageDone > 0)
+        {
+            this.HP -= damageDone;
+        }
+
+        attackResult.AppendLine(this.shortDescription + " takes " + damageDone + " damage!");
+
+        return attackResult.ToString();
     }
 
 
@@ -834,7 +987,7 @@ class EsmudohrBattleEncounter : FEncounterScene
 
     public override void OnEnter()
     {
-        MoveToPhase(Phase.PHASE1);
+        MoveToPhase(Phase.PHASE0);
 
         this.currentScene = new FSelectionDisplayScene(this.Name, battleTree);
         FSceneManager.Instance.PushScene(this.currentScene);

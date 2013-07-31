@@ -17,7 +17,7 @@ public class Mob : FAnimatedSprite
 
     public int TileY { get { return (int) tileCoordinates.y; } set { tileCoordinates.y = value; } }
 
-    public float MoveDelayTime = 0.2f;
+    public float MoveDelayTime = 0.15f;
 
     public bool IsMovingToPosition = false;
     public Vector2 TargetPosition = Vector2.zero;
@@ -101,7 +101,7 @@ public class Mob : FAnimatedSprite
     public List<Item> Inventory { get; set; }
 
     FAnimation standingAnim = new FAnimation("standing", new int[1] { 0 }, 500, false);
-    FAnimation walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, 200, true);
+    FAnimation walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, 150, true);
 
     public int MaxEnergy { get; set; }
 

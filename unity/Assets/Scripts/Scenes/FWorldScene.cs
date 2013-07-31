@@ -43,6 +43,11 @@ public class FWorldScene : FScene
 	
 	public override void OnUpdate ()
 	{
+        if (GameVars.Instance.ReturnToTitle)
+        {
+            DoReturnToTitle();
+            GameVars.Instance.ReturnToTitle = false;
+        }
         //grayLayer.MoveToBack();
         if (this.fadingIn)
         {
@@ -183,6 +188,15 @@ public class FWorldScene : FScene
         this.fadeOutTime = 2.0f;
         fadeStartTime = Time.time;
         GameVars.Instance.SHOW_ALTERNATE_TITLE = true;
+    }
+
+    public void DoReturnToTitle()
+    {
+        nextScene = new FTitleScene("Title");
+        this.fadingOut = true;
+        this.fadeOutTime = 1.0f;
+        fadeStartTime = Time.time;
+        this.musicShouldFadeOnNextScene = true;
     }
 
     

@@ -86,7 +86,9 @@ public class FWorldLayer : FLayer
 
         if (elevatedLayer != null) { elevatedLayer.MoveToFront(); }
 
-        CheckGameOver();
+        CheckRockyBeaten();
+
+        CheckGameOver();        
 
         if (SurviveGame.ALLOW_DEBUG)
         {
@@ -99,6 +101,12 @@ public class FWorldLayer : FLayer
             {
                 player.MaxEnergy = 10000;
                 GameVars.Instance.PLAYER_FULL_WATER = 1000;
+                player.FullHeal();
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                player.Level++;
                 player.FullHeal();
             }
 
@@ -246,6 +254,11 @@ public class FWorldLayer : FLayer
             //if there are any events queued, keep running them until they are gone
             return;
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExecuteRandomEvent("GAME_MENU");
+        }
                
         //only handle input if player is standing still
         if (player.IsMovingToPosition)
@@ -341,6 +354,17 @@ public class FWorldLayer : FLayer
             else { player.play("standing"); }
         }
 	}
+
+    private void CheckRockyBeaten()
+    {
+        if (!this.gameWon)
+        {
+            if (GameVars.Instance.GetParamValueBool(GameVarParams.ROCKY_BEATEN.ToString()))
+            {
+                DoGameWon("You have banished Esmudohr from this world forever!");
+            }
+        }
+    }
 
     public override void OnEnter()
 	{
@@ -646,11 +670,6 @@ public class FWorldLayer : FLayer
 
     private void WonGameEvent(IPTiledObject tileObject)
     {
-        DoGameWon();
-    }
-
-    private void DoGameWon()
-    {
         DoGameWon("You made it back to the Visitor Center safely!");
     }
 
@@ -704,7 +723,7 @@ public class FWorldLayer : FLayer
         GameVars.Instance.SECRET_WORLD_FOUND = true;
         GameVars.Instance.SetParamValue(GameVarParams.SECRET_WORLD.ToString(), true);
 
-        baseRandomEncounterInterval *= 2;
+        //baseRandomEncounterInterval = (int) (baseRandomEncounterInterval * 1.5);
         GenerateNextEncounterInterval();
 
         FillEncounterBag();

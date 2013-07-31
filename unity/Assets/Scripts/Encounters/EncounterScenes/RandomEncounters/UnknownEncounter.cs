@@ -76,9 +76,10 @@ class UnknownEncounter : FEncounterScene
                 {
                     if (GameVars.Instance.RollToHit(20, 0))
                     {
-                        turnDescription.AppendLine("You finally figured it out.");
+                        turnDescription.AppendLine("You found your way.");
                         this.isAlive = false;
                         endBattle = true;
+                        GameVars.Instance.UNKNOWN_BEATEN = true;
                     }
                     else
                     {
@@ -87,8 +88,8 @@ class UnknownEncounter : FEncounterScene
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                 {
-                    turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
-                    GameVars.Instance.Player.Energy += 30;
+                    turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
+                    GameVars.Instance.Player.Energy += 50;
                 }
                 else
                 {
@@ -241,6 +242,7 @@ class UnknownEncounter : FEncounterScene
 
     public override void OnEnter()
     {
+        GameVars.Instance.UNKNOWN_SEEN = true;
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, this.encounterDescription);
 
         rootMenu.DisplayImageAsset = this.imageAsset;

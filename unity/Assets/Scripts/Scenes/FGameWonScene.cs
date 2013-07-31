@@ -174,7 +174,6 @@ public class FGameWonScene : FScene
         if (GameVars.Instance.GetParamValueBool("MUSIC_FOUND"))
         {
             musicAsset = "06-The Long Walk Home";
-            GameVars.Instance.MUSIC_HEARD = true;
         }
 
         FSoundManager.PlayMusic(musicAsset, GameVars.Instance.MUSIC_VOLUME, true);
