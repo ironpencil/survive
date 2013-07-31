@@ -2,7 +2,7 @@
 
 "angel_trumpet.png":
 {
-	"frame": {"x":231,"y":2313,"w":224,"h":237},
+	"frame": {"x":1371,"y":2032,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -10,7 +10,7 @@
 },
 "ants.png":
 {
-	"frame": {"x":3,"y":2313,"w":224,"h":237},
+	"frame": {"x":1143,"y":2032,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -18,7 +18,7 @@
 },
 "ants_blurred.png":
 {
-	"frame": {"x":459,"y":2272,"w":224,"h":237},
+	"frame": {"x":915,"y":2032,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -26,7 +26,7 @@
 },
 "bear.png":
 {
-	"frame": {"x":687,"y":2032,"w":224,"h":237},
+	"frame": {"x":231,"y":2313,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -34,7 +34,7 @@
 },
 "bees.png":
 {
-	"frame": {"x":1599,"y":1841,"w":224,"h":237},
+	"frame": {"x":3,"y":2313,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -42,7 +42,7 @@
 },
 "bees_blurred.png":
 {
-	"frame": {"x":1371,"y":1791,"w":224,"h":237},
+	"frame": {"x":459,"y":2272,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -66,7 +66,7 @@
 },
 "butter_bug.png":
 {
-	"frame": {"x":1143,"y":1791,"w":224,"h":237},
+	"frame": {"x":687,"y":2032,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -74,7 +74,7 @@
 },
 "butter_bug_blurred.png":
 {
-	"frame": {"x":915,"y":1791,"w":224,"h":237},
+	"frame": {"x":1599,"y":1841,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -82,7 +82,7 @@
 },
 "castor.png":
 {
-	"frame": {"x":231,"y":2072,"w":224,"h":237},
+	"frame": {"x":1371,"y":1791,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -98,7 +98,7 @@
 },
 "cougar.png":
 {
-	"frame": {"x":3,"y":2072,"w":224,"h":237},
+	"frame": {"x":1143,"y":1791,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -106,7 +106,7 @@
 },
 "dolls_eye.png":
 {
-	"frame": {"x":459,"y":2031,"w":224,"h":237},
+	"frame": {"x":915,"y":1791,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -114,7 +114,23 @@
 },
 "english_yew.png":
 {
-	"frame": {"x":687,"y":1791,"w":224,"h":237},
+	"frame": {"x":231,"y":2072,"w":224,"h":237},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
+	"sourceSize": {"w":224,"h":237}
+},
+"esmudohr.png":
+{
+	"frame": {"x":3,"y":2072,"w":224,"h":237},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
+	"sourceSize": {"w":224,"h":237}
+},
+"eternal.png":
+{
+	"frame": {"x":459,"y":2031,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -122,7 +138,7 @@
 },
 "evil_rocky.png":
 {
-	"frame": {"x":1657,"y":1600,"w":224,"h":237},
+	"frame": {"x":687,"y":1791,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -130,7 +146,7 @@
 },
 "feral_anum.png":
 {
-	"frame": {"x":1429,"y":1550,"w":224,"h":237},
+	"frame": {"x":1657,"y":1600,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -938,7 +954,7 @@
 },
 "hemlock.png":
 {
-	"frame": {"x":1201,"y":1550,"w":224,"h":237},
+	"frame": {"x":1429,"y":1550,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -970,7 +986,7 @@
 },
 "magic_sword.png":
 {
-	"frame": {"x":973,"y":1550,"w":224,"h":237},
+	"frame": {"x":1201,"y":1550,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -986,7 +1002,7 @@
 },
 "monkshood.png":
 {
-	"frame": {"x":231,"y":1831,"w":224,"h":237},
+	"frame": {"x":973,"y":1550,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -994,7 +1010,7 @@
 },
 "moonseed.png":
 {
-	"frame": {"x":3,"y":1831,"w":224,"h":237},
+	"frame": {"x":231,"y":1831,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -1002,7 +1018,7 @@
 },
 "mushroom.png":
 {
-	"frame": {"x":459,"y":1790,"w":224,"h":237},
+	"frame": {"x":3,"y":1831,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -1010,7 +1026,7 @@
 },
 "oleander.png":
 {
-	"frame": {"x":745,"y":1550,"w":224,"h":237},
+	"frame": {"x":459,"y":1790,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -1018,7 +1034,7 @@
 },
 "optorchid.png":
 {
-	"frame": {"x":1717,"y":1359,"w":224,"h":237},
+	"frame": {"x":745,"y":1550,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -1066,7 +1082,7 @@
 },
 "pokeweed.png":
 {
-	"frame": {"x":1489,"y":1309,"w":224,"h":237},
+	"frame": {"x":1717,"y":1359,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
@@ -1074,13 +1090,21 @@
 },
 "quiz.png":
 {
-	"frame": {"x":1261,"y":1309,"w":224,"h":237},
+	"frame": {"x":1489,"y":1309,"w":224,"h":237},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
 	"sourceSize": {"w":224,"h":237}
 },
 "raccoon.png":
+{
+	"frame": {"x":1261,"y":1309,"w":224,"h":237},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":224,"h":237},
+	"sourceSize": {"w":224,"h":237}
+},
+"rocky.png":
 {
 	"frame": {"x":1033,"y":1309,"w":224,"h":237},
 	"rotated": false,
@@ -1199,6 +1223,6 @@
 	"format": "RGBA8888",
 	"size": {"w":2048,"h":4096},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:bc9c6e71b2370a1e9c540c8be574bf0c:1/1$"
+	"smartupdate": "$TexturePacker:SmartUpdate:518bc2e28eadd73391819158c14fb14a:1/1$"
 }
 }

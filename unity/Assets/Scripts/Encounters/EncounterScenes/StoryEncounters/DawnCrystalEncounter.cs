@@ -26,8 +26,8 @@ class DawnCrystalEncounter : FEncounterScene
     public override void OnEnter()
     {
         string displayMessage =
-                "You see a glint of light shimmering in the water. Reaching down, you close your hand on a large, fist-sized gemstone. " +
-                "Almost immediately it seems to react with your sword, blue light flashing up and down the surface of the weapon.\n" +
+                "You see a glint of light shimmering in the water. Reaching down, you close your hand on a large, fist-sized gemstone and pull it out of the lake. " +
+                "Almost immediately it seems to react with your sword, blue light flashing up and down the surface of the weapon. " +
                 "Honestly, it looks pretty awesome.\n" +
                 "You feel immense power coursing through your hands and up into your arms and body, as you " +
                 "are surrounded by a soft blue glow. Cool.";

@@ -297,6 +297,9 @@
             <filename>encounterImages/feral_anum.png</filename>
             <filename>encounterImages/magic_sword.png</filename>
             <filename>encounterImages/optorchid.png</filename>
+            <filename>encounterImages/rocky.png</filename>
+            <filename>encounterImages/esmudohr.png</filename>
+            <filename>encounterImages/eternal.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

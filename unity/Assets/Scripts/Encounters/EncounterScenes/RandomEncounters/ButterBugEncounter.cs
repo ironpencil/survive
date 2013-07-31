@@ -53,7 +53,7 @@ class ButterBugEncounter : FEncounterScene
 
     private int AttackPower = 10;
     private int AttackMultiplier = 2;
-    private int CritChance = 50;
+    private int CritChance = 60;
 
     private int XP = 20;
 
@@ -82,12 +82,12 @@ class ButterBugEncounter : FEncounterScene
                 if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
                 {
                     turnDescription.AppendLine("You used the Bug Spray... " + shortDescription + " started moving slowly!");
-                    this.EvadeChance = 0;
+                    this.EvadeChance = (int)(this.EvadeChance * 0.5f);
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                 {
-                    turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
-                    GameVars.Instance.Player.Energy += 30;
+                    turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
+                    GameVars.Instance.Player.Energy += 50;
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.DAWN_CRYSTAL.ToString()))
                 {

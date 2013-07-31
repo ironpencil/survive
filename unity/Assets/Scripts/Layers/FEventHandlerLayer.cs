@@ -122,6 +122,8 @@ class FEventHandlerLayer : FLayer
                 break;
             case "DAWN_CRYSTAL": DawnCrystalEncounterEnter();
                 break;
+            case "FINAL_BATTLE": EsmudohrEncounterEnter();
+                break;
             default:
                 break;
         }
@@ -191,6 +193,8 @@ class FEventHandlerLayer : FLayer
             case "SECRET_WORLD": SecretWorldEncounterExit();
                 break;
             case "DAWN_CRYSTAL": DawnCrystalEncounterExit();
+                break;
+            case "FINAL_BATTLE": EsmudohrEncounterExit();
                 break;
             default:
                 break;
@@ -299,10 +303,10 @@ class FEventHandlerLayer : FLayer
     {
         if (((BearEncounter)encounter).eatenByBears)
         {
-            GameVars.Instance.SetParamValue(GameVarParams.POINTS.ToString(), "\"BEAR'ED\" END");
+            GameVars.Instance.SetParamValue(GameVarParams.POINTS.ToString(), "BEAR END");
             GameVars.Instance.SECRETS_FOUND++;
             GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You were eaten by bears, yay!\n" + 
-                "That doesn't happen every day, you must be... \"BEARY\" LUCKY!");
+                "That doesn't happen every day, you must be... BEARY lucky!");
             ((FWorldScene)this.Parent).DoGameWon();
         }
     }
@@ -496,5 +500,16 @@ class FEventHandlerLayer : FLayer
         GameVars.Instance.Player.Defense += 50;
 
         GameVars.Instance.Player.FullHeal();
+    }
+
+    private void EsmudohrEncounterEnter()
+    {
+        encounter = new EsmudohrBattleEncounter();
+        FSceneManager.Instance.PushScene(encounter);
+    }
+    private void EsmudohrEncounterExit()
+    {
+        GameVars.Instance.SetParamValue(GameVarParams.WIN_MESSAGE.ToString(), "You defeated Esmudohr!");
+        ((FWorldScene)this.Parent).DoGameWon();
     }
 }

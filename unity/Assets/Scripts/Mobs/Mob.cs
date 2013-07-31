@@ -45,7 +45,7 @@ public class Mob : FAnimatedSprite
 
             this.wildernessPoints = (level * 100) + remainder;
 
-            this.MaxEnergy = GameVars.Instance.PLAYER_STARTING_ENERGY + (level * 5);
+            this.MaxEnergy = GameVars.Instance.PLAYER_STARTING_ENERGY + (level * 10);
         }
     }
 

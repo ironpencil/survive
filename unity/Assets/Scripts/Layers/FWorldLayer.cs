@@ -171,6 +171,16 @@ public class FWorldLayer : FLayer
                 eventQueue.Enqueue(randomEvent);
             }
 
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                DawnCrystalEvent(null);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                FinalBattleEvent(null);
+            }
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 eventQueue.Enqueue(PullRandomEncounter());
@@ -715,6 +725,11 @@ public class FWorldLayer : FLayer
         GameVars.Instance.SetParamValue(GameVarParams.DAWN_CRYSTAL.ToString(), true);
     }
 
+    private void FinalBattleEvent(IPTiledObject tileObject)
+    {
+        ExecuteRandomEvent("FINAL_BATTLE");
+    }
+
     private void GroveEntranceEvent(IPTiledObject tileObject)
     {
 
@@ -763,6 +778,8 @@ public class FWorldLayer : FLayer
             case "DAWN_CRYSTAL": DawnCrystalEvent(tileObject);
                 break;
             case "GROVE_ENTRANCE": GroveEntranceEvent(tileObject);
+                break;
+            case "FINAL_BATTLE": FinalBattleEvent(tileObject);
                 break;
             case "NO_ENCOUNTERS": break; //used to not generate random encounters when moving
             default:

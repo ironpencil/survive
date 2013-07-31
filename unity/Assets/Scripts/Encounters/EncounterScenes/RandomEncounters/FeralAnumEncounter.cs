@@ -41,14 +41,14 @@ class FeralAnumEncounter : FEncounterScene
 
     private int Defense = 20;
 
-    private int HitChance = 30;
+    private int HitChance = 50;
     private int EvadeChance = 0;
 
     private int AttackPower = 30;
     private int AttackMultiplier = 2;
     private int CritChance = 0;
 
-    private int XP = 50;
+    private int XP = 60;
 
     private bool isAlive = true;
 
@@ -74,7 +74,7 @@ class FeralAnumEncounter : FEncounterScene
             default: // item usage
                 if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.LASER_POINTER)))
                 {
-                    if (GameVars.Instance.RollToHit(GameVars.Instance.Player.HitChance / 4, this.EvadeChance))
+                    if (GameVars.Instance.RollToHit(GameVars.Instance.Player.HitChance / 5, this.EvadeChance))
                     {
                         turnDescription.AppendLine("You fire the laser... You hit!");
                         this.isAlive = false;
@@ -87,8 +87,8 @@ class FeralAnumEncounter : FEncounterScene
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                 {
-                    turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
-                    GameVars.Instance.Player.Energy += 30;
+                    turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
+                    GameVars.Instance.Player.Energy += 50;
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.DAWN_CRYSTAL.ToString()))
                 {
@@ -169,7 +169,7 @@ class FeralAnumEncounter : FEncounterScene
         {
             int damageDone = 0;
 
-            if (GameVars.Instance.RollCritChance(attacker.CritChance, 0))
+            if (GameVars.Instance.RollCritChance(attacker.CritChance, 50))
             {
                 damageDone = GameVars.Instance.RollAttackDamage(attacker.AttackPower, attacker.AttackMultiplier, 0);
                 attackResult.AppendLine("Critical Hit!!");

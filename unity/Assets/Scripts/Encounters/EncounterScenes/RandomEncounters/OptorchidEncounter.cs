@@ -49,7 +49,7 @@ class OptorchidEncounter : FEncounterScene
     private int AttackMultiplier = 2;
     private int CritChance = 5;
 
-    private int XP = 30;
+    private int XP = 40;
 
     private bool isAlive = true;
 
@@ -84,20 +84,21 @@ class OptorchidEncounter : FEncounterScene
                     {
                         if (!isBlind)
                         {
-                            turnDescription.AppendLine("You sprinkled some salt around... The " + shortDescription + " was blinded!");
+                            turnDescription.AppendLine("You sprinkled some salt around... " + shortDescription + " was blinded!");
                             this.isBlind = true;
                             this.AttackMultiplier = 3;
-                            this.HitChance = 50;
+                            this.AttackPower = 20;
+                            this.HitChance = 60;
                         }
                         else
                         {
-                            turnDescription.AppendLine("The " + shortDescription + " is already blinded!");
+                            turnDescription.AppendLine(shortDescription + " is already blinded!");
                         }
                     }
                     else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
                     {
-                        turnDescription.AppendLine("You used the First Aid Kit... You regain 30 HP!");
-                        GameVars.Instance.Player.Energy += 30;
+                        turnDescription.AppendLine("You used the First Aid Kit... You regain 50 HP!");
+                        GameVars.Instance.Player.Energy += 50;
                     }
                     else if (selectedNode.NodeTitle.Equals(ItemIDs.DAWN_CRYSTAL.ToString()))
                     {
