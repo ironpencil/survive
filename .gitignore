@@ -9,9 +9,12 @@
 /unity/Mac
 /unity/ExportedObj
 /unity/Assets/FutileDemos/
+/unity/*Data/
 *.csproj
 *.pidb
 *.unityproj
 *.sln
 *.userprefs
 *.suo
+*.exe
+*.zip

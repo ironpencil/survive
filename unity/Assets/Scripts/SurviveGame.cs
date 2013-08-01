@@ -11,12 +11,14 @@ public class SurviveGame : MonoBehaviour {
     bool showFPS = false;
     //FStage guiStage;
 
-    public static bool ALLOW_DEBUG = false;
+    public static bool ALLOW_DEBUG = true;
     
 
 
     // Use this for initialization
 	void Start () {
+
+        Screen.SetResolution(960, 640, false);
 
         //IPDebug.DoLog = true;
 
@@ -27,6 +29,8 @@ public class SurviveGame : MonoBehaviour {
         fparams.backgroundColor = Color.black;
         Futile.instance.Init(fparams);
         Futile.instance.shouldTrackNodesInRXProfiler = false;
+
+        
 
         // load image atlas (within Resources/Atlases folder)
         Futile.atlasManager.LoadAtlas("Atlases/survive");
