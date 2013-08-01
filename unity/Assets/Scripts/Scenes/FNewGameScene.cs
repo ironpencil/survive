@@ -110,8 +110,8 @@ public class FNewGameScene : FScene
             "eating and drinking, but only when it is safe to do so!\n\n" + 
             "You will also be quizzed on general survival safety.\n" +
             "Answer correctly to earn Wilderness Survival Points!\n\n" +
-            "Use the Arrow Keys or [WASD] to move, and\n" +
-            "use [Space] or [Enter] to make selections.\n\n" +
+            "Use the Arrow Keys or [WASD] to move, toggle running with\n" +
+            "[Shift], and use [Space] or [Enter] to make selections.\n\n" +
             "Good luck!");
 
         //howToPlayLabel1.anchorY = 1.0f;

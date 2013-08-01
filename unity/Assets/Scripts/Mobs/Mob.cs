@@ -19,9 +19,40 @@ public class Mob : FAnimatedSprite
 
     public float MoveDelayTime = 0.15f;
 
+    private Vector2 walkingSpeed = Vector2.zero;
+    private Vector2 runningSpeed = Vector2.zero;
+
+    private float speedMultiplier = 1.0f;
+    public float SpeedMultiplier
+    {
+        get { return speedMultiplier; }
+        set
+        {
+            if (value == 0) { return; }
+
+            speedMultiplier = value;
+            //walkingAnim.delay = (int) (walkingAnimBaseDelay / value);
+            //runningAnim.delay = (int) (runningAnimBaseDelay / value);
+        }
+    }
+
     public bool IsMovingToPosition = false;
     public Vector2 TargetPosition = Vector2.zero;
-    public Vector2 speed = Vector2.zero;
+
+    public Vector2 Speed
+    {
+        get
+        {
+            if (this.IsRunning)
+            {
+                return runningSpeed * SpeedMultiplier;
+            }
+            else
+            {
+                return walkingSpeed * SpeedMultiplier;
+            }
+        }
+    }
 
     private int level = 0;
     public int Level
@@ -92,6 +123,12 @@ public class Mob : FAnimatedSprite
         }
     }
 
+    public bool IsRunning
+    {
+        get;
+        set;
+    }
+
     public int Defense { get; set; }
 
     public bool HasAntArmor { get; set; }
@@ -100,8 +137,12 @@ public class Mob : FAnimatedSprite
 
     public List<Item> Inventory { get; set; }
 
-    FAnimation standingAnim = new FAnimation("standing", new int[1] { 0 }, 500, false);
-    FAnimation walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, 150, true);
+    private int walkingAnimBaseDelay = 175;
+    private int runningAnimBaseDelay = 125;
+
+    FAnimation standingAnim;
+    FAnimation walkingAnim;
+    FAnimation runningAnim;
 
     public int MaxEnergy { get; set; }
 
@@ -144,8 +185,9 @@ public class Mob : FAnimatedSprite
         : base(elementName)
     {
         this.anchorY = 0.25f;
-        speed.x = this.width / MoveDelayTime;
-        speed.y = this.height / MoveDelayTime;
+        walkingSpeed.x = this.width / MoveDelayTime;
+        walkingSpeed.y = this.height / MoveDelayTime;
+        runningSpeed = walkingSpeed * 2f;
         Inventory = new List<Item>();
         MaxEnergy = GameVars.Instance.PLAYER_STARTING_ENERGY;
         Energy = GameVars.Instance.PLAYER_STARTING_ENERGY;
@@ -154,9 +196,15 @@ public class Mob : FAnimatedSprite
         Defense = 1;
         HasAntArmor = false;
         IsFloating = false;
+        IsRunning = false;
+
+        standingAnim = new FAnimation("standing", new int[1] { 0 }, 500, false);
+        walkingAnim = new FAnimation("walking", new int[2] { 1, 2 }, walkingAnimBaseDelay, true);
+        runningAnim = new FAnimation("running", new int[2] { 1, 2 }, runningAnimBaseDelay, true);
 
         this.addAnimation(standingAnim);
-        this.addAnimation(walkingAnim);               
+        this.addAnimation(walkingAnim);
+        this.addAnimation(runningAnim);      
     }
 
     public void FullHeal()
@@ -174,7 +222,7 @@ public class Mob : FAnimatedSprite
             return true;
         }
 
-        Vector2 dtSpeed = new Vector2(speed.x * Time.deltaTime, speed.y * Time.deltaTime);
+        Vector2 dtSpeed = new Vector2(Speed.x * Time.deltaTime, Speed.y * Time.deltaTime);
 
         Vector2 difference = this.TargetPosition - this.GetPosition();
 

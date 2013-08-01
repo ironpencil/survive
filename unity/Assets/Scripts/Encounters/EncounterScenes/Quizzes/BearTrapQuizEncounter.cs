@@ -55,7 +55,7 @@ class BearTrapQuizEncounter : FEncounterScene
 
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_A, "Pry the jaws open with a stick", "OK yeah, maybe if you were Hercules or something. The force required to pry the jaws of a standard bear trap open is incredible, that's how it TRAPS BEARS. Your only hope to escape without further injury is to remove the trapped leg.")));
         rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_B, "Press down on the springs to release the jaws", "No! This is a common misconception. The springs on the sides of a standard bear trap are actually used to tighten the jaws in the event of resistance from the trapped animal. The only way to escape without further injury is to remove the trapped leg.")));
-        rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_C, "Amputate the leg", "Correct! Bear traps are incredibly strong and exert a lot of force, escape is nearly impossible. The only way to guarantee your safe extraction is to remove the trapped leg. Make sure not to leave it behind once you are free, so that a doctor can reattach it! That would be embarrassing!")));
+        rootNode.AddChild(new TreeNode<MenuNode>(new MenuNode(MenuNodeType.TEXT, CHOICE1_C, "Amputate the leg", "Correct! Bear traps are incredibly strong and exert a lot of force; escape is nearly impossible. The only way to guarantee your safe extraction is to remove the trapped leg. Make sure not to leave it behind once you are free, so that a doctor can reattach it! That would be embarrassing!")));
 
         this.currentScene = new FSelectionDisplayScene(this.Name, rootNode);
         FSceneManager.Instance.PushScene(this.currentScene);

@@ -74,7 +74,7 @@ class UnknownEncounter : FEncounterScene
             default: // item usage
                 if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.COMPASS)))
                 {
-                    if (GameVars.Instance.RollToHit(20, 0))
+                    if (GameVars.Instance.RollToHit(50, 0))
                     {
                         turnDescription.AppendLine("You found your way.");
                         this.isAlive = false;
@@ -83,7 +83,7 @@ class UnknownEncounter : FEncounterScene
                     }
                     else
                     {
-                        turnDescription.AppendLine("It does nothing.");
+                        turnDescription.AppendLine("You couldn't figure it out.");
                     }
                 }
                 else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))

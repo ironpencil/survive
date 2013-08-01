@@ -37,7 +37,7 @@ class BearEncounter : FEncounterScene
                 if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.HONEY)))
                 {
                     int eatenChance = UnityEngine.Random.Range(0, 100);
-                    if (eatenChance < 5) // 0-4 = eaten by a bear, congratulations
+                    if (eatenChance < 10) // 0-4 = eaten by a bear, congratulations
                     {
                         DisplayTextMessage(selectedNode.NodeTitle, "You slather yourself in honey and walk toward the bears.\n\n\nThey devour you hungrily. Congratulations!");
                         this.eatenByBears = true;

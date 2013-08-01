@@ -11,7 +11,7 @@ public class SurviveGame : MonoBehaviour {
     bool showFPS = false;
     //FStage guiStage;
 
-    public static bool ALLOW_DEBUG = true;
+    public static bool ALLOW_DEBUG = false;
     
 
 

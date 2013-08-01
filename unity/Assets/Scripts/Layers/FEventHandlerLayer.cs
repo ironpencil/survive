@@ -498,7 +498,8 @@ class FEventHandlerLayer : FLayer
     private void SecretWorldEncounterExit()
     {
         GameVars.Instance.Player.Level += 5;
-        GameVars.Instance.Player.speed *= 2;
+        //GameVars.Instance.Player.speed *= 2;
+        GameVars.Instance.Player.SpeedMultiplier = 2;
         GameVars.Instance.Player.AttackPower += 20;
         GameVars.Instance.Player.Defense += 5;
         GameVars.Instance.Player.IsFloating = true;

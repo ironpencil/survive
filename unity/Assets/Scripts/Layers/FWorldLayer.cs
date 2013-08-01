@@ -127,12 +127,14 @@ public class FWorldLayer : FLayer
 
             if (Input.GetKeyDown(KeyCode.PageUp))
             {
-                player.speed = new Vector2(1600, 1600);
+                //player.speed = new Vector2(1600, 1600);
+                player.SpeedMultiplier = 10;
+                player.IsFloating = true;
             }
 
             if (Input.GetKeyDown(KeyCode.PageDown))
             {
-                player.speed = new Vector2(256, 256);
+                player.SpeedMultiplier = 1;                
             }
 
             if (Input.GetKeyDown("0"))
@@ -223,6 +225,21 @@ public class FWorldLayer : FLayer
         }
         //unpause player animation
         if (player.isPaused) { player.pause(); }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            player.IsRunning = !player.IsRunning;
+            if (player.IsRunning)
+            {
+                baseRandomEncounterInterval *= 2;
+                maxRandomEncounterVariance *= 2;
+            }
+            else
+            {
+                baseRandomEncounterInterval = (int)(baseRandomEncounterInterval / 2);
+                maxRandomEncounterVariance = (int)(maxRandomEncounterVariance / 2);
+            }
+        }
 
         if (startSecretWorldMusic)
         {
@@ -346,7 +363,14 @@ public class FWorldLayer : FLayer
                     IPDebug.Log("Player position = " + player.GetPosition());
                     IPDebug.Log("Player tile = " + player.TileCoordinates);
 
-                    player.play("walking");
+                    if (player.IsRunning)
+                    {
+                        player.play("running");
+                    }
+                    else
+                    {
+                        player.play("walking");
+                    }
                     //IPDebug.Log("Background position = " + background.GetPosition());
                 }
                 else { player.play("standing"); }
@@ -726,6 +750,8 @@ public class FWorldLayer : FLayer
         //baseRandomEncounterInterval = (int) (baseRandomEncounterInterval * 1.5);
         GenerateNextEncounterInterval();
 
+        //reset random encounter system
+        encounterBagFills = 0;
         FillEncounterBag();
         fadeMusicToSecretWorld = true;
     }
@@ -817,7 +843,7 @@ public class FWorldLayer : FLayer
         randomEncounterBag.Clear();
         if (GameVars.Instance.GetParamValueBool(GameVarParams.SECRET_WORLD.ToString()))
         {
-            int bittyBugs = UnityEngine.Random.Range(4, 8);
+            int bittyBugs = UnityEngine.Random.Range(5, 8);
             int feralAnums = UnityEngine.Random.Range(2, 5);
             int optorchids = UnityEngine.Random.Range(3, 7);            
 
@@ -842,12 +868,12 @@ public class FWorldLayer : FLayer
             }
 
             //5% chance to spawn a single unknown
-            int unknowns = UnityEngine.Random.Range(0, 100);
-            if (unknowns < 5)
+            int unknownChance = UnityEngine.Random.Range(0, 100);
+            if (unknownChance < (10 * (encounterBagFills)))
             {
                 randomEncounterBag.Add(EncounterEvent.CreateRandomEvent("UNKNOWN"));
             }
-            IPDebug.ForceLog("BittyBugs = " + bittyBugs + "\nFeralAnums = " + feralAnums + "\nOptorchids = " + optorchids + "\nUnknown = " + (unknowns < 5).ToString());
+            IPDebug.ForceLog("BittyBugs = " + bittyBugs + "\nFeralAnums = " + feralAnums + "\nOptorchids = " + optorchids + "\nUnknown = " + (unknownChance < 5).ToString());
         }
         else
         {
