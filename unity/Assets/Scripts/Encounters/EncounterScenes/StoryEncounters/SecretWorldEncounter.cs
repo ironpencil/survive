@@ -42,7 +42,8 @@ class SecretWorldEncounter : FEncounterScene
                 "Good. Well, you should get on your way, I'm very busy. To aid in your quest and blah blah blah I will give you " +
                 "a secret magic of the wind. It will enable you to move faster and allow you to float on the " +
                 "breeze as if you were weightless or whatever. Okay, it's done, good luck I guess, try not to let the whole world down.\n\n\n\n\n" +
-                "                               oh yeah also I don't know watch out for monsters maybe";
+                "                               oh yeah also I don't know watch out for monsters maybe\n" +
+                "The voice inside your head clears. The spirit said you should be able to find the Dawn Crystal somewhere to the south...";
 
             MenuNode endNode = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, endDescription);
             dialogTree = new TreeNode<MenuNode>(endNode);

@@ -148,7 +148,7 @@ public class FWorldLayer : FLayer
                 canGameOver = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.M))
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 SecretWorldEvent(null);                
             }

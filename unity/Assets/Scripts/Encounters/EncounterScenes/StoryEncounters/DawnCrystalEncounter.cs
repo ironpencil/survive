@@ -30,7 +30,8 @@ class DawnCrystalEncounter : FEncounterScene
                 "Almost immediately it seems to react with your sword, blue light flashing up and down the surface of the weapon. " +
                 "Honestly, it looks pretty awesome.\n" +
                 "You feel immense power coursing through your hands and up into your arms and body, as you " +
-                "are surrounded by a soft blue glow. Cool.\n\nYou received the Dawn Crystal!";
+                "are surrounded by a soft blue glow. Cool.\n\nYou received the Dawn Crystal!\n" + 
+                "You feel a pulse from the Dawn Crystal urging you towards the north...";
 
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, displayMessage);
 

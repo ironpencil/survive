@@ -33,6 +33,8 @@ public class FSelectionDisplayScene : FScene
 
     TreeNode<MenuNode> rootNode;
 
+    FLabel cancelLabel = null;
+
     public TreeNode<MenuNode> SelectedItem { get; private set; }
     public bool ItemWasSelected { get; private set; }
 
@@ -50,6 +52,10 @@ public class FSelectionDisplayScene : FScene
         {
             rootNode = new TreeNode<MenuNode>(rootNode.Value); //add inventory items to a copy of the root node
             rootNode.AddChildren(GameData.Instance.GenerateInventoryNodes());
+
+            //show cancel label
+            cancelLabel = new FLabel(GameVars.Instance.FONT_NAME, "Backspace to Cancel");
+            //cancelLabel.scale = 0.9f;
         }
         this.rootNode = rootNode;
     }
@@ -89,14 +95,14 @@ public class FSelectionDisplayScene : FScene
         }
         else if (selectBoxInFocus)
         {
-            ////can only currently cancel Inventory nodes
-            //if (Input.GetKeyDown(KeyCode.Backspace) &&
-            //    this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
-            //{
-            //    this.ItemWasSelected = false;
-            //    this.SelectedItem = null;
-            //    selectBoxInFocus = false;
-            //}
+            //can only currently cancel Inventory nodes
+            if (Input.GetKeyDown(KeyCode.Backspace) &&
+                this.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
+            {
+                this.ItemWasSelected = false;
+                this.SelectedItem = null;
+                selectBoxInFocus = false;
+            }
 
             if (selectBox.ItemIsSelected)
             {
@@ -163,6 +169,14 @@ public class FSelectionDisplayScene : FScene
                     {
                         shouldPopScene = true;
                         this.SelectedItem.Value.AfterSelection = MenuNode.AfterSelectionBehavior.CLOSE_ALL;
+                    }
+                }
+                else
+                {
+                    if (childScene.rootNode.Value.NodeType == MenuNodeType.INVENTORY)
+                    {
+                        //cancelled out of inventory, don't close this node
+                        shouldPopScene = false;
                     }
                 }
 
@@ -259,6 +273,13 @@ public class FSelectionDisplayScene : FScene
                     break;
             }            
             selectBox = new SelectionBox(this, rootNode, boundsRect, GameVars.Instance.MESSAGE_TEXT_OFFSET, backgroundAsset, showSelectionDescriptions);
+            if (cancelLabel != null)
+            {
+                selectBox.AddChild(cancelLabel);
+                cancelLabel.x = 0.0f;
+                cancelLabel.y = -(selectBox.Height / 2) + (selectBox.textAreaOffset / 2) + (cancelLabel.textRect.height / 2) + 2;
+                cancelLabel.alpha = 0.5f;
+            }
             GameVars.Instance.GUIStage.AddChild(selectBox);
             selectBoxInFocus = true;
             messageBoxInFocus = false;

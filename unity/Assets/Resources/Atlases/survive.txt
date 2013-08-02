@@ -1000,6 +1000,14 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":912,"h":160},
 	"sourceSize": {"w":912,"h":160}
 },
+"miniMap.png":
+{
+	"frame": {"x":1885,"y":1600,"w":160,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
+	"sourceSize": {"w":160,"h":160}
+},
 "monkshood.png":
 {
 	"frame": {"x":973,"y":1550,"w":224,"h":237},
@@ -1223,6 +1231,6 @@
 	"format": "RGBA8888",
 	"size": {"w":2048,"h":4096},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:518bc2e28eadd73391819158c14fb14a:1/1$"
+	"smartupdate": "$TexturePacker:SmartUpdate:c62bcabbdd1a269cfc93110309cf529a:1/1$"
 }
 }

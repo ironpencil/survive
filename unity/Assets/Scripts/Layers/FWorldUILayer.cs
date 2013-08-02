@@ -18,8 +18,22 @@ public class FWorldUILayer : FLayer
 {
     Mob player;
     MessageBox playerStatus;
+
+    FContainer miniMapContainer = new FContainer();
+    FSprite miniMap;
+    FSprite miniMapLocation;
+    FSprite miniMapBackground;
     
     public FWorldUILayer(FScene parent) : base(parent) { }
+
+    enum MiniMapState
+    {
+        INVISIBLE,
+        VISIBLE,
+        TRANSPARENT
+    }
+
+    private MiniMapState mapVisibility = MiniMapState.VISIBLE;
 
     public override void HandleMultiTouch(FTouch[] touches)
 	{
@@ -36,6 +50,35 @@ public class FWorldUILayer : FLayer
         if (player != null)
         {            
             UpdateUIText();
+            miniMapLocation.x = (player.TileX / 2) + 1;
+            miniMapLocation.y = (player.TileY / 2);
+        }
+
+        if (!this.Parent.Paused)
+        {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                switch (mapVisibility)
+                {
+                    case MiniMapState.INVISIBLE:
+                        //move to visible
+                        mapVisibility = MiniMapState.VISIBLE;
+                        miniMapContainer.alpha = 1.0f;
+                        break;
+                    case MiniMapState.VISIBLE:
+                        //move to transparent
+                        mapVisibility = MiniMapState.TRANSPARENT;
+                        miniMapContainer.alpha = 0.5f;
+                        break;
+                    case MiniMapState.TRANSPARENT:
+                        //move to invisible
+                        mapVisibility = MiniMapState.INVISIBLE;
+                        miniMapContainer.alpha = 0.0f;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 	}
 
@@ -46,6 +89,41 @@ public class FWorldUILayer : FLayer
         playerStatus = new MessageBox(this.Parent, "", GameVars.Instance.STATUS_UI_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET, GameVars.Instance.STATUS_UI_RECT_ASSET);
         GameVars.Instance.GUIStage.AddChild(playerStatus);
 
+        miniMapBackground = new FSprite("Futile_White");
+
+        miniMap = new FSprite("miniMap");
+        miniMap.anchorX = 0;
+        miniMap.anchorY = 0;
+
+        miniMapBackground.width = miniMap.width + 4;
+        miniMapBackground.height = miniMap.height + 4;
+
+        miniMapBackground.color = new Color(0.1f, 0.45f, 0.1f);
+
+        miniMapBackground.anchorX = 0;
+        miniMapBackground.anchorY = 0;
+        miniMapBackground.x = miniMap.x - 2;
+        miniMapBackground.y = miniMap.y - 2;
+
+        miniMapLocation = new FSprite("Futile_White");
+
+        miniMapLocation.color = new Color(0.5f, 0.0f, 0.7f);
+        miniMapLocation.width = 3;
+        miniMapLocation.height = 3;
+
+        miniMapLocation.x = (player.TileX / 2) + 2;
+        miniMapLocation.y = (player.TileY / 2);
+
+        miniMapContainer.AddChild(miniMapBackground);
+        miniMapContainer.AddChild(miniMap);
+        miniMapContainer.AddChild(miniMapLocation);
+
+        miniMapContainer.x = Futile.screen.halfWidth - (miniMap.width) - 20;
+        miniMapContainer.y = Futile.screen.halfHeight - (miniMap.height) - 20;
+
+        //miniMap.alpha = 0.75f;
+
+        GameVars.Instance.GUIStage.AddChild(miniMapContainer);
         //MessageBox image = new MessageBox(this.Parent, "", GameVars.Instance.IMAGE_RECT, GameVars.Instance.MESSAGE_TEXT_OFFSET);
         //GameVars.Instance.GUIStage.AddChild(image);
 	}

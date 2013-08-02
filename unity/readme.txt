@@ -26,7 +26,7 @@ Features
 
 Controls
 
-Arrow Keys/WASD to move, Shift toggles run, and Space/Enter to select. + and - will change the volume, and you can use Escape in the main game to bring up a menu that will let you return to the Title screen. 
+Arrow Keys/WASD to move, Shift toggles run, and Space/Enter to select. Press M to toggle mini-map visibility. + and - will change the volume, and you can use Escape in the main game to bring up a menu that will let you return to the Title screen. 
 
 Also there are a few semi-gross up-close bug pictures in the game, so if you don't like creepy crawlies you should enable the "Blur Bugs" option on the How to Play screen.
 

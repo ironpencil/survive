@@ -107,11 +107,12 @@ public class FNewGameScene : FScene
 
         FLabel howToPlayLabel2 = new FLabel(GameVars.Instance.FONT_NAME,
             "Make sure to keep your energy and hydration levels up by\n" +
-            "eating and drinking, but only when it is safe to do so!\n\n" + 
+            "eating and drinking, but only when it is safe to do so!\n" + 
             "You will also be quizzed on general survival safety.\n" +
             "Answer correctly to earn Wilderness Survival Points!\n\n" +
             "Use the Arrow Keys or [WASD] to move, toggle running with\n" +
-            "[Shift], and use [Space] or [Enter] to make selections.\n\n" +
+            "[Shift], and use [Space] or [Enter] to make selections.\n" +
+            "You can also press [M] to toggle mini-map visibility.\n\n" +
             "Good luck!");
 
         //howToPlayLabel1.anchorY = 1.0f;
@@ -163,10 +164,10 @@ public class FNewGameScene : FScene
 
         blurBugsButton.SignalRelease += HandleBugsButtonRelease;
 
-        FLabel bugsDescLabel = new FLabel(GameVars.Instance.FONT_NAME, "Don't like bugs?");
+        FLabel bugsDescLabel = new FLabel(GameVars.Instance.FONT_NAME, "Don't like bugs?\nBlur bug pictures!");
 
         bugsDescLabel.x = blurBugsButton.x;
-        bugsDescLabel.y = blurBugsButton.y + (blurBugsButton.hitRect.height);
+        bugsDescLabel.y = blurBugsButton.y + (blurBugsButton.hitRect.height/2) + (bugsDescLabel.textRect.height/2) + 2;
 
         AddChild(bugsDescLabel);
 

@@ -300,6 +300,7 @@
             <filename>encounterImages/rocky.png</filename>
             <filename>encounterImages/esmudohr.png</filename>
             <filename>encounterImages/eternal.png</filename>
+            <filename>miniMap.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
