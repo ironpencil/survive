@@ -41,11 +41,46 @@ class CougarEncounter : FEncounterScene
                     DisplayTextMessage(selectedNode.NodeTitle, "HAHA look at it go! \"Why can't I get it?? What is this devilry??\" hahaha stupid cat.");
                     GameVars.Instance.Player.WildernessPoints += 5;
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You spray the mountain lion liberally with the bug spray. It slowly shrinks and morphs into a tiny harmless beetle.");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mountain lion rolls its eyes at the ridiculous trust you put in your fiat currency. Haven't you ever heard of bitcoins? Google Ron Paul.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.HONEY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "\"Ooooh, you're a little freaky, aren't you?\" Oh no, the cougar has misunderstood your intentions! You get out of there as fast as possible!");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mountain lion does not seem to trust magnets. How do they work? And it doesn't want to talk to a scientist, as they are always lying, and getting it pissed.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "TODO: insert really touching scene here about removing thorn from the mountain lion's paw and a lesson about how first impressions are not always reliable\n\n\nTODO: remember to go through and clean up all TODO notes");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.RAW_MEAT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "This mountain lion is apparently a vegan, and very offended at your ignorant assumptions.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "That cougar is salty enough already, just trust me on this one.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
                 else
                 {
                     //default failure
-                    DisplayTextMessage(selectedNode.NodeTitle, "The mountain lion is unfazed by your display, and pounces! You are just barely able to get away with your life!");
-                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(5, 11);
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mountain lion is unfazed by your display, and just stares at you, judgingly.\n\nMan, cats are jerks.");
+                    //GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(5, 11);
                     GameVars.Instance.Player.WildernessPoints -= 5;
                 }
                 break;

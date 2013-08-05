@@ -36,6 +36,47 @@ class RaccoonEncounter : FEncounterScene
                     DisplayTextMessage(selectedNode.NodeTitle, "The raccoon is pleased by your gift and consumes the marshmallows messily. That must be why his mouth was so foamy! He even lets you pet him and rub his belly. Raccoons love belly rubs!");
                     GameVars.Instance.Player.WildernessPoints += 5;
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The raccoon explains that it built up a tolerance to bug spray a long time ago; it needs way harder stuff to get the same effect nowadays.");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "What, just because raccoons look like they're wearing masks, it must be trying to rob you? That's racist.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.HONEY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "What are the odds?? The raccoon just happened to be carrying around a large plate of fresh waffles. You two enjoy a nice breakfast while catching up.");
+                    GameVars.Instance.Player.Energy += UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints += 3;                   
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The raccoon seems annoyed at your implication that it might be lost. A raccoon is never lost and never late; it always arrives exactly when it means to.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The raccoon is not interested, unless you have something for hangovers in there.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.RAW_MEAT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Bad idea. Raccoons have notoriously horrible taste, and it would only want the steak cooked well done, completely ruining it.");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.LASER_POINTER.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Your laser shot hits the raccoon directly in the midsection, disintegrating it completely. Was that really necessary?");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "As it turns out, the raccoon was actually just on the way to the store to get salt. You're a lifesaver!");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
                 else
                 {
                     //default failure

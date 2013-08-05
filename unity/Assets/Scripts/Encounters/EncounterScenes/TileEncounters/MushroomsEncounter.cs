@@ -81,6 +81,14 @@ class MushroomsEncounter : FEncounterScene
 
         bool hasEatenBright = GameVars.Instance.GetParamValueBool(this.Name + ":" + CHOICE1_BRIGHT);
         bool hasEatenDull = GameVars.Instance.GetParamValueBool(this.Name + ":" + CHOICE1_DULL);
+        bool hasEatenAll = GameVars.Instance.GetParamValueBool(this.Name + ":" + CHOICE1_ALL);
+
+        if (hasEatenAll)
+        {
+            GameVars.Instance.Player.Energy += GetBrightEnergy() + GetDullEnergy();
+            this.ShouldPop = true;
+            return;
+        }
 
         if (hasEatenBright && hasEatenDull)
         {

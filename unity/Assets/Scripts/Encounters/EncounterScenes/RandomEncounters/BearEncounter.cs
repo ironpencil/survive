@@ -48,6 +48,41 @@ class BearEncounter : FEncounterScene
                         GameVars.Instance.Player.WildernessPoints += 5;
                     }
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "No Sale, bears only accept cash.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear is not impressed, as she has GPS navigation with lifetime map updates and traffic alerts. Get with the times already.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear goes off on a long diatribe about how natural remedies are way safer and more effective than modern medicine. You are able to slip away unnoticed during a tangent about vaccines.");
+                    GameVars.Instance.Player.WildernessPoints += 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.RAW_MEAT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear explains that she's not supposed to eat red meat anymore - doctor's orders. But her cubs eagerly indulge.");
+                    GameVars.Instance.Player.WildernessPoints += 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.LASER_POINTER.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear chastises you for playing with the laser pointer as if it were a toy. You could blind somebody with that!");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.MARSHMALLOWS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear explains that her cubs are not allowed to have sweets after dinner. She does not appreciate being told how to raise her children.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The mother bear explains that she has a salt sensitivity due to her thyroid problem, so she only uses salt substitutes. Not that she doesn't appreciate the gesture!");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
                 else
                 {
                     //default failure

@@ -48,13 +48,13 @@ public class FWorldLayer : FLayer
     private Queue eventQueue = new Queue();
 
     private int randomEncounterSteps = 0;
-    private int baseRandomEncounterInterval = 14;
-    private int maxRandomEncounterVariance = 16;
+    private int baseRandomEncounterInterval = 20;
+    private int maxRandomEncounterVariance = 21;
     private int nextRandomEncounter = 0;
 
     private bool fadeMusicToSecretWorld = false;
 
-    private bool startSecretWorldMusic = false;
+    private bool setupSecretWorld = false;
 
     private int encounterBagFills = 0;
     private List<EncounterEvent> randomEncounterBag = new List<EncounterEvent>();
@@ -79,7 +79,7 @@ public class FWorldLayer : FLayer
             {
                 fadeMusicToSecretWorld = false;                
             }
-            startSecretWorldMusic = true;
+            setupSecretWorld = true;
         }
 
         //tileMap.LoadMoreTiles(5);
@@ -94,9 +94,15 @@ public class FWorldLayer : FLayer
         {
             if (Input.GetKeyDown(KeyCode.B))
             {
-                ExecuteRandomEvent("BEAR");
+                ExecuteRandomEvent("WOLF");
             }
 
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                player.Energy -= 5;
+                ExecuteRandomEvent("WILD_PLANT");
+
+            }
             if (Input.GetKeyDown(KeyCode.N))
             {
                 player.MaxEnergy = 10000;
@@ -241,12 +247,23 @@ public class FWorldLayer : FLayer
             }
         }
 
-        if (startSecretWorldMusic)
+        if (setupSecretWorld)
         {
+            //moved here so encounter bag will update after Secret World flag is set
+            GameVars.Instance.SECRET_WORLD_FOUND = true;
+            GameVars.Instance.SetParamValue(GameVarParams.SECRET_WORLD.ToString(), true);
+
+            //baseRandomEncounterInterval = (int) (baseRandomEncounterInterval * 1.5);
+            GenerateNextEncounterInterval();
+
+            //reset random encounter system
+            encounterBagFills = 0;
+            FillEncounterBag();
+
             Debug.Log("starting secret world music");
             FSoundManager.PlayMusic("03-Another World", GameVars.Instance.MUSIC_VOLUME, false);
             FSoundManager.CurrentMusicShouldLoop(true);
-            startSecretWorldMusic = false;
+            setupSecretWorld = false;
             fadeMusicToSecretWorld = false;
         }
 
@@ -743,16 +760,7 @@ public class FWorldLayer : FLayer
         }
 
         ExecuteRandomEvent("SECRET_WORLD");
-
-        GameVars.Instance.SECRET_WORLD_FOUND = true;
-        GameVars.Instance.SetParamValue(GameVarParams.SECRET_WORLD.ToString(), true);
-
-        //baseRandomEncounterInterval = (int) (baseRandomEncounterInterval * 1.5);
-        GenerateNextEncounterInterval();
-
-        //reset random encounter system
-        encounterBagFills = 0;
-        FillEncounterBag();
+        
         fadeMusicToSecretWorld = true;
     }
 

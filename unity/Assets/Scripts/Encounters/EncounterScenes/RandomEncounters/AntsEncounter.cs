@@ -36,7 +36,7 @@ class AntsEncounter : FEncounterScene
                 GameVars.Instance.Player.WildernessPoints += 5;
                 break;
             default: // item usage                
-                if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.BUG_SPRAY)))
+                if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
                 {
                     DisplayTextMessage(selectedNode.NodeTitle, "Applying the bug spray to the ants causes them to disappear in a puff of smoke. Their entire existence is erased from the timestream, as if it never happened.");
                     GameVars.Instance.Player.WildernessPoints += 5;
@@ -53,10 +53,44 @@ class AntsEncounter : FEncounterScene
                     GameVars.Instance.Player.WildernessPoints += 3;
                     GameVars.Instance.Player.HasAntArmor = true;
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Consulting your compass, you realize that you are not where you thought you were. So I guess you're not covered in ants after all!");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You would generally want to wait until after you've stopped suffering from trauma before attempting to treat the wounds inflicted by it. Good initiative, though.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.RAW_MEAT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The ants accept your gift, and quickly move the meat into their colony using a complex series of cranes and pulleys.");
+                    GameVars.Instance.Player.WildernessPoints += 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.LASER_POINTER.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "As a militaristic race, your puny laser pointer is no match for their advanced plasma weaponry. It quickly becomes clear this is a losing battle, and you are forced to retreat.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.MARSHMALLOWS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Actually it's a little-known fact that ants prefer circus peanuts over standard marshmallows. Ridiculous, I know, but true.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Pouring salt on your bitten, stung legs was a pretty dumb idea. I have to hand it to you, it takes a special kind of person to try something so supremely idiotic.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
                 else
                 {
                     //default failure
-                    DisplayTextMessage(selectedNode.NodeTitle, "I know you thought that was a good idea, but it does nothing! The ants only sting more viciously! You start jumping around frantically and are eventually able to get away.");
+                    DisplayTextMessage(selectedNode.NodeTitle, "It only seems to agitate them, causing them to sting even more viciously! You start jumping around frantically and are eventually able to get away.");
                     GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
                     GameVars.Instance.Player.WildernessPoints -= 5;
                 }

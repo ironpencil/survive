@@ -64,6 +64,17 @@ class WildPlantEncounter : FEncounterScene
     {
         GeneratePlantType();
 
+        //check if we already saw this plant, if so, just give them the energy for it and don't display the plant
+        if (GameVars.Instance.GetParamValueBool(Name + ":" + plantName))
+        {
+            if (plantIsSafe)
+            {
+                GameVars.Instance.Player.Energy += UnityEngine.Random.Range(5, 11);
+            }
+            this.ShouldPop = true;
+            return;
+        }
+
         string questionSuffix = "\nShould you eat this plant?";
         MenuNode rootMenu = new MenuNode(MenuNodeType.TEXT, this.Name, this.Name, plantDescription + questionSuffix);
 
@@ -92,6 +103,8 @@ class WildPlantEncounter : FEncounterScene
 
         this.currentScene = new FSelectionDisplayScene(this.Name, rootNode);
         FSceneManager.Instance.PushScene(this.currentScene);
+
+        GameVars.Instance.SetParamValue(Name + ":" + plantName, true);
     }
 
     private void GeneratePlantType()

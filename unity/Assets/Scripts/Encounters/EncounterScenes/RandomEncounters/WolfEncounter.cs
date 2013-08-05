@@ -34,13 +34,48 @@ class WolfEncounter : FEncounterScene
             default: // item usage
                 if (selectedNode.NodeTitle.Equals(Enum.GetName(typeof(ItemIDs), ItemIDs.RAW_MEAT)))
                 {
-                    DisplayTextMessage(selectedNode.NodeTitle, "You toss a slab of raw meat to the animals, which they happily consume. After sniffing around for a moment, the pack leader howls and they all run off together. Good job being prepared!");
+                    DisplayTextMessage(selectedNode.NodeTitle, "You toss a slab of raw meat to the animals, which they happily consume. After sniffing around for a moment, the pack leader howls and they all run off together. Good thing you remembered to always carry raw meat in your pocket in case of an emergency!");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You depress the plunger on the can of bug spray and a swarm of angry wasps flies out, stinging the wolves and allowing you to escape. Get it? Bug spray?");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Wolves have no need for material wealth and possessions. They lead a rich inner life.");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.HONEY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "While your gesture is good-intentioned, there's not really enough for everyone to share. Pretty rude, all things considered.");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.COMPASS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You are able to help the wolves figure out that they were actually way off course, and direct them back to continue on their journey. They wander off, singing merrily.");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.LASER_POINTER.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You try to get the pack leader to follow the laser pointer dot, but he just calmly reaches down with his paw and catches it, stopping it dead in its tracks. Impressive.");
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.MARSHMALLOWS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Marshmallows are actually a wolf's only natural predator, and your brazen display causes them to scatter in a panic and flee.");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "You throw a handful of salt down to the ground and shout, \"Ninja Vanish!\" While the wolves are confused, you are able to slip away!");
                     GameVars.Instance.Player.WildernessPoints += 5;
                 }
                 else
                 {
                     //default failure
-                    DisplayTextMessage(selectedNode.NodeTitle, "The wolves do not seem impressed, and they attack! You are just barely able to fight them off and escape!");
+                    DisplayTextMessage(selectedNode.NodeTitle, "I know you thought that was a good idea, but it does nothing! The wolves attack, and you are just barely able to fight them off and escape!");
                     GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(5, 11);
                     GameVars.Instance.Player.WildernessPoints -= 5;
                 }

@@ -68,7 +68,7 @@ class EsmudohrBattleEncounter : FEncounterScene
     private int stage1HP = 1000;
     private int stage2HP = 10000;
     private int stage3HP = 1000000;
-    private int TentacleHP = 100;
+    private int TentacleHP = 60;
 
     private int hp;
 
@@ -87,8 +87,8 @@ class EsmudohrBattleEncounter : FEncounterScene
     private int TotalTentaclesSpawned = 5;
     private int TentacleCount = 5;
     private int TentacleDefense = 50;
-    private int TentacleHitChance = 60;
-    private int TentacleAttackPower = 6;
+    private int TentacleHitChance = 50;
+    private int TentacleAttackPower = 5;
     private int TentacleAttackMultiplier = 2;
     private int TentacleCritChance = 0;
 
@@ -198,7 +198,7 @@ class EsmudohrBattleEncounter : FEncounterScene
                 this.turnCounter = 0;
 
                 this.HP = stage2HP;
-                this.Defense = 50;
+                this.Defense = 60;
 
                 this.HitChance = 0;
                 this.EvadeChance = 0;
@@ -601,7 +601,7 @@ class EsmudohrBattleEncounter : FEncounterScene
         this.TotalTentaclesSpawned += tentaclesSpawned;
         this.TentacleCount += tentaclesSpawned;
 
-        turnResult.AppendLine(this.shortDescription + "'s screams echo loudly inside your head.");
+        turnResult.AppendLine(this.shortDescription + "'s unearthly wails echo loudly inside your head.");
 
         switch (tentaclesSpawned)
         {
@@ -639,14 +639,21 @@ class EsmudohrBattleEncounter : FEncounterScene
         return turnResult.ToString();
     }
 
+    int tentacleHitCount = 0;
     protected virtual string TentacleTurnPhase2()
     {
         Mob defender = GameVars.Instance.Player;
         StringBuilder turnResult = new StringBuilder();
 
+        tentacleHitCount = 0;
+
         for (int i = 0; i < TentacleCount; i++)
         {
             turnResult.Append(DoTentacleAttackPhase2());
+            if (tentacleHitCount >= 5)
+            {
+                break;
+            }
         }
 
         return turnResult.ToString();
@@ -734,17 +741,18 @@ class EsmudohrBattleEncounter : FEncounterScene
 
         if (tentaclesDestroyed > 0)
         {
+            string hitResponse = this.shortDescription + " thrashes about in pain!";
             if (criticalHit)
             {
                 attackResult.AppendLine("Critical Hit!!");
             }
             if (tentaclesDestroyed == 1)
             {
-                attackResult.AppendLine("You severed 1 tentacle!");
+                attackResult.AppendLine("You severed 1 tentacle! " + hitResponse);
             }
             else
             {
-                attackResult.AppendLine("You severed " + tentaclesDestroyed + " tentacles!");
+                attackResult.AppendLine("You severed " + tentaclesDestroyed + " tentacles! " + hitResponse);
             }
         }
         else
@@ -798,6 +806,7 @@ class EsmudohrBattleEncounter : FEncounterScene
                 }
                 
                 attackResult.AppendLine("You take " + damageDone + " damage!");
+                tentacleHitCount++;
             }            
         }
 

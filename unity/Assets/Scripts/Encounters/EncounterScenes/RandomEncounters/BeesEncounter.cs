@@ -41,11 +41,50 @@ class BeesEncounter : FEncounterScene
                     DisplayTextMessage(selectedNode.NodeTitle, "You present some honey as a peace offering to their Queen. She appears to consider your suggestion thoughtfully, and finally accepts. You are released without further harm and allowed to continue on your way. Whew, close call!");
                     GameVars.Instance.Player.WildernessPoints += 5;
                 }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.BUG_SPRAY.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "It's a common misconception that bees are bugs; they are actually the smallest member of the avian family, thus immune to your weaponry.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.ATM_CARD.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Bees are a noble people, and can't be bought off like common thugs.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.FIRST_AID_KIT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Bees have no need for first aid kits. As their society is a kratocracy, only the strong have value, and those who are weak or become injured are left to die. It might seem foreign to us, but we must respect their ancient ways.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.RAW_MEAT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "The bees devour the meat hungrily, but their incredibly poor table manners make the meal very awkward and uncomfortable.");
+                    GameVars.Instance.Player.WildernessPoints -= 3;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.LASER_POINTER.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Seeing that you have a laser, the bees get their mirror ball out of the hive and kick up the jams. You all dance long into the night.");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.MARSHMALLOWS.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "Fun Fact: Bees actually lay their eggs in marshmallows! Usually they have to sneak into stores and lay them in packages there, and they greatly appreciate you bringing them some for their nurseries.");
+                    GameVars.Instance.Player.WildernessPoints += 5;
+                }
+                else if (selectedNode.NodeTitle.Equals(ItemIDs.SALT.ToString()))
+                {
+                    DisplayTextMessage(selectedNode.NodeTitle, "OK sure why not, you salt some of the bees and eat them. It actually tastes alright... oh yeah, except for the horrible stinging sensation. You probably should've considered that a little more carefully.");
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
+                    GameVars.Instance.Player.WildernessPoints -= 5;
+                }
                 else
                 {
                     //default failure
                     DisplayTextMessage(selectedNode.NodeTitle, "The bees are angered by your hubris, and you are forced to flee after being stung several times!");
-                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(5, 11);
+                    GameVars.Instance.Player.Energy -= UnityEngine.Random.Range(3, 7);
                     GameVars.Instance.Player.WildernessPoints -= 5;
                 }
                 break;
